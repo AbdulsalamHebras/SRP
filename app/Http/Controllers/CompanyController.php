@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; 
 
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company_follower;
@@ -60,7 +60,7 @@ class CompanyController extends Controller
     }
     public function follow(Request $request, $id)
     {
-        
+
         $user = auth()->user();
 
         if (!$user) {
