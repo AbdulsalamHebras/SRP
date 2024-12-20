@@ -1,31 +1,186 @@
-
+/* إعدادات عامة */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Cairo', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f8f9fa;
     color: #333;
 }
 
+/* إعدادات الهيدر */
 header {
     background-color: #007bff;
     color: #fff;
-    padding: 15px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-header a {
-    color: #fff;
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* الشعار */
+.logo h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: white;
+    text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+    animation: glow 2s infinite alternate;
+}
+
+.logo span {
+    color: #ffe600;
+}
+
+/* الروابط */
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
     text-decoration: none;
-    margin: 0 10px;
+    color: #ffffff;
+    padding: 10px 15px;
+    font-size: 1.1em;
+    position: relative;
 }
 
-header a:hover {
-    text-decoration: underline;
+.nav-link:hover::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ffffff;
 }
 
+.nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+}
+
+/* الرسائل */
+.message-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.message-icon {
+    font-size: 1.5em;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8em;
+    padding: 2px 6px;
+}
+/* روابط الدخول والتسجيل */
+.auth-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.auth-links .nav-link {
+    padding: 8px 12px;
+    font-size: 1em;
+    border-radius: 5px;
+    background-color: #ffffff33;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.message-dropdown-content {
+    display: none; /* مخفية افتراضيًا */
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    width: 300px;
+    z-index: 1;
+    top: 40px; /* المسافة من الأيقونة */
+    right: 0; /* محاذاة لليمين */
+}
+
+.auth-links .nav-link:hover {
+    background-color: #ffffff;
+    color: #007bff;
+}
+
+
+.message-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    width: 300px;
+    z-index: 1;
+    top: 40px;
+    right: 0;
+}
+
+.message-dropdown:hover .message-dropdown-content {
+    display: block;
+}
+
+.message-dropdown-content h4 {
+    margin: 10px;
+    font-size: 1.2em;
+}
+
+.message-dropdown-content p {
+    margin: 10px;
+    color: #888;
+}
+
+.message-dropdown-content a {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    color: #007bff;
+    text-decoration: none;
+    border-top: 1px solid #ddd;
+}
+
+.message-dropdown-content a:hover {
+    background-color: #f9f9f9;
+}
+
+/* تأثير الإضاءة للشعار */
+@keyframes glow {
+    0% {
+        text-shadow: 2px 4px 8px rgba(255, 255, 255, 0.4);
+    }
+    100% {
+        text-shadow: 2px 4px 12px rgba(255, 255, 255, 0.8);
+    }
+}
+
+/* إعدادات القسم الرئيسي */
 .container {
     text-align: center;
     padding: 50px 20px;
@@ -41,6 +196,7 @@ header a:hover {
     margin-bottom: 30px;
 }
 
+/* صندوق البحث */
 .search-box {
     display: flex;
     justify-content: center;
@@ -49,7 +205,7 @@ header a:hover {
     flex-wrap: wrap;
 }
 
-.search-box input, .search-box select, .search-box button {
+.search-box input, .search-box button {
     padding: 10px;
     font-size: 1em;
     border: 1px solid #ccc;
@@ -67,73 +223,40 @@ header a:hover {
     background-color: #0056b3;
 }
 
+/* البحث الشائع */
 .popular-searches {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
-.popular-searches a {
+.search-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.search-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-link {
     display: inline-block;
-    margin: 5px 10px;
     padding: 5px 10px;
     background-color: #e9ecef;
     color: #007bff;
     text-decoration: none;
     border-radius: 5px;
-    font-size: 0.9em;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.popular-searches a:hover {
+.search-link:hover {
     background-color: #007bff;
     color: #fff;
 }
-header {
-    padding: 20px 0;
-    background-color: #007bff;
-    border-bottom: 2px solid #ddd;
-}
-
-header div a {
-    text-decoration: none;
-    color: #ffffff;
-    padding: 10px 15px;
-    position: relative;
-    display: inline-block;
-    font-size: 1.1em;
-}
-
-header div a:hover::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #ffffff;
-}
-
-header div a.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #ffffff;
-}
-
-header div a.active {
-    font-weight: bold;
-}
-
-header div a:hover:not(.active)::after {
-    height: 2px;
-}
-
-header div a.active:hover::after {
-    height: 3px;
-}
-header div a#srp-link {
-    font-size: 1.5em;
-    margin-right: 20px; 
-}
-
