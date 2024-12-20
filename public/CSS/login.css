@@ -1,0 +1,90 @@
+
+/* Reset some default styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+#record-container {
+    display: none; /* Initially hidden */
+    margin-top: 10px;
+}
+
+#record-container label {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+#record {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Container styling */
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Logo styling */
+.logo img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+/* Input fields */
+/* Input fields */
+input, select {
+    width: calc(100% - 20px); /* Subtract padding */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Buttons */
+.btn {
+    background-color: #6b4eff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.btn:hover {
+    background-color: #573ed9;
+}
+
+/* Links */
+.footer-text a {
+    color: #6b4eff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+}
+
+/* User type dropdown */
+select {
+    appearance: none;
+    background-color: #fff;
+    padding-right: 10px;
+}
+
