@@ -16,8 +16,9 @@
                 <h1>ط<span>موح</span></h1>
             </div>
             <div class="nav-links">
-                <a href="#" class="nav-link">الرئيسية</a>
-                <a href="#" class="nav-link">البحث عن وظائف</a>
+                <a href="{{route('main')}}" class="nav-link">الرئيسية</a>
+                <a href="" class="nav-link">البحث عن وظائف</a>
+                <a href="#" class="nav-link"> الشركات </a>
                 <a href="#" class="nav-link">طلبات التوظيف</a>
                 <a href="#" class="nav-link">من شاهد سيرتي؟</a>
             </div>
@@ -62,7 +63,6 @@
 
 <script>
     const navLinks = document.querySelectorAll('header div a');
-
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             // Remove the active class from all links
