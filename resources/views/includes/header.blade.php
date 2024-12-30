@@ -10,6 +10,7 @@
 </head>
 <body>
     <header>
+        
         <div class="header-container">
             <div class="logo">
                 <a href="{{route('home')}}">
