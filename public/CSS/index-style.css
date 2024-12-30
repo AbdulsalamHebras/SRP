@@ -1,0 +1,224 @@
+/* إعدادات القسم الرئيسي */
+.container {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.container h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.container p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+/* صندوق البحث */
+.search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-box input, .search-box button {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.search-box button:hover {
+    background-color: #0056b3;
+}
+
+.popular-searches {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.search-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.search-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-link {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #e9ecef;
+    color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.search-link:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.section-title {
+    background-color: #f3f4f6;
+    padding: 20px 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* الشركات */
+.companies-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px 10px;
+    background-color: #fff;
+}
+
+.company-logo {
+    width: calc(100% / 4 - 20px);
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.company-logo img {
+    width: 100%;
+    height: 100%;
+}
+
+.company-logo:hover {
+    transform: scale(1.1);
+}
+
+@media (max-width: 1200px) {
+    .company-logo {
+        width: calc(100% / 3 - 20px);
+    }
+}
+
+@media (max-width: 800px) {
+    .company-logo {
+        width: calc(100% / 2 - 20px);
+    }
+}
+
+@media (max-width: 500px) {
+    .company-logo {
+        width: 100%;
+    }
+}
+
+/* المدن */
+.cities-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.city-card {
+    position: relative;
+    width: calc(100% / 4 - 20px);
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: -10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.city-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.city-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.job-count {
+    font-size: 16px;
+}
+
+@media (max-width: 1200px) {
+    .city-card {
+        width: calc(100% / 3 - 20px);
+    }
+}
+
+@media (max-width: 800px) {
+    .city-card {
+        width: calc(100% / 2 - 20px);
+    }
+}
+
+@media (max-width: 500px) {
+    .city-card {
+        width: 100%;
+    }
+}
+
+.show-more-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.show-more-btn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    margin: 10px 0;
+    margin-top: -20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.show-more-btn:hover {
+    background-color: #0056b3;
+}

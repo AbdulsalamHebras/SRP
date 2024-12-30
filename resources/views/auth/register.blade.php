@@ -13,10 +13,10 @@
         <div class="logo">
             <img src="https://via.placeholder.com/100" alt="Logo">
         </div>
-
         <!-- Form Fields -->
-        <form id="registerForm">
-            <input type="text" name="username" placeholder="اسم المستخدم" id="username" required>
+        <form id="registerForm" action="{{route('addUser')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="text" name="name" placeholder="اسم المستخدم" id="name" required>
             <input type="text" name="email" placeholder="البريد الإلكتروني" id="email" required>
             <select id="userType" name="accountType" required>
                 <option value="">نوع الحساب</option>
@@ -29,8 +29,8 @@
             </div>
             <input type="password" name="password" placeholder="كلمة المرور" id="password" required>
             <input type="password" name="confirm-password" placeholder="تأكيد كلمة المرور" id="confirm-password" required>
+            <input type="submit" value="إنشاء" class="btn">
 
-            <button type="submit" class="btn">إنشاء</button>
         </form>
     </div>
 
@@ -40,11 +40,11 @@
 
         userType.addEventListener('change', function() {
             if (userType.value === 'company') {
-                recordContainer.style.display = 'block'; // Show record input
-                document.getElementById('record').setAttribute('required', true); // Make it required
+                recordContainer.style.display = 'block';
+                document.getElementById('record').setAttribute('required', true);
             } else {
-                recordContainer.style.display = 'none'; // Hide record input
-                document.getElementById('record').removeAttribute('required'); // Remove required attribute
+                recordContainer.style.display = 'none';
+                document.getElementById('record').removeAttribute('required');
             }
         });
     </script>

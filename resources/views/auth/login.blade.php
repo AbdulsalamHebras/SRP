@@ -14,7 +14,8 @@
         </div>
 
         <!-- Form Fields -->
-        <form id="loginForm">
+        <form id="loginForm" action="{{route('login')}}" method="POST">
+            @csrf
             <input type="text" name="email" placeholder=" البريد الاكتروني" id="email" required>
             <input type="password" name="password" placeholder="كلمة المرور" id="password" required>
             <select id="userType" name="accountType" required>
