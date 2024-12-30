@@ -1,0 +1,125 @@
+.footer {
+    background-color: #f3f4f6;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.footer-jobs {
+    text-align: right;
+}
+
+.footer-jobs h3 {
+    font-size: 20px;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.job-grid {
+    display: flex;
+    gap: 40px;
+}
+
+.job-grid ul {
+    list-style: none;
+    padding: 0;
+}
+
+.job-grid ul li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.job-grid ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.job-grid ul li a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.info-sections {
+    display: flex;
+    justify-content: space-between; /* توزيع الأقسام أفقياً */
+    gap: 20px;
+    flex-wrap: wrap; /* لجعل التصميم مرناً للشاشات الصغيرة */
+}
+
+.footer-section {
+    text-align: right;
+    flex: 1 1 45%; /* تحديد عرض القسم ليكون حوالي نصف الشاشة */
+}
+
+.footer-section h3 {
+    font-size: 18px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.footer-section ul li a:hover {
+    color: #007bff;
+}
+
+.footer-social {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.footer-social h3 {
+    font-size: 18px;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-icons a img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.social-icons a img:hover {
+    transform: scale(1.1);
+}
+
+.footer-bottom {
+    border-top: 1px solid #ddd;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.footer-bottom p {
+    margin: 5px 0;
+}
