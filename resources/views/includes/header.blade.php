@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        
+
         <div class="header-container">
             <div class="logo">
                 <a href="{{route('home')}}">
@@ -46,8 +46,15 @@
                 </div>
             </div>
             <div class="auth-links">
-                <a href="{{ route('login') }}" class="nav-link">تسجيل الدخول</a>
-                <a href="{{ route('register') }}" class="nav-link">إنشاء حساب</a>
+                @auth
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="nav-link">تسجيل الخروج</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="nav-link">تسجيل الدخول</a>
+                    <a href="{{ route('register') }}" class="nav-link">إنشاء حساب</a>
+                @endauth
             </div>
         </div>
     </header>

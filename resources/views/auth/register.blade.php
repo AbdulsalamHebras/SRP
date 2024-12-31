@@ -14,24 +14,60 @@
             <img src="https://via.placeholder.com/100" alt="Logo">
         </div>
         <!-- Form Fields -->
-        <form id="registerForm" action="{{route('addUser')}}" method="POST" enctype="multipart/form-data">
+        <form method="POST" action="{{route('register')}}" enctype="multipart/form-data">
             @csrf
             <input type="text" name="name" placeholder="اسم المستخدم" id="name" required>
+            @error('name')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+
             <input type="text" name="email" placeholder="البريد الإلكتروني" id="email" required>
+            @error('email')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+
             <select id="userType" name="accountType" required>
                 <option value="">نوع الحساب</option>
                 <option value="applier">باحث عن عمل</option>
                 <option value="company">شركة</option>
             </select>
+            @error('accountType')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+
             <div id="record-container">
                 <label for="record">ارفق صورة للسجل التجاري</label>
                 <input type="file" name="record" id="record">
             </div>
-            <input type="password" name="password" placeholder="كلمة المرور" id="password" required>
-            <input type="password" name="confirm-password" placeholder="تأكيد كلمة المرور" id="confirm-password" required>
-            <input type="submit" value="إنشاء" class="btn">
+            @error('record')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
 
+            <input type="password" name="password" placeholder="كلمة المرور" id="password" required>
+            @error('password')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+
+            <input type="password" name="password_confirmation" placeholder="تأكيد كلمة المرور" id="password_confirmation" required>
+            @error('password_confirmation')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+
+            <button type="submit" class="btn">إنشاء</button>
         </form>
+
     </div>
 
     <script>

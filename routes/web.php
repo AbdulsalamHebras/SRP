@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register',[RegisteredUserController::Class,'store'])->name('addUser');
 Route::get('/', function () {
     return view('index');
 })->name('home');
