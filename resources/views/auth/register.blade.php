@@ -25,8 +25,7 @@
 
             <input type="text" name="email" placeholder="البريد الإلكتروني" id="email" required>
             @error('email')
-                <span class="invalid-feedba
-                ck" role="alert">
+                <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
