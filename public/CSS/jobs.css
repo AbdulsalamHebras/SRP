@@ -1,0 +1,223 @@
+body {
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+header p {
+    font-size: 1rem;
+    color: #666;
+}
+
+header span {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.filters label {
+    margin-left: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.filters select {
+    padding: 5px;
+    font-size: 1rem;
+}
+
+.job-listing {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.job-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.favorite {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.5rem;
+}
+
+.heart-icon {
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.job-info {
+    flex: 1;
+    margin-right: 40px;
+}
+
+.job-title {
+    font-size: 1.2rem;
+    color: #007bff;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.company {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.company .logo {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+}
+
+.company .location {
+    display: block;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.salary {
+    color: #28a745;
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+}
+
+.time-posted {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 5px;
+    display: block;
+}
+
+.apply-btn {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+}
+
+.apply-btn button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.apply-btn button:hover {
+    background-color: #0056b3;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+}
+.dropdown-container {
+    display: flex; /* لجعل الحاوية مرتبة بعناصر داخلية */
+    flex-direction: column; /* ترتيب رأسي للعناصر */
+    align-items: center; /* محاذاة العناصر إلى الوسط */
+    gap: 10px; /* مسافة بين العناصر */
+    margin-top: 10px;
+    width: 100%; /* لتحديد عرض الحاوية */
+}
+.dropdown-toggle {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 200px;
+    text-align: right;
+    color: #333;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-search {
+    margin: 0 auto;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+    display: block;
+
+}
+
+.dropdown-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-list li {
+    padding: 10px;
+    cursor: pointer;
+    text-align: right;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.dropdown-list li:hover {
+    background-color: #f9f9f9;
+}

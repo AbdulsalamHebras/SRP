@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>لوحة التحكم</title>
-    <link rel="stylesheet" href="{{asset('CSS/main.css')}}">
+    <link rel="stylesheet" href="{{asset('CSS/search.css')}}">
     <style>
         .search-box {
             display: flex;
@@ -42,34 +42,37 @@
         <button>بحث</button>
     </div>
     <main>
-        <section class="profile-section">
-            <div class="profile-card">
-                <img src="placeholder-profile.png" alt="صورة شخصية">
-                <h2>سلام</h2>
-                <p>رقم الهاتف: <a href="#">أضف رقم الهاتف</a></p>
-                <p>البريد الإلكتروني: <a href="mailto:wesamdreib@gmail.com">wesamdreab@gmail.com</a></p>
-                <button>عرض السيرة الذاتية</button>
+        <div class="container">
+            <div class="header">
+                <h1>وسام دريب</h1>
+                <button class="button">عرض السيرة الذاتية</button>
             </div>
-            <div class="update-notice">
-                <h3>احصل على انتباه أصحاب العمل</h3>
-                <p>
-                    قم بتحديث أو تجديد سيرتك الذاتية بانتظام لتبقى في مقدمة نتائج بحث أصحاب العمل.
-                </p>
-                <p>آخر تحديث: Dec 20, 2024</p>
-                <button>حدث السيرة الذاتية</button>
+            <div class="section">
+                <h2>تحديثات الوظائف</h2>
+                <div class="box">
+                    <div class="flex">
+                        <p>ابحث عن وظائف الآن أو حدث ملفك الشخصي لبدء تلقي اقتراحات بالوظائف المناسبة.</p>
+                        <button class="button">حدث ملفك الشخصي</button>
+                    </div>
+                </div>
             </div>
-        </section>
-        <section class="progress-section">
-            <h2>حسن سيرتك الذاتية</h2>
-            <div class="progress-bar">
-                <div class="progress" style="width: 23%;">قوة ملفك الشخصي: 23%</div>
+            <div class="section">
+                <h2>طلباتي الوظيفية</h2>
+                <div class="box">
+                    <p>لم تتقدم إلى أي وظائف حتى الآن. ابحث عن الوظيفة وتقدم إليها في ثوانٍ!</p>
+                    <button class="button">تصفح الوظائف</button>
+                </div>
             </div>
-            <button>أضف الوظيفة المرغوبة</button>
-        </section>
-        <section class="jobs-section">
-            <h2>تحديثات الوظائف</h2>
-            <p>ابحث عن وظائف الآن أو حدث ملفك الشخصي لبدء تلقي اقتراحات بالوظائف المناسبة.</p>
-        </section>
+
+            <div class="section">
+                <h2>احصل على انتباه أصحاب العمل</h2>
+                <div class="box">
+                    <p>قم بتحديث أو تجديد سيرتك الذاتية بانتظام لتبقى في مقدمة نتائج بحث أصحاب العمل.</p>
+                    <p class="email">آخر تحديث: Dec 19, 2024</p>
+                    <button class="button">حدث السيرة الذاتية</button>
+                </div>
+            </div>
+        </div>
     </main>
     @include('includes.footer')
 </body>
