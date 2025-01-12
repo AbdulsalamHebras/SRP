@@ -47,7 +47,7 @@
                 <img src="placeholder-profile.png" alt="صورة شخصية">
                 <h2>سلام</h2>
                 <p>رقم الهاتف: <a href="#">أضف رقم الهاتف</a></p>
-                <p>البريد الإلكتروني: <a href="mailto:salamhebras@gmail.com">salamhebras@gmail.com</a></p>
+                <p>البريد الإلكتروني: <a href="mailto:wesamdreib@gmail.com">wesamdreab@gmail.com</a></p>
                 <button>عرض السيرة الذاتية</button>
             </div>
             <div class="update-notice">
