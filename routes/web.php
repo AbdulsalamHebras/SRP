@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
@@ -32,6 +33,8 @@ Route::middleware('auth')->group(function () {
 
 // Route::middleware('auth')->group(function () {
     Route::get('/main', [MainPageController::class,'main'])->name('main');
+    Route::get('/jobs', [JobController::class,'index'])->name('jobs');
+
 // });
 
 
