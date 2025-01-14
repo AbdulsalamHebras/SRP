@@ -16,8 +16,12 @@
         <!-- Form Fields -->
         <form id="loginForm" action="{{route('login')}}" method="POST">
             @csrf
-            <input type="text" name="email" placeholder=" البريد الاكتروني" id="email" required>
-            <input type="password" name="password" placeholder="كلمة المرور" id="password" required>
+            <input type="text" name="email" placeholder=" البريد الاكتروني" id="email"
+                class="form-control form-control-lg @error('email') is-invalid @enderror" value="{{ old('username') }}"
+                required autocomplete="email" autofocus>>
+            <input type="password" name="password" placeholder="كلمة المرور" id="password"
+                class="form-control form-control-lg @error('password') is-invalid @enderror" name="password"
+                required autocomplete="current-password">
             <select id="userType" name="accountType" required>
                 <option value="">نوع المستخدم</option>
                 <option value="applier">باحث عن عمل</option>

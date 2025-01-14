@@ -42,26 +42,30 @@
         </div>
 
         <div class="job-listing">
-            <div class="job-card">
-                <div class="favorite">
-                    <i class="heart-icon" onclick="toggleFavorite(this)">&#9829;</i>
-                </div>
-                <div class="job-info">
-                    <h2 class="job-title">مطلوب مندوب / مسؤول مبيعات</h2>
-                    <div class="company">
-                        <img src="logo-placeholder.png" alt="Logo" class="logo">
-                        <span>yemnak company</span>
+
+                <div class="job-card">
+                    <div class="favorite" onclick="event.stopPropagation();">
+                        <i class="heart-icon" onclick="toggleFavorite(this)">&#9829;</i>
                     </div>
-                    <span class="location">صنعاء</span>
-                    <p>مندوب، مسؤول مبيعات لشركة صيانة تكييف  . خبرة لا تقل عن 3 سنوات...</p>
-                    <span class="salary">$1,000 - $500</span>
-                    <span class="time-posted">قبل 45 دقيقة</span>
+                    <a href="{{route('jobs.details')}}" class="job-card-link">
+                        <div class="job-info">
+                            <h2 class="job-title">مطلوب مندوب / مسؤول مبيعات</h2>
+                            <div class="company">
+                                <img src="logo-placeholder.png" alt="Logo" class="logo">
+                                <span>yemnak company</span>
+                            </div>
+                            <span class="location">صنعاء</span>
+                            <p>مندوب، مسؤول مبيعات لشركة صيانة تكييف  . خبرة لا تقل عن 3 سنوات...</p>
+                            <span class="salary">$1,000 - $500</span>
+                            <span class="time-posted">قبل 45 دقيقة</span>
+                        </div>
+                    </a>
+                    <div class="apply-btn" onclick="event.stopPropagation();">
+                            <button onclick="window.location.href={{route('jobs.apply')}}";>التقديم السريع</button>
+                    </div>
                 </div>
-                <div class="apply-btn">
-                    <button>التقديم السريع</button>
-                </div>
-            </div>
         </div>
+
     </div>
     @include('includes.footer')
     <script>

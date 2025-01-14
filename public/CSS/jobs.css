@@ -81,6 +81,14 @@ header span {
     cursor: pointer;
     transition: color 0.3s;
 }
+.job-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.job-card-link:hover {
+    text-decoration: none; 
+}
 
 .job-info {
     flex: 1;
