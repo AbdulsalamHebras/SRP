@@ -42,7 +42,10 @@ Route::name('jobs.')->group(function () {
 });
 
 Route::name('company.')->prefix('company')->group(function () {
-    Route::post('/register', [CompanyController::class, 'store'])->name('register');
+    Route::post('/register', [CompanyController::class, 'register'])->name('register');
+    Route::get('/new-company', function () {
+        return view('companies.new-company');
+    })->name('new-company');
 });
 
 

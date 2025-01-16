@@ -47,9 +47,9 @@
 
             <div id="record-container">
                 <label for="record">ارفق صورة للسجل التجاري</label>
-                <input type="file" name="record" id="record">
+                <input type="file" name="commercialRegister" id="record">
             </div>
-            @error('record')
+            @error('commercialRegister')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
