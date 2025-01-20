@@ -9,6 +9,7 @@
     <div style="text-align: center; margin-top: 50px;">
         <h1>تمت إضافة الشركة بنجاح</h1>
         <p>يرجى الانتظار حتى يقوم المسؤول بمراجعة السجل التجاري للشركة.</p>
+        <p>        إذا تمت مراجعة الحساب يمكنكم <a href="{{route('login')}}">تسجيل الدخول</a>.</p>
         <p>سيتم التواصل معك عبر البريد الإلكتروني: <strong>salamhebras@gmail.com</strong>.</p>
     </div>
 </body>

@@ -47,6 +47,4 @@ Route::name('company.')->prefix('company')->group(function () {
         return view('companies.new-company');
     })->name('new-company');
 });
-
-
 require __DIR__.'/auth.php';
