@@ -14,16 +14,20 @@
             <img src="https://via.placeholder.com/100" alt="Logo">
         </div>
         <!-- Form Fields -->
-        <form method="POST" action="{{route('register')}}" enctype="multipart/form-data">
+        <form method="POST" action="{{route('register')}}" enctype="multipart/form-data" id="registrationForm">
             @csrf
-            <input type="text" name="name" placeholder="اسم المستخدم" id="name" required>
+            <input type="text" name="name" placeholder="اسم المستخدم" id="name"
+                class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"
+                required autocomplete="name" autofocus>
             @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
 
-            <input type="text" name="email" placeholder="البريد الإلكتروني" id="email" required>
+            <input type="text" name="email" placeholder="البريد الإلكتروني" id="email"
+                class="form-control @error('email') is-invalid @enderror" name="email"
+                value="{{ old('email') }}" required autocomplete="email">
             @error('email')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -43,22 +47,24 @@
 
             <div id="record-container">
                 <label for="record">ارفق صورة للسجل التجاري</label>
-                <input type="file" name="record" id="record">
+                <input type="file" name="commercialRegister" id="record">
             </div>
-            @error('record')
+            @error('commercialRegister')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
 
-            <input type="password" name="password" placeholder="كلمة المرور" id="password" required>
+            <input type="password" name="password" placeholder="كلمة المرور" id="password"
+                class="form-control @error('password') is-invalid @enderror" name="password"
+                required autocomplete="new-password">
             @error('password')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
 
-            <input type="password" name="password_confirmation" placeholder="تأكيد كلمة المرور" id="password_confirmation" required>
+            <input type="password" name="password_confirmation" placeholder="تأكيد كلمة المرور" id="password_confirmation" required autocomplete="new-password">
             @error('password_confirmation')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -67,20 +73,25 @@
 
             <button type="submit" class="btn">إنشاء</button>
         </form>
-
+        <div class="footer-text">
+            <a href="{{route('login')}}"> لدي حساب</a>
+        </div>
     </div>
 
     <script>
         const userType = document.getElementById('userType');
         const recordContainer = document.getElementById('record-container');
+        const form = document.getElementById('registrationForm');
 
         userType.addEventListener('change', function() {
             if (userType.value === 'company') {
                 recordContainer.style.display = 'block';
                 document.getElementById('record').setAttribute('required', true);
+                form.setAttribute('action', '{{ route('company.register') }}');
             } else {
                 recordContainer.style.display = 'none';
                 document.getElementById('record').removeAttribute('required');
+                form.setAttribute('action', '{{ route('register') }}');
             }
         });
     </script>

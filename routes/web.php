@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\ProfileController;
@@ -31,12 +32,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route::middleware('auth')->group(function () {
-    Route::get('/main', [MainPageController::class,'main'])->name('main');
-    Route::get('/jobs', [JobController::class,'index'])->name('jobs');
-
-// });
+Route::get('/main', [MainPageController::class,'main'])->name('main');
 
 
+Route::name('jobs.')->group(function () {
+    Route::get('/jobs', [JobController::class, 'index'])->name('index');
+    Route::get('/job-details', [JobController::class, 'details'])->name('details');
+    Route::get('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
+});
 
+Route::name('company.')->prefix('company')->group(function () {
+    Route::post('/register', [CompanyController::class, 'register'])->name('register');
+    Route::get('/new-company', function () {
+        return view('companies.new-company');
+    })->name('new-company');
+});
 require __DIR__.'/auth.php';

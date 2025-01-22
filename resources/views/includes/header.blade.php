@@ -20,7 +20,7 @@
 
             <div class="nav-links" id="nav-links">
                 <a href="{{route('main')}}" class="nav-link">الرئيسية</a>
-                <a href="{{route('jobs')}}" class="nav-link">البحث عن وظائف</a>
+                <a href="{{route('jobs.index')}}" class="nav-link">البحث عن وظائف</a>
                 <a href="#" class="nav-link">الشركات</a>
                 <a href="#" class="nav-link">طلبات التوظيف</a>
                 <a href="#" class="nav-link">من شاهد سيرتي؟</a>
