@@ -18,11 +18,12 @@
                 <input type="text" class="dropdown-search" placeholder="بحث..." oninput="filterDropdown(this)">
                 <ul class="dropdown-list">
                     <li onclick="selectLocation(this)">جميع المواقع</li>
-                    <li onclick="selectLocation(this)">الأردن</li>
-                    <li onclick="selectLocation(this)">عمان</li>
-                    <li onclick="selectLocation(this)">الإمارات العربية المتحدة</li>
-                    <li onclick="selectLocation(this)">الإمارات العربية المتحدة: أبو ظبي</li>
-                    <li onclick="selectLocation(this)">الإمارات العربية المتحدة: عجمان</li>
+                    <li onclick="selectLocation(this)">صنعاء</li>
+                    <li onclick="selectLocation(this)">عدن</li>
+                    <li onclick="selectLocation(this)">تعز</li>
+                    <li onclick="s electLocation(this)">مارب</li>
+                    <li onclick="selectLocation(this)">الضالع</li>
+                    <li onclick="selectLocation(this)">الحديدة</li>
                 </ul>
             </div>
         </div>
