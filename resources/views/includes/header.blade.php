@@ -19,11 +19,11 @@
             </div>
 
             <div class="nav-links" id="nav-links">
-                <a href="{{route('main')}}" class="nav-link">الرئيسية</a>
-                <a href="{{route('jobs.index')}}" class="nav-link">البحث عن وظائف</a>
-                <a href="#" class="nav-link">الشركات</a>
-                <a href="#" class="nav-link">طلبات التوظيف</a>
-                <a href="#" class="nav-link">من شاهد سيرتي؟</a>
+                <a href="{{route('main')}}" class="nav-link {{ request()->routeIs('main') ? 'active' : '' }}">الرئيسية</a>
+                <a href="{{route('jobs.index')}}" class="nav-link {{ request()->routeIs('jobs.index') ? 'active' : '' }}">البحث عن وظائف</a>
+                <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">الشركات</a>
+                <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">طلبات التوظيف</a>
+                <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">من شاهد سيرتي؟</a>
             </div>
 
             <div class="hamburger-menu" id="hamburger-menu">
