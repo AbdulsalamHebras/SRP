@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -38,6 +39,15 @@ class CompanyController extends Controller
         ]);
 
         return redirect()->route('company.new-company')->with('success', 'Company registered successfully!');
+    }
+    public function destroy(Request $request){
+        Auth::guard('company')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 
 }

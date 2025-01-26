@@ -25,4 +25,8 @@ class Company extends Authenticatable
         'isAccepted',
         'jobsNumber'
     ];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

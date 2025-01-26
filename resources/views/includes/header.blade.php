@@ -46,15 +46,21 @@
                 </div>
             </div>
             <div class="auth-links">
-                @auth
+                @if(Auth::guard('web')->check())
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="nav-link">تسجيل الخروج</button>
+                        <button type="submit" class="nav-link">تسجيل الخروج (مستخدم)</button>
+                    </form>
+                @elseif(Auth::guard('company')->check())
+                    <form action="{{ route(name: 'company.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="nav-link">تسجيل الخروج (شركة)</button>
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="nav-link">تسجيل الدخول</a>
                     <a href="{{ route('register') }}" class="nav-link">إنشاء حساب</a>
-                @endauth
+                @endif
+
             </div>
         </div>
     </header>
