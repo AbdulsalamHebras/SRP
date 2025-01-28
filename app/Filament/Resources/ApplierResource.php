@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CompanyResource\Pages;
-use App\Filament\Resources\CompanyResource\RelationManagers;
-use App\Models\Company;
+use App\Filament\Resources\ApplierResource\Pages;
+use App\Filament\Resources\ApplierResource\RelationManagers;
+use App\Models\Applier;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,11 +13,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CompanyResource extends Resource
+class ApplierResource extends Resource
 {
-    protected static ?string $model = Company::class;
+    protected static ?string $model = Applier::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-home-modern';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -25,8 +25,6 @@ class CompanyResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->searchable()
-                    ->sortable()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
@@ -36,40 +34,36 @@ class CompanyResource extends Resource
                     ->password()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('jobField')
-                    ->maxLength(255)
-                    ->searchable()
-                    ->required(),
-                Forms\Components\TextInput::make('mission')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('vision')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('dataOfCreation')
-                    ->dateTime(),
-                Forms\Components\TextInput::make('aboutus')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\FileUpload::make('logo')
-
-                    ->default(null),
                 Forms\Components\TextInput::make('phoneNumber')
                     ->tel()
                     ->maxLength(255)
                     ->default(null),
-                Forms\Components\TextInput::make('website')
+                Forms\Components\TextInput::make('city')
                     ->maxLength(255)
                     ->default(null),
-                Forms\Components\TextInput::make('commercialRegister')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('isAccepted')
-                    ->required(),
-                Forms\Components\TextInput::make('jobsNumber')
-                    ->required()
+                Forms\Components\TextInput::make('address')
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\DatePicker::make('BOB'),
+                Forms\Components\TextInput::make('gender')
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\TextInput::make('acadmicStudy')
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\TextInput::make('languages')
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\TextInput::make('CVfile')
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\DatePicker::make('graduationDate'),
+                Forms\Components\TextInput::make('age')
                     ->numeric()
-                    ->default(0),
+                    ->default(null),
+                Forms\Components\TextInput::make('photo')
+                    ->maxLength(255)
+                    ->default(null),
             ]);
     }
 
@@ -81,29 +75,31 @@ class CompanyResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('jobField')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('mission')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vision')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('dataOfCreation')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('aboutus')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('logo')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('phoneNumber')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('website')
+                Tables\Columns\TextColumn::make('city')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('commercialRegister')
+                Tables\Columns\TextColumn::make('address')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('isAccepted')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('jobsNumber')
+                Tables\Columns\TextColumn::make('BOB')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('gender')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('acadmicStudy')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('languages')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('CVfile')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('graduationDate')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('age')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('photo')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -119,7 +115,6 @@ class CompanyResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -138,10 +133,10 @@ class CompanyResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCompanies::route('/'),
-            'create' => Pages\CreateCompany::route('/create'),
-            'view' => Pages\ViewCompany::route('/{record}'),
-            'edit' => Pages\EditCompany::route('/{record}/edit'),
+            'index' => Pages\ListAppliers::route('/'),
+            'create' => Pages\CreateApplier::route('/create'),
+            'view' => Pages\ViewApplier::route('/{record}'),
+            'edit' => Pages\EditApplier::route('/{record}/edit'),
         ];
     }
 }
