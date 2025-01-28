@@ -25,8 +25,6 @@ class CompanyResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->searchable()
-                    ->sortable()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
@@ -35,10 +33,9 @@ class CompanyResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(10),
                 Forms\Components\TextInput::make('jobField')
                     ->maxLength(255)
-                    ->searchable()
                     ->required(),
                 Forms\Components\TextInput::make('mission')
                     ->maxLength(255)
@@ -47,12 +44,15 @@ class CompanyResource extends Resource
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\TextInput::make('dataOfCreation')
-                    ->dateTime(),
+                    ,
                 Forms\Components\TextInput::make('aboutus')
                     ->maxLength(255)
                     ->default(null),
                 Forms\Components\FileUpload::make('logo')
-
+                    ->preserveFilenames()
+                    ->image()
+                    ->minSize(512)
+                    ->maxSize(5120)
                     ->default(null),
                 Forms\Components\TextInput::make('phoneNumber')
                     ->tel()
@@ -61,14 +61,19 @@ class CompanyResource extends Resource
                 Forms\Components\TextInput::make('website')
                     ->maxLength(255)
                     ->default(null),
-                Forms\Components\TextInput::make('commercialRegister')
+                Forms\Components\FileUpload::make('commercialRegister')
                     ->required()
-                    ->maxLength(255),
+                    ->preserveFilenames()
+                    ->acceptedFileTypes(['png/jpg/pdf'])
+                    ->minSize(512)
+                    ->maxSize(5120)
+                    ,
                 Forms\Components\Toggle::make('isAccepted')
                     ->required(),
                 Forms\Components\TextInput::make('jobsNumber')
                     ->required()
                     ->numeric()
+                    ->readOnly()
                     ->default(0),
             ]);
     }
@@ -84,23 +89,26 @@ class CompanyResource extends Resource
                 Tables\Columns\TextColumn::make('jobField')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mission')
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('vision')
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('dataOfCreation')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('aboutus')
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('logo')
-                    ->searchable(),
+                ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('phoneNumber')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('website')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('commercialRegister')
-                    ->searchable(),
+                    ->openable()
+                    ->downloadable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('isAccepted')
-                    ->boolean(),
+                    ->boolean()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('jobsNumber')
                     ->numeric()
                     ->sortable(),
@@ -142,6 +150,7 @@ class CompanyResource extends Resource
             'create' => Pages\CreateCompany::route('/create'),
             'view' => Pages\ViewCompany::route('/{record}'),
             'edit' => Pages\EditCompany::route('/{record}/edit'),
-        ];
+
+       ];
     }
 }
