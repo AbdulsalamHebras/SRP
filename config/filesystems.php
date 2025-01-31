@@ -35,6 +35,13 @@ return [
             'root' => storage_path('app'),
             'throw' => false,
         ],
+        'logos' => [
+            'driver' => 'local',
+            'root' => public_path('images/logos'), // Defines the logos folder in public
+            'url' => env('APP_URL').'/images/logos',
+            'visibility' => 'public',
+        ],
+
 
         'public' => [
             'driver' => 'local',

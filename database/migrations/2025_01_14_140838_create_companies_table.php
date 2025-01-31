@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('dataOfCreation')->nullable();
             $table->string('aboutus')->nullable();
             $table->string('logo')->nullable();
-            $table->string('phoneNumber')->nullable();
-            $table->string('website')->nullable();
+            $table->string('phoneNumber')->nullable()->unique();
+            $table->string('website')->nullable()->unique();
             $table->string('commercialRegister');
             $table->boolean('isAccepted')->default(false);
             $table->integer('jobsNumber')->default(0);

@@ -12,6 +12,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Hash;
+
 
 class CompanyResource extends Resource
 {
@@ -25,49 +29,101 @@ class CompanyResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->unique()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->unique()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
-                    ->maxLength(10),
+                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->maxLength(12)
+                    ->minlength(6),
                 Forms\Components\TextInput::make('jobField')
                     ->maxLength(255)
                     ->required(),
-                Forms\Components\TextInput::make('mission')
+                RichEditor::make('mission')
+                        ->maxLength(255)
+                        ->default(null)
+                        ->toolbarButtons([
+                            'bold',
+                            'italic',
+                            'underline',
+                            'strike',
+                            'link',
+                            'orderedList',
+                            'unorderedList',
+                            'blockquote',
+                        ]),
+                RichEditor::make('vision')
+                        ->maxLength(255)
+                        ->default(null)
+                        ->toolbarButtons([
+                            'bold',
+                            'italic',
+                            'underline',
+                            'strike',
+                            'link',
+                            'orderedList',
+                            'unorderedList',
+                            'blockquote',
+                        ]),
+                Forms\Components\DatePicker::make('dataOfCreation')
+                    ->required()
+                    ->native(false)
+                    ->displayFormat('Y-m-d')
+                    ->format('Y-m-d'),
+                RichEditor::make('aboutus')
                     ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('vision')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('dataOfCreation')
-                    ,
-                Forms\Components\TextInput::make('aboutus')
-                    ->maxLength(255)
-                    ->default(null),
+                    ->default(null)
+                    ->toolbarButtons([
+                        'bold',
+                        'italic',
+                        'underline',
+                        'strike',
+                        'link',
+                        'orderedList',
+                        'unorderedList',
+                        'blockquote',
+                    ]),
                 Forms\Components\FileUpload::make('logo')
                     ->preserveFilenames()
                     ->image()
-                    ->minSize(512)
                     ->maxSize(5120)
-                    ->default(null),
-                Forms\Components\TextInput::make('phoneNumber')
-                    ->tel()
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('website')
-                    ->maxLength(255)
-                    ->default(null),
+                    ->default(null)
+                    ->visibility('public')
+                    ->disk('logos')
+                    ->directory(''),
                 Forms\Components\FileUpload::make('commercialRegister')
                     ->required()
                     ->preserveFilenames()
-                    ->acceptedFileTypes(['png/jpg/pdf'])
-                    ->minSize(512)
+                    ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
                     ->maxSize(5120)
-                    ,
+                    ->disk('local')
+                    ->directory('records'),
+                Forms\Components\TextInput::make('phoneNumber')
+                    ->tel()
+                    ->required()
+                    ->unique()
+                    ->maxLength(12)
+                    ->placeholder('7XXXXXXXX')
+                    ->rules([
+                        'required',
+                        'regex:/^(7[1-9]\d{6}|3\d{7}|1\d{7}|8\d{7}|0\d{7})$/'
+                    ])
+                    ->helperText('Enter a valid Yemeni phone number (e.g., 77XXXXXXX, 78XXXXXXX, 70XXXXXXXX,73XXXXXXXX,71XXXXXXXX)')
+                    ->prefixIcon('heroicon-o-phone'),
+                Forms\Components\TextInput::make('website')
+                    ->maxLength(255)
+                    ->default(null)
+                    ->url()
+                    ->unique()
+                    ->placeholder('https://example.com')
+                    ->suffixIcon('heroicon-o-globe-alt'),
                 Forms\Components\Toggle::make('isAccepted')
                     ->required(),
                 Forms\Components\TextInput::make('jobsNumber')
@@ -103,8 +159,8 @@ class CompanyResource extends Resource
                 Tables\Columns\TextColumn::make('website')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('commercialRegister')
-                    ->openable()
-                    ->downloadable()
+                    // ->openable()
+                    // ->downloadable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('isAccepted')
                     ->boolean()
@@ -152,5 +208,6 @@ class CompanyResource extends Resource
             'edit' => Pages\EditCompany::route('/{record}/edit'),
 
        ];
-    }
+
+   }
 }
