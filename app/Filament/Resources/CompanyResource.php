@@ -163,7 +163,7 @@ class CompanyResource extends Resource
                     // ->downloadable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('isAccepted')
-                    ->boolean() 
+                    ->boolean()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('jobsNumber')
                     ->numeric()
