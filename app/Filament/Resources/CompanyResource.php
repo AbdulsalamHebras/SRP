@@ -13,6 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Hash;
+
 
 class CompanyResource extends Resource
 {
@@ -26,15 +29,20 @@ class CompanyResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->unique()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->unique()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
-                    ->maxLength(10),
+                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->maxLength(12)
+                    ->minlength(6),
                 Forms\Components\TextInput::make('jobField')
                     ->maxLength(255)
                     ->required(),
@@ -85,30 +93,35 @@ class CompanyResource extends Resource
                 Forms\Components\FileUpload::make('logo')
                     ->preserveFilenames()
                     ->image()
-                    ->minSize(512)
                     ->maxSize(5120)
-                    ->default(null),
+                    ->default(null)
+                    ->visibility('public')
+                    ->disk('logos')
+                    ->directory(''),
                 Forms\Components\FileUpload::make('commercialRegister')
                     ->required()
                     ->preserveFilenames()
-                    ->acceptedFileTypes(['png/jpg/pdf'])
-                    ->minSize(512)
-                    ->maxSize(5120),
+                    ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
+                    ->maxSize(5120)
+                    ->disk('local')
+                    ->directory('records'),
                 Forms\Components\TextInput::make('phoneNumber')
                     ->tel()
                     ->required()
-                    ->maxLength(255)
-                    ->placeholder('+9677XXXXXXXX')
+                    ->unique()
+                    ->maxLength(12)
+                    ->placeholder('7XXXXXXXX')
                     ->rules([
                         'required',
-                        '   regex:/^\+967(7\d{7}|3\d{7}|1\d{7}|8\d{7}|0\d{7})$/'
+                        'regex:/^(7[1-9]\d{6}|3\d{7}|1\d{7}|8\d{7}|0\d{7})$/'
                     ])
-                    ->helperText('Enter a valid Yemeni phone number (e.g., +9677XXXXXXXX, +9678XXXXXXXX, +9670XXXXXXXX)')
+                    ->helperText('Enter a valid Yemeni phone number (e.g., 77XXXXXXX, 78XXXXXXX, 70XXXXXXXX,73XXXXXXXX,71XXXXXXXX)')
                     ->prefixIcon('heroicon-o-phone'),
                 Forms\Components\TextInput::make('website')
                     ->maxLength(255)
                     ->default(null)
                     ->url()
+                    ->unique()
                     ->placeholder('https://example.com')
                     ->suffixIcon('heroicon-o-globe-alt'),
                 Forms\Components\Toggle::make('isAccepted')
@@ -198,5 +211,6 @@ class CompanyResource extends Resource
             'edit' => Pages\EditCompany::route('/{record}/edit'),
 
        ];
-    }
+
+   }
 }
