@@ -43,7 +43,7 @@ Route::name('jobs.')->group(function () {
 
 Route::name('company.')->prefix('company')->group(function () {
     Route::post('/register', [CompanyController::class, 'register'])->name('register');
-    Route::post('/register', [CompanyController::class, 'destroy'])->name('logout');
+    Route::post('/logout', [CompanyController::class, 'destroy'])->name('logout');
     Route::get('/new-company', function () {
         return view('companies.new-company');
     })->name('new-company');

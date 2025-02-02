@@ -106,8 +106,8 @@ class CompanyResource extends Resource
                     ->required()
                     ->preserveFilenames()
                     ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
-                    ->maxSize(5120)
-                    ->disk('local')
+                    ->maxSize(size: 5120)
+                    ->disk('public')
                     ->directory('records')
                     ->openable()
                     ->downloadable(),
