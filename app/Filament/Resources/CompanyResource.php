@@ -17,6 +17,7 @@ use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Facades\Hash;
 
 
+
 class CompanyResource extends Resource
 {
     protected static ?string $model = Company::class;
@@ -76,7 +77,8 @@ class CompanyResource extends Resource
                     ->required()
                     ->native(false)
                     ->displayFormat('Y-m-d')
-                    ->format('Y-m-d'),
+                    ->format('Y-m-d')
+                    ->maxDate(now()),
                 RichEditor::make('aboutus')
                     ->maxLength(255)
                     ->default(null)
@@ -97,23 +99,27 @@ class CompanyResource extends Resource
                     ->default(null)
                     ->visibility('public')
                     ->disk('logos')
-                    ->directory(''),
+                    ->directory('')
+                    ->openable()
+                    ->downloadable(),
                 Forms\Components\FileUpload::make('commercialRegister')
                     ->required()
                     ->preserveFilenames()
                     ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
                     ->maxSize(5120)
                     ->disk('local')
-                    ->directory('records'),
+                    ->directory('records')
+                    ->openable()
+                    ->downloadable(),
                 Forms\Components\TextInput::make('phoneNumber')
                     ->tel()
                     ->required()
                     ->unique()
-                    ->maxLength(12)
+                    ->maxLength(13)
                     ->placeholder('7XXXXXXXX')
                     ->rules([
                         'required',
-                        'regex:/^(7[1-9]\d{6}|3\d{7}|1\d{7}|8\d{7}|0\d{7})$/'
+                        'regex:/^7(8|7|1|0|3)\d{7}$/'
                     ])
                     ->helperText('Enter a valid Yemeni phone number (e.g., 77XXXXXXX, 78XXXXXXX, 70XXXXXXXX,73XXXXXXXX,71XXXXXXXX)')
                     ->prefixIcon('heroicon-o-phone'),
@@ -162,8 +168,7 @@ class CompanyResource extends Resource
                 Tables\Columns\TextColumn::make('website')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('commercialRegister')
-                    // ->openable()
-                    // ->downloadable()
+
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('isAccepted')
                     ->boolean()
