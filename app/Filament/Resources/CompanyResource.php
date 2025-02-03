@@ -107,10 +107,11 @@ class CompanyResource extends Resource
                     ->preserveFilenames()
                     ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
                     ->maxSize(size: 5120)
-                    ->disk('public')
-                    ->directory('records')
+                    ->disk('records')
+                    ->directory('')
                     ->openable()
-                    ->downloadable(),
+                    ->downloadable()
+                    ->visibility('public') ,
                 Forms\Components\TextInput::make('phoneNumber')
                     ->tel()
                     ->required()

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 
 
 class Company extends Authenticatable
@@ -29,4 +30,23 @@ class Company extends Authenticatable
         'password',
         'remember_token',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($company) {
+            if ($company->logo) {
+                Storage::disk('logos')->delete($company->logo);
+            }
+
+            if ($company->commercialRegister) {
+                Storage::disk('public')->delete($company->commercialRegister);
+            }
+
+            $companyFolder = 'records/' . $company->id;
+            if (Storage::disk('public')->exists($companyFolder)) {
+                Storage::disk('public')->deleteDirectory($companyFolder);
+            }
+        });
+    }
 }
