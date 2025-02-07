@@ -37,8 +37,8 @@
             <label for="sort">الترتيب حسب:</label>
             <select id="sort">
                 <option value="language">التاريخ</option>
-                <option value="language">الشركة</option>
-                <option value="language">المحافظة</option>
+                <option value="language">نوع الوظيفة</option>
+                <option value="language">الراتب</option>
             </select>
         </div>
 

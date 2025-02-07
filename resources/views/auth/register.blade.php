@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="{{asset('CSS/login.css')}}">
-
+    <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -44,17 +44,6 @@
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-
-            <div id="record-container">
-                <label for="record">ارفق صورة للسجل التجاري</label>
-                <input type="file" name="commercialRegister" id="record">
-            </div>
-            @error('commercialRegister')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-
             <input type="password" name="password" placeholder="كلمة المرور" id="password"
                 class="form-control @error('password') is-invalid @enderror" name="password"
                 required autocomplete="new-password">
@@ -70,6 +59,63 @@
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
+            <div id="company-container">
+
+                <input type="text" name="jobField" placeholder="مجال العمل" id="jobField"
+                class="form-control @error('jobField') is-invalid @enderror" value="{{ old('jobField') }}">
+                @error('jobField')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+                <label for="mission">المهمة</label>
+                <textarea name="mission" id="mission" placeholder="المهمة"
+                class="form-control @error('mission') is-invalid @enderror">{{ old('mission') }}</textarea>
+                @error('mission')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+                <label for="vision">الرؤية</label>
+                <textarea name="vision" placeholder="الرؤية" id="vision"
+                    class="form-control @error('vision') is-invalid @enderror">{{ old('vision') }}</textarea>
+                @error('vision')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+
+                <input type="date" name="dateOfCreation" id="dateOfCreation"
+                    class="form-control @error('dateOfCreation') is-invalid @enderror" value="{{ old('dateOfCreation') }}">
+                @error('dateOfCreation')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+                <label for="aboutus">نبذة عن الشركة</label>
+                <textarea name="aboutus" placeholder="نبذة عن الشركة" id="aboutus"
+                    class="form-control @error('aboutus') is-invalid @enderror">{{ old('aboutus') }}</textarea>
+                @error('aboutus')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+
+                <label for="logo">شعار الشركة</label>
+                <input type="file" name="logo" id="logo">
+                @error('logo')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+
+                <input type="text" name="phoneNumber" placeholder="رقم الهاتف" id="phoneNumber"
+                    class="form-control @error('phoneNumber') is-invalid @enderror" value="{{ old('phoneNumber') }}">
+                @error('phoneNumber')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+
+                <input type="url" name="website" placeholder="الموقع الإلكتروني" id="website"
+                    class="form-control @error('website') is-invalid @enderror" value="{{ old('website') }}">
+                @error('website')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+                <label for="record">ارفق صورة للسجل التجاري</label>
+                <input type="file" name="commercialRegister" id="record">
+                @error('commercialRegister')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
 
             <button type="submit" class="btn">إنشاء</button>
         </form>
@@ -77,23 +123,68 @@
             <a href="{{route('login')}}"> لدي حساب</a>
         </div>
     </div>
-
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        if (document.getElementById("mission")) {
+            CKEDITOR.replace("mission", {
+                toolbar: [
+                    { name: "basicstyles", items: ["Bold", "Italic", "Underline", "Strike"] },
+                    { name: "paragraph", items: ["NumberedList", "BulletedList", "Blockquote"] },
+                    { name: "links", items: ["Link"] }
+                ]
+            });
+        }
+        if (document.getElementById("vision")) {
+            CKEDITOR.replace("vision", {
+                toolbar: [
+                    { name: "basicstyles", items: ["Bold", "Italic", "Underline", "Strike"] },
+                    { name: "paragraph", items: ["NumberedList", "BulletedList", "Blockquote"] },
+                    { name: "links", items: ["Link"] }
+                ]
+            });
+        }
+        if (document.getElementById("aboutus")) {
+            CKEDITOR.replace("aboutus", {
+                toolbar: [
+                    { name: "basicstyles", items: ["Bold", "Italic", "Underline", "Strike"] },
+                    { name: "paragraph", items: ["NumberedList", "BulletedList", "Blockquote"] },
+                    { name: "links", items: ["Link"] }
+                ]
+            });
+        }
+        });
         const userType = document.getElementById('userType');
-        const recordContainer = document.getElementById('record-container');
+        const companyContainer = document.getElementById('company-container');
         const form = document.getElementById('registrationForm');
 
         userType.addEventListener('change', function() {
             if (userType.value === 'company') {
-                recordContainer.style.display = 'block';
+                companyContainer.style.display = 'block';
+                document.getElementById('jobField').setAttribute('required', true);
+                document.getElementById('mission').setAttribute('required', true);
+                document.getElementById('vision').setAttribute('required', true);
+                document.getElementById('dateOfCreation').setAttribute('required', true);
+                document.getElementById('aboutus').setAttribute('required', true);
+                document.getElementById('logo').setAttribute('required', true);
+                document.getElementById('phoneNumber').setAttribute('required', true);
+                document.getElementById('website').setAttribute('required', true);
                 document.getElementById('record').setAttribute('required', true);
                 form.setAttribute('action', '{{ route('company.register') }}');
             } else {
-                recordContainer.style.display = 'none';
-                document.getElementById('record').removeAttribute('required');
+                companyContainer.style.display = 'none';
+                document.getElementById('jobField').removeAttribute('required', true);
+                document.getElementById('mission').removeAttribute('required', true);
+                document.getElementById('vision').removeAttribute('required', true);
+                document.getElementById('dateOfCreation').removeAttribute('required', true);
+                document.getElementById('aboutus').removeAttribute('required', true);
+                document.getElementById('logo').removeAttribute('required', true);
+                document.getElementById('phoneNumber').removeAttribute('required', true);
+                document.getElementById('website').removeAttribute('required', true);
+                document.getElementById('record').removeAttribute('required', true);
                 form.setAttribute('action', '{{ route('register') }}');
             }
         });
     </script>
+
 </body>
 </html>

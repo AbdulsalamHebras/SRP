@@ -1,4 +1,3 @@
-
 /* Reset some default styles */
 body {
     font-family: Arial, sans-serif;
@@ -7,26 +6,8 @@ body {
     background-color: #f8f9fa;
     text-align: center;
 }
-#record-container {
-    display: none; /* Initially hidden */
-    margin-top: 10px;
-}
 
-#record-container label {
-    display: block;
-    text-align: right;
-    font-size: 0.9em;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-#record {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Container styling */
+/* Main container */
 .login-container {
     max-width: 400px;
     margin: 50px auto;
@@ -43,15 +24,21 @@ body {
 }
 
 /* Input fields */
-/* Input fields */
-input, select {
-    width: calc(100% - 20px); /* Subtract padding */
+input, select, textarea {
+    width: calc(100% - 20px); /* Adjust width to include padding */
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 10px;
     font-size: 16px;
-    box-sizing: border-box; /* Include padding and border in the width */
+    box-sizing: border-box; /* Include padding and border in width */
+    display: block;
+    text-align: right;
+}
+
+textarea {
+    resize: none;
+    height: 80px;
 }
 
 /* Buttons */
@@ -64,6 +51,7 @@ input, select {
     border-radius: 10px;
     cursor: pointer;
     font-size: 18px;
+    transition: background-color 0.3s;
 }
 
 .btn:hover {
@@ -86,5 +74,44 @@ select {
     appearance: none;
     background-color: #fff;
     padding-right: 10px;
+    cursor: pointer;
 }
 
+/* Hide company-specific fields initially */
+#company-container {
+    display: none;
+    margin-top: 10px;
+    padding: 15px;
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+/* Labels styling */
+#company-container label {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* File input styling */
+#record, #logo {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .login-container {
+        width: 90%;
+        padding: 15px;
+    }
+    input, select, textarea {
+        font-size: 14px;
+    }
+    .btn {
+        font-size: 16px;
+    }
+}

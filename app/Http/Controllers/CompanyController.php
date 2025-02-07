@@ -12,30 +12,22 @@ class CompanyController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:companies,name',
-            'email' => 'required|email|unique:companies,email',
-            'password' => 'required|confirmed|min:8',
-            'commercialRegister' => 'required|file|mimes:jpeg,png,pdf|max:2048',
-        ]);
 
-        if ($request->hasFile('commercialRegister')) {
-            $file = $request->file('commercialRegister');
+        $request->validated();
 
-            $originalFileName = $file->getClientOriginalName();
-
-            $filePath = 'records/' . $originalFileName;
-
-            Storage::disk('local')->put($filePath, file_get_contents($file));
-        } else {
-            return redirect()->back()->withErrors(['commercialRegister' => 'File upload failed.']);
-        }
-
-        $company = Company::create([
+        Company::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'commercialRegister' => $filePath,
+            'password' => bcrypt($request->password), // Ensure password is hashed
+            'commercialRegister' => $request->file('commercialRegister')->store('records', 'public'),
+            'jobField' => $request->jobField,
+            'mission' => $request->mission,
+            'vision' => $request->vision,
+            'dateOfCreation' => $request->dateOfCreation,
+            'aboutus' => $request->aboutus,
+            'logo' => $request->file('logo')->store('logos', 'public'),
+            'phoneNumber' => $request->phoneNumber,
+            'website' => $request->website,
         ]);
 
         return redirect()->route('company.new-company')->with('success', 'Company registered successfully!');
