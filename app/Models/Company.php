@@ -17,7 +17,7 @@ class Company extends Authenticatable
         'jobField',
         'mission',
         'vision',
-        'dataOfCreation',
+        'dateOfCreation',
         'aboutus',
         'logo',
         'phoneNumber',
