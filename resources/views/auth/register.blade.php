@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="{{asset('CSS/login.css')}}">
-    <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
+    <script src="{{asset('tinymce/js/tinymce/tinymce.min.js')}}"></script>
 </head>
 <body>
     <div class="login-container">
@@ -123,30 +123,24 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            ["mission", "vision", "aboutus"].forEach(function(id) {
-                if (document.getElementById(id)) {
-                    CKEDITOR.replace(id, {
-                        toolbar: [
-                            { name: "basicstyles", items: ["Bold", "Italic", "Underline", "Strike"] },
-                            { name: "paragraph", items: ["NumberedList", "BulletedList", "Blockquote"] },
-                            { name: "links", items: ["Link"] }
-                        ]
-                    });
-                }
+        tinymce.init({
+            selector: '#mission, #vision, #aboutus',
+            menubar: false,
+            plugins: 'lists link',
+            toolbar: 'bold italic underline strikethrough | bullist numlist blockquote | link',
+            setup: function (editor) {
+                  editor.on('change', function () {
+                    tinymce.triggerSave();
+                });
+            }
             });
 
-            document.getElementById("registrationForm").addEventListener("submit", function() {
-                for (let instance in CKEDITOR.instances) {
-                    CKEDITOR.instances[instance].updateElement();
-                }
-            });
 
             const userType = document.getElementById('userType');
             const companyContainer = document.getElementById('company-container');
             const form = document.getElementById('registrationForm');
 
-            const companyRegisterRoute = document.getElementById("registrationForm").dataset.companyRoute;
-            const userRegisterRoute = document.getElementById("registrationForm").dataset.userRoute;
+
 
             userType.addEventListener('change', function() {
                 if (userType.value === 'company') {
@@ -156,7 +150,7 @@
                         document.getElementById(id).setAttribute('required', true);
                     });
 
-                    form.setAttribute('action', companyRegisterRoute);
+                    form.setAttribute('action', '{{ route('company.register') }}');
                 } else {
                     companyContainer.style.display = 'none';
 
@@ -164,7 +158,7 @@
                         document.getElementById(id).removeAttribute('required');
                     });
 
-                    form.setAttribute('action', userRegisterRoute);
+                    form.setAttribute('action', '{{ route('register') }}');
                 }
             });
         });
