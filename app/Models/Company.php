@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Job;
 
 
 class Company extends Authenticatable
@@ -48,5 +49,8 @@ class Company extends Authenticatable
                 Storage::disk('public')->deleteDirectory($companyFolder);
             }
         });
+    }
+    public function Jobs(){
+        return $this->hasMany(Job::class);
     }
 }

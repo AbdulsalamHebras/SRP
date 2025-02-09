@@ -43,7 +43,7 @@
         </div>
 
         <div class="job-listing">
-
+            @foreach ($jobs as $job)
                 <div class="job-card">
                     <div class="favorite" onclick="event.stopPropagation();">
                         <i class="heart-icon" onclick="toggleFavorite(this)">&#9829;</i>
@@ -52,7 +52,9 @@
                         <div class="job-info">
                             <h2 class="job-title">مطلوب مندوب / مسؤول مبيعات</h2>
                             <div class="company">
-                                <img src="logo-placeholder.png" alt="Logo" class="logo">
+                                @if($job->company && $job->company->logo)
+                                    <img src="{{asset('images/logos/',$job->comany->logo)}}" alt="Logo" class="logo">
+                                @endif
                                 <span>yemnak company</span>
                             </div>
                             <span class="location">صنعاء</span>
@@ -65,7 +67,11 @@
                             <button onclick="window.location.href={{route('jobs.apply')}}";>التقديم السريع</button>
                     </div>
                 </div>
+            @endforeach
+
+
         </div>
+
 
     </div>
     @include('includes.footer')

@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
+            $table->string('jobName');
+            $table->text('description');
+            $table->string('jobType');
+            $table->integer('minSalary');
+            $table->integer('maxSalary');
+            $table->string('currency');
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+            $table->text('requirements');
+            $table->date('expirationDate');
+
             $table->timestamps();
         });
     }

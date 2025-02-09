@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('jobField');
             $table->string('mission');
             $table->string('vision');
-            $table->string('dateOfCreation');
+            $table->date('dateOfCreation');
             $table->string('aboutus');
             $table->string('logo');
             $table->string('phoneNumber')->unique();
