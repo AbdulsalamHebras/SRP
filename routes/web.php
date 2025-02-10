@@ -37,7 +37,7 @@ Route::get('/main', [MainPageController::class,'main'])->name('main');
 
 Route::name('jobs.')->group(function () {
     Route::get('/jobs', [JobController::class, 'index'])->name('index');
-    Route::get('/job-details', [JobController::class, 'details'])->name('details');
+    Route::get('/job-details/{jobid}', [JobController::class, 'details'])->name('details');
     Route::get('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
 });
 

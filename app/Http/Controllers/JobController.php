@@ -12,8 +12,14 @@ class JobController extends Controller
         $jobs = Job::with('company')->get();
         return view("Jobs.index", compact('jobs'));
     }
-    public function details(){
-        return view('Jobs.details');
+    public function details(string $id){
+        $job = Job::with('company')->where('id', $id)->first();
+
+        if (!$job) {
+            abort(404); // Return 404 if job not found
+        }
+
+        return view('Jobs.details', compact('job'));
     }
     public function apply(){
         //

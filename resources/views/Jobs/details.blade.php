@@ -7,6 +7,7 @@
     <title>details</title>
 </head>
 <body>
+        <p>{{$job->jobName}}</p>
 
 </body>
 </html>
