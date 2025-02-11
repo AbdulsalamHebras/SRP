@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Header</title>
-    <link rel="stylesheet" href="{{asset('CSS/header.css')}}">
+    <link rel="stylesheet" href="{{asset('CSS/includes/header.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
             <div class="nav-links" id="nav-links">
                 <a href="{{route('main')}}" class="nav-link {{ request()->routeIs('main') ? 'active' : '' }}">الرئيسية</a>
                 <a href="{{route('jobs.index')}}" class="nav-link {{ request()->routeIs('jobs.index') ? 'active' : '' }}">البحث عن وظائف</a>
-                <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">الشركات</a>
+                <a href="{{route('companies.index')}}" class="nav-link {{ request()->routeIs('companies.index') ? 'active' : '' }}">الشركات</a>
                 <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">طلبات التوظيف</a>
                 <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">من شاهد سيرتي؟</a>
             </div>
@@ -52,7 +52,7 @@
                         <button type="submit" class="nav-link">تسجيل الخروج (مستخدم)</button>
                     </form>
                 @elseif(Auth::guard('company')->check())
-                    <form action="{{ route(name: 'company.logout') }}" method="POST">
+                    <form action="{{ route(name: 'companies.logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="nav-link">تسجيل الخروج (شركة)</button>
                     </form>

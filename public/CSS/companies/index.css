@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    text-align: center;
+    direction: rtl;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.companies {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.company-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+}
+
+.company-logo {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.company-name {
+    color: #007bff;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.company-name:hover {
+    text-decoration: underline;
+}
+
+.industry {
+    font-size: 16px;
+    color: black;
+    font-weight: bold;
+}
+
+.location {
+    font-size: 14px;
+    color: gray;
+}
+
+.follow-btn {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+}

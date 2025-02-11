@@ -16,7 +16,7 @@ class JobController extends Controller
         $job = Job::with('company')->where('id', $id)->first();
 
         if (!$job) {
-            abort(404); // Return 404 if job not found
+            abort(404); 
         }
 
         return view('Jobs.details', compact('job'));

@@ -45,10 +45,15 @@ class CompanyController extends Controller
             'commercialRegister' => $recordName, // Save the record name
         ]);
 
-        return redirect()->route('company.new-company')->with('success', 'Company registered successfully!');
+        return redirect()->route('companies.new-company')->with('success', 'Company registered successfully!');
     }
 
-        public function destroy(Request $request){
+    public function index(){
+        $companies=Company::all();
+        return view("companies.index", compact('companies'));
+    }
+
+    public function destroy(Request $request){
         Auth::guard('company')->logout();
 
         $request->session()->invalidate();

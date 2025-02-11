@@ -41,7 +41,8 @@ Route::name('jobs.')->group(function () {
     Route::get('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
 });
 
-Route::name('company.')->prefix('company')->group(function () {
+Route::name('companies.')->group(function () {
+    Route::get('/companies',[CompanyController::class,'index'])->name('index');
     Route::post('/register', [CompanyController::class, 'register'])->name('register');
     Route::post('/logout', [CompanyController::class, 'destroy'])->name('logout');
     Route::get('/new-company', function () {

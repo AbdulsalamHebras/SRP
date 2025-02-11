@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{asset('CSS/jobs.css')}}">
+    <link rel="stylesheet" href="{{asset('CSS/jobs/index.css')}}">
     <link rel="stylesheet" href="{{asset('CSS/search.css')}}">
     <title>Jobs</title>
 </head>

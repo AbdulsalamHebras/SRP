@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ابحث عن وظيفة أحلامك</title>
-    <link rel="stylesheet" href="{{asset('CSS/index-style.css')}}">
+    <link rel="stylesheet" href="{{asset('CSS/index.css')}}">
     <!-- Add Font Awesome for Icons -->
 
 

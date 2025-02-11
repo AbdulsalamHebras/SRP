@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="{{asset('CSS/login.css')}}">
+    <link rel="stylesheet" href="{{asset('CSS/auth/login.css')}}">
     <script src="{{asset('tinymce/js/tinymce/tinymce.min.js')}}"></script>
 </head>
 <body>
@@ -150,7 +150,7 @@
                         document.getElementById(id).setAttribute('required', true);
                     });
 
-                    form.setAttribute('action', '{{ route('company.register') }}');
+                    form.setAttribute('action', '{{ route('companies.register') }}');
                 } else {
                     companyContainer.style.display = 'none';
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="{{asset('CSS/login.css')}}">
+    <link rel="stylesheet" href="{{asset('CSS/auth/login.css')}}">
 </head>
 <body>
     <div class="login-container">
@@ -18,7 +18,7 @@
             @csrf
             <!-- Email Field -->
             <input type="text" name="email" placeholder=" البريد الإلكتروني" id="email"
-                class="form-control form-control-lg @error('email') is-invalid @enderror" 
+                class="form-control form-control-lg @error('email') is-invalid @enderror"
                 value="{{ old('email') }}" required autocomplete="email" autofocus>
             @error('email')
                 <span class="invalid-feedback" role="alert">
@@ -28,7 +28,7 @@
 
             <!-- Password Field -->
             <input type="password" name="password" placeholder="كلمة المرور" id="password"
-                class="form-control form-control-lg @error('password') is-invalid @enderror" 
+                class="form-control form-control-lg @error('password') is-invalid @enderror"
                 required autocomplete="current-password">
             @error('password')
                 <span class="invalid-feedback" role="alert">
