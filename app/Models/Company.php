@@ -25,7 +25,8 @@ class Company extends Authenticatable
         'website',
         'commercialRegister',
         'isAccepted',
-        'jobsNumber'
+        'jobsNumber',
+        'location'
     ];
     protected $hidden = [
         'password',

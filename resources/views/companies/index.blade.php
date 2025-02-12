@@ -17,7 +17,7 @@
                     <img src="{{asset('images/'.$company->logo)}}" alt="Company Logo" class="company-logo">
                     <a href="#" class="company-name">{{$company->name}}</a>
                     <p class="industry">{{$company->jobField}}</p>
-                    <p class="location">{{$company->l}}</p>
+                    <p class="location">{{$company->location}}</p>
                     <a href="#" class="follow-btn">متابعة</a>
                 </div>
             @endforeach

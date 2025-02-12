@@ -66,6 +66,11 @@
                 @error('jobField')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
+                <input type="text" name="location" placeholder="المحافظة" id="location"
+                class="form-control @error('location') is-invalid @enderror" value="{{ old('location') }}">
+                @error('location')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
                 <label for="mission">المهمة</label>
                 <textarea name="mission" id="mission" placeholder="المهمة"
                 class="form-control @error('mission') is-invalid @enderror">{{ old('mission') }}</textarea>

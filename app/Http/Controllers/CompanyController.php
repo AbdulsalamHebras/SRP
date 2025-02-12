@@ -35,6 +35,7 @@ class CompanyController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password), // Ensure password is hashed
             'jobField' => $request->jobField,
+            'jobField' => $request->jobField,
             'mission' => $request->mission,
             'vision' => $request->vision,
             'dateOfCreation' => $request->dateOfCreation,
