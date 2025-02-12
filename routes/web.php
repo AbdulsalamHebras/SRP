@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('index');
 })->name('home');
@@ -41,8 +42,8 @@ Route::name('jobs.')->group(function () {
     Route::get('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
 });
 
-Route::name('companies.')->group(function () {
-    Route::get('/companies',[CompanyController::class,'index'])->name('index');
+Route::name('companies.')->prefix('companies')->group(function () {
+    Route::get('/', [CompanyController::class, 'index'])->name('index');
     Route::post('/register', [CompanyController::class, 'register'])->name('register');
     Route::post('/logout', [CompanyController::class, 'destroy'])->name('logout');
     Route::get('/new-company', function () {

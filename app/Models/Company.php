@@ -22,11 +22,10 @@ class Company extends Authenticatable
         'aboutus',
         'logo',
         'phoneNumber',
-        'website',
         'commercialRegister',
         'isAccepted',
         'jobsNumber',
-        'location'
+        'location',
     ];
     protected $hidden = [
         'password',

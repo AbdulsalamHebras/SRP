@@ -66,9 +66,9 @@
                 @error('jobField')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
-                <input type="text" name="location" placeholder="المحافظة" id="location"
-                class="form-control @error('location') is-invalid @enderror" value="{{ old('location') }}">
-                @error('location')
+                <input type="text" name="locatuin" placeholder="المحافظة" id="locatuin"
+                class="form-control @error('locatuin') is-invalid @enderror" value="{{ old('locatuin') }}">
+                @error('locatuin')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
                 <label for="mission">المهمة</label>
@@ -151,15 +151,16 @@
                 if (userType.value === 'company') {
                     companyContainer.style.display = 'block';
 
-                    ["jobField", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"].forEach(function(id) {
+                    ["jobField","location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"].forEach(function(id) {
                         document.getElementById(id).setAttribute('required', true);
                     });
 
                     form.setAttribute('action', '{{ route('companies.register') }}');
+
                 } else {
                     companyContainer.style.display = 'none';
 
-                    ["jobField", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"].forEach(function(id) {
+                    ["jobField","location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"].forEach(function(id) {
                         document.getElementById(id).removeAttribute('required');
                     });
 
