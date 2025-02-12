@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('jobField');
+            $table->string('location');
             $table->string('mission');
             $table->string('vision');
             $table->date('dateOfCreation');

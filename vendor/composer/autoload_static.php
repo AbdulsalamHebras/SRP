@@ -369,8 +369,8 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
-            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
         ),
         'Spatie\\Invade\\' => 
         array (
@@ -378,8 +378,8 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
-            1 => __DIR__ . '/..' . '/spatie/ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -712,6 +712,26 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Console\\Commands\\MakeFilamentAdminUser' => __DIR__ . '/../..' . '/app/Console/Commands/MakeFilamentAdminUser.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Filament\\Resources\\AdminResource' => __DIR__ . '/../..' . '/app/Filament/Resources/AdminResource.php',
+        'App\\Filament\\Resources\\AdminResource\\Pages\\CreateAdmin' => __DIR__ . '/../..' . '/app/Filament/Resources/AdminResource/Pages/CreateAdmin.php',
+        'App\\Filament\\Resources\\AdminResource\\Pages\\EditAdmin' => __DIR__ . '/../..' . '/app/Filament/Resources/AdminResource/Pages/EditAdmin.php',
+        'App\\Filament\\Resources\\AdminResource\\Pages\\ListAdmins' => __DIR__ . '/../..' . '/app/Filament/Resources/AdminResource/Pages/ListAdmins.php',
+        'App\\Filament\\Resources\\AdminResource\\Pages\\ViewAdmin' => __DIR__ . '/../..' . '/app/Filament/Resources/AdminResource/Pages/ViewAdmin.php',
+        'App\\Filament\\Resources\\ApplierResource' => __DIR__ . '/../..' . '/app/Filament/Resources/ApplierResource.php',
+        'App\\Filament\\Resources\\ApplierResource\\Pages\\CreateApplier' => __DIR__ . '/../..' . '/app/Filament/Resources/ApplierResource/Pages/CreateApplier.php',
+        'App\\Filament\\Resources\\ApplierResource\\Pages\\EditApplier' => __DIR__ . '/../..' . '/app/Filament/Resources/ApplierResource/Pages/EditApplier.php',
+        'App\\Filament\\Resources\\ApplierResource\\Pages\\ListAppliers' => __DIR__ . '/../..' . '/app/Filament/Resources/ApplierResource/Pages/ListAppliers.php',
+        'App\\Filament\\Resources\\ApplierResource\\Pages\\ViewApplier' => __DIR__ . '/../..' . '/app/Filament/Resources/ApplierResource/Pages/ViewApplier.php',
+        'App\\Filament\\Resources\\CompanyResource' => __DIR__ . '/../..' . '/app/Filament/Resources/CompanyResource.php',
+        'App\\Filament\\Resources\\CompanyResource\\Pages\\CreateCompany' => __DIR__ . '/../..' . '/app/Filament/Resources/CompanyResource/Pages/CreateCompany.php',
+        'App\\Filament\\Resources\\CompanyResource\\Pages\\EditCompany' => __DIR__ . '/../..' . '/app/Filament/Resources/CompanyResource/Pages/EditCompany.php',
+        'App\\Filament\\Resources\\CompanyResource\\Pages\\ListCompanies' => __DIR__ . '/../..' . '/app/Filament/Resources/CompanyResource/Pages/ListCompanies.php',
+        'App\\Filament\\Resources\\CompanyResource\\Pages\\ViewCompany' => __DIR__ . '/../..' . '/app/Filament/Resources/CompanyResource/Pages/ViewCompany.php',
+        'App\\Filament\\Resources\\UserResource' => __DIR__ . '/../..' . '/app/Filament/Resources/UserResource.php',
+        'App\\Filament\\Resources\\UserResource\\Pages\\CreateUser' => __DIR__ . '/../..' . '/app/Filament/Resources/UserResource/Pages/CreateUser.php',
+        'App\\Filament\\Resources\\UserResource\\Pages\\EditUser' => __DIR__ . '/../..' . '/app/Filament/Resources/UserResource/Pages/EditUser.php',
+        'App\\Filament\\Resources\\UserResource\\Pages\\ListUsers' => __DIR__ . '/../..' . '/app/Filament/Resources/UserResource/Pages/ListUsers.php',
+        'App\\Filament\\Resources\\UserResource\\Pages\\ViewUser' => __DIR__ . '/../..' . '/app/Filament/Resources/UserResource/Pages/ViewUser.php',
         'App\\Http\\Controllers\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminController.php',
         'App\\Http\\Controllers\\ApplierController' => __DIR__ . '/../..' . '/app/Http/Controllers/ApplierController.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
@@ -723,6 +743,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\Auth\\PasswordResetLinkController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/PasswordResetLinkController.php',
         'App\\Http\\Controllers\\Auth\\RegisteredUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisteredUserController.php',
         'App\\Http\\Controllers\\Auth\\VerifyEmailController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerifyEmailController.php',
+        'App\\Http\\Controllers\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/CategoryController.php',
         'App\\Http\\Controllers\\CompanyController' => __DIR__ . '/../..' . '/app/Http/Controllers/CompanyController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\JobController' => __DIR__ . '/../..' . '/app/Http/Controllers/JobController.php',
@@ -739,9 +760,11 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
+        'App\\Http\\Requests\\CompanyRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CompanyRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\Applier' => __DIR__ . '/../..' . '/app/Models/Applier.php',
+        'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
         'App\\Models\\Company' => __DIR__ . '/../..' . '/app/Models/Company.php',
         'App\\Models\\Job' => __DIR__ . '/../..' . '/app/Models/Job.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',

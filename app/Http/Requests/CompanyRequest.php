@@ -23,11 +23,12 @@ class CompanyRequest extends FormRequest
     {
 
         return [
-           'name' => ['required', 'string', 'max:255', 'unique:companies,name'],
+        'name' => ['required', 'string', 'max:255', 'unique:companies,name'],
         'email' => ['required', 'email', 'unique:companies,email'],
         'password' => ['required', 'confirmed', 'min:8'],
         'commercialRegister' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:10240'],
         'jobField' => ['required', 'string', 'max:255'],
+        'location' => ['required', 'string', 'max:255'],
         'mission' => ['required', 'string', 'max:1000'],
         'vision' => ['required', 'string', 'max:1000'],
         'dateOfCreation' => ['required', 'date', 'before:today'], // Ensures the date is before today
