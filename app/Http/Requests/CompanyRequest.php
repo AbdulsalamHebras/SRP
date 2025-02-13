@@ -29,10 +29,10 @@ class CompanyRequest extends FormRequest
         'commercialRegister' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:10240'],
         'jobField' => ['required', 'string', 'max:255'],
         'location' => ['required', 'string', 'max:255'],
-        'mission' => ['required', 'string', 'max:1000'],
-        'vision' => ['required', 'string', 'max:1000'],
+        'mission' => ['required', 'string'],
+        'vision' => ['required', 'string'],
         'dateOfCreation' => ['required', 'date', 'before:today'], // Ensures the date is before today
-        'aboutus' => ['required', 'string', 'max:2000'],
+        'aboutus' => ['required', 'string'],
         'logo' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],
         'phoneNumber' => [
             'required',

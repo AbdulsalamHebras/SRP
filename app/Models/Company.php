@@ -21,6 +21,7 @@ class Company extends Authenticatable
         'dateOfCreation',
         'aboutus',
         'logo',
+        'website',
         'phoneNumber',
         'commercialRegister',
         'isAccepted',
