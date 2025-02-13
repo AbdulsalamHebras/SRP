@@ -15,19 +15,19 @@ return [
     ],
 
     'messages' => [
-        'notification_not_received' => 'Nisi primio e-poštu koju smo poslali?',
-        'notification_sent' => 'Poslali smo e-poštu na :email s uputama o tome kako potvrditi svoju adresu e-pošte.',
+        'notification_not_received' => 'Niste primili email koji smo poslali?',
+        'notification_sent' => 'Poslali smo email na :email s uputama o tome kako potvrditi svoju email adresu.',
     ],
 
     'notifications' => [
 
         'notification_resent' => [
-            'title' => 'Ponovno smo poslali e-poštu.',
+            'title' => 'Ponovno smo poslali email.',
         ],
 
         'notification_resend_throttled' => [
             'title' => 'Previše pokušaja ponovnog slanja',
-            'body' => 'Molim te, pokušaj ponovno za :seconds sekundi.',
+            'body' => 'Molim pokušajte ponovno za :seconds sekundi.',
         ],
 
     ],

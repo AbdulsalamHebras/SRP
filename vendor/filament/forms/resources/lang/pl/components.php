@@ -11,67 +11,15 @@ return [
             ],
 
             'add' => [
-
                 'label' => 'Dodaj do :label',
-
-                'modal' => [
-
-                    'heading' => 'Dodaj do :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Dodaj',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'add_between' => [
-
-                'label' => 'Wstaw pomiędzy',
-
-                'modal' => [
-
-                    'heading' => 'Dodaj do :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Dodaj',
-                        ],
-
-                    ],
-
-                ],
-
+                'label' => 'Wstaw',
             ],
 
             'delete' => [
                 'label' => 'Usuń',
-            ],
-
-            'edit' => [
-
-                'label' => 'Edytuj',
-
-                'modal' => [
-
-                    'heading' => 'Edytuj blok',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'Zapisz zmiany',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'reorder' => [
@@ -237,15 +185,6 @@ return [
 
             ],
 
-            'svg' => [
-
-                'messages' => [
-                    'confirmation' => 'Edycja plików SVG nie jest zalecana, ponieważ może to prowadzić do utraty jakości podczas skalowania.\n Czy na pewno chcesz kontynuować?',
-                    'disabled' => 'Edycja plików SVG jest wyłączona, ponieważ może to prowadzić do utraty jakości podczas skalowania.',
-                ],
-
-            ],
-
         ],
 
     ],
@@ -302,25 +241,12 @@ return [
 
     ],
 
-    'radio' => [
-
-        'boolean' => [
-            'true' => 'Tak',
-            'false' => 'Nie',
-        ],
-
-    ],
-
     'repeater' => [
 
         'actions' => [
 
             'add' => [
                 'label' => 'Dodaj do :label',
-            ],
-
-            'add_between' => [
-                'label' => 'Dodaj pomiędzy',
             ],
 
             'delete' => [
@@ -408,8 +334,6 @@ return [
 
             'create_option' => [
 
-                'label' => 'Utwórz',
-
                 'modal' => [
 
                     'heading' => 'Utwórz',
@@ -431,8 +355,6 @@ return [
             ],
 
             'edit_option' => [
-
-                'label' => 'Edytuj',
 
                 'modal' => [
 
@@ -473,31 +395,6 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Nowy tag',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Ukryj hasło',
-            ],
-
-            'show_password' => [
-                'label' => 'Pokaż hasło',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Tak',
-            'false' => 'Nie',
-        ],
-
     ],
 
     'wizard' => [

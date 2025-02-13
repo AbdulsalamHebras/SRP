@@ -16,5 +16,6 @@ class GlobalSearchResult
         readonly public string $url,
         readonly public array $details = [],
         readonly public array $actions = [],
-    ) {}
+    ) {
+    }
 }

@@ -38,7 +38,7 @@ trait InteractsWithTableQuery
 
     public function applyEagerLoading(EloquentBuilder | Relation $query): EloquentBuilder | Relation
     {
-        if (! $this->hasRelationship($query->getModel())) {
+        if (! $this->queriesRelationships($query->getModel())) {
             return $query;
         }
 
@@ -76,7 +76,7 @@ trait InteractsWithTableQuery
 
         $isSearchForcedCaseInsensitive = $this->isSearchForcedCaseInsensitive();
 
-        $nonTranslatableSearch = generate_search_term_expression($search, $isSearchForcedCaseInsensitive, $databaseConnection);
+        $search = generate_search_term_expression($search, $isSearchForcedCaseInsensitive, $databaseConnection);
 
         $translatableContentDriver = $this->getLivewire()->makeFilamentTranslatableContentDriver();
 
@@ -87,28 +87,18 @@ trait InteractsWithTableQuery
                 $translatableContentDriver?->isAttributeTranslatable($model::class, attribute: $searchColumn),
                 fn (EloquentBuilder $query): EloquentBuilder => $translatableContentDriver->applySearchConstraintToQuery($query, $searchColumn, $search, $whereClause, $isSearchForcedCaseInsensitive),
                 fn (EloquentBuilder $query) => $query->when(
-                    $this->hasRelationship($query->getModel()),
+                    $this->queriesRelationships($query->getModel()),
                     fn (EloquentBuilder $query): EloquentBuilder => $query->{"{$whereClause}Relation"}(
                         $this->getRelationshipName(),
                         generate_search_column_expression($searchColumn, $isSearchForcedCaseInsensitive, $databaseConnection),
                         'like',
-                        "%{$nonTranslatableSearch}%",
+                        "%{$search}%",
                     ),
-                    function (EloquentBuilder $query) use ($databaseConnection, $isSearchForcedCaseInsensitive, $nonTranslatableSearch, $searchColumn, $whereClause): EloquentBuilder {
-                        // Treat the missing "relationship" as a JSON column if dot notation is used in the column name.
-                        if (filled($relationshipName = $this->getRelationshipName())) {
-                            $searchColumn = (string) str($relationshipName)
-                                ->append('.')
-                                ->append($searchColumn)
-                                ->replace('.', '->');
-                        }
-
-                        return $query->{$whereClause}(
-                            generate_search_column_expression($searchColumn, $isSearchForcedCaseInsensitive, $databaseConnection),
-                            'like',
-                            "%{$nonTranslatableSearch}%",
-                        );
-                    },
+                    fn (EloquentBuilder $query): EloquentBuilder => $query->{$whereClause}(
+                        generate_search_column_expression($searchColumn, $isSearchForcedCaseInsensitive, $databaseConnection),
+                        'like',
+                        "%{$search}%",
+                    ),
                 ),
             );
 
@@ -152,14 +142,6 @@ trait InteractsWithTableQuery
         $currentRelationshipName = array_shift($relationships);
 
         $relationship = $this->getRelationship($query->getModel(), $currentRelationshipName);
-
-        if (! $relationship) {
-            // Treat the missing "relationship" as a JSON column if dot notation is used in the column name.
-            return (string) str($relationshipName ?? $this->getRelationshipName())
-                ->append('.')
-                ->append($sortColumn)
-                ->replace('.', '->');
-        }
 
         $relatedQuery = $relationship->getRelated()::query();
 

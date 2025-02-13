@@ -97,27 +97,28 @@ trait CanSortRecords
 
     protected function applyDefaultSortingToTableQuery(Builder $query): Builder
     {
+        $sortColumnName = $this->getTable()->getDefaultSortColumn();
         $sortDirection = ($this->getTable()->getDefaultSortDirection() ?? $this->tableSortDirection) === 'desc' ? 'desc' : 'asc';
-        $defaultSort = $this->getTable()->getDefaultSort($query, $sortDirection);
 
         if (
-            is_string($defaultSort) &&
-            ($sortColumn = $this->getTable()->getSortableVisibleColumn($defaultSort))
+            $sortColumnName &&
+            ($sortColumn = $this->getTable()->getSortableVisibleColumn($sortColumnName))
         ) {
             $sortColumn->applySort($query, $sortDirection);
 
             return $query;
         }
 
-        if (is_string($defaultSort)) {
-            return $query->orderBy($defaultSort, $sortDirection);
+        if ($sortColumnName) {
+            return $query->orderBy($sortColumnName, $sortDirection);
         }
 
-        if ($defaultSort instanceof Builder) {
-            return $defaultSort;
-        }
+        if ($sortQueryUsing = $this->getTable()->getDefaultSortQuery()) {
+            app()->call($sortQueryUsing, [
+                'direction' => $sortDirection,
+                'query' => $query,
+            ]);
 
-        if (filled($query->toBase()->orders)) {
             return $query;
         }
 

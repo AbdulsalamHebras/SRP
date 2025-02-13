@@ -20,34 +20,32 @@ trait CanReorderRecords
 
         $orderColumn = (string) str($this->getTable()->getReorderColumn())->afterLast('.');
 
-        DB::transaction(function () use ($order, $orderColumn) {
-            if (
-                (($relationship = $this->getTable()->getRelationship()) instanceof BelongsToMany) &&
-                in_array($orderColumn, $relationship->getPivotColumns())
-            ) {
-                foreach ($order as $index => $recordKey) {
-                    $this->getTableRecord($recordKey)->{$relationship->getPivotAccessor()}->update([
-                        $orderColumn => $index + 1,
-                    ]);
-                }
-
-                return;
+        if (
+            (($relationship = $this->getTable()->getRelationship()) instanceof BelongsToMany) &&
+            in_array($orderColumn, $relationship->getPivotColumns())
+        ) {
+            foreach ($order as $index => $recordKey) {
+                $this->getTableRecord($recordKey)->{$relationship->getPivotAccessor()}->update([
+                    $orderColumn => $index + 1,
+                ]);
             }
 
-            $model = app($this->getTable()->getModel());
-            $modelKeyName = $model->getKeyName();
+            return;
+        }
 
-            $model
-                ->newModelQuery()
-                ->whereIn($modelKeyName, array_values($order))
-                ->update([
-                    $orderColumn => DB::raw(
-                        'case ' . collect($order)
-                            ->map(fn ($recordKey, int $recordIndex): string => 'when ' . $modelKeyName . ' = ' . DB::getPdo()->quote($recordKey) . ' then ' . ($recordIndex + 1))
-                            ->implode(' ') . ' end'
-                    ),
-                ]);
-        });
+        $model = app($this->getTable()->getModel());
+        $modelKeyName = $model->getKeyName();
+
+        $model
+            ->newModelQuery()
+            ->whereIn($modelKeyName, array_values($order))
+            ->update([
+                $orderColumn => DB::raw(
+                    'case ' . collect($order)
+                        ->map(fn ($recordKey, int $recordIndex): string => 'when ' . $modelKeyName . ' = ' . DB::getPdo()->quote($recordKey) . ' then ' . ($recordIndex + 1))
+                        ->implode(' ') . ' end'
+                ),
+            ]);
     }
 
     public function toggleTableReordering(): void

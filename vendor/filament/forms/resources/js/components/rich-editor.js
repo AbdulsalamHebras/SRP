@@ -1,4 +1,4 @@
-import Trix from 'trix'
+import Trix from 'trix/dist/trix'
 
 Trix.config.blockAttributes.default.tagName = 'p'
 
@@ -30,8 +30,9 @@ Trix.config.textAttributes.underline = {
 
 Trix.Block.prototype.breaksOnReturn = function () {
     const lastAttribute = this.getLastAttribute()
-    const blockConfig =
-        Trix.config.blockAttributes[lastAttribute ? lastAttribute : 'default']
+    const blockConfig = Trix.getBlockConfig(
+        lastAttribute ? lastAttribute : 'default',
+    )
 
     return blockConfig?.breakOnReturn ?? false
 }
@@ -53,16 +54,14 @@ export default function richEditorFormComponent({ state }) {
         state,
 
         init: function () {
-            this.$refs.trixValue.value = this.state
-            this.$refs.trix.editor?.loadHTML(this.state ?? '')
+            this.$refs.trix?.editor?.loadHTML(this.state)
 
             this.$watch('state', () => {
                 if (document.activeElement === this.$refs.trix) {
                     return
                 }
 
-                this.$refs.trixValue.value = this.state
-                this.$refs.trix.editor?.loadHTML(this.state ?? '')
+                this.$refs.trix?.editor?.loadHTML(this.state)
             })
         },
     }

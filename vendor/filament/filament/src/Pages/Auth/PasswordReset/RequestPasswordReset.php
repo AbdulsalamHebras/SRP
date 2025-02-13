@@ -52,7 +52,17 @@ class RequestPasswordReset extends SimplePage
         try {
             $this->rateLimit(2);
         } catch (TooManyRequestsException $exception) {
-            $this->getRateLimitedNotification($exception)?->send();
+            Notification::make()
+                ->title(__('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled.title', [
+                    'seconds' => $exception->secondsUntilAvailable,
+                    'minutes' => ceil($exception->secondsUntilAvailable / 60),
+                ]))
+                ->body(array_key_exists('body', __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled') ?: []) ? __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled.body', [
+                    'seconds' => $exception->secondsUntilAvailable,
+                    'minutes' => ceil($exception->secondsUntilAvailable / 60),
+                ]) : null)
+                ->danger()
+                ->send();
 
             return;
         }
@@ -68,7 +78,7 @@ class RequestPasswordReset extends SimplePage
                     throw new Exception("Model [{$userClass}] does not have a [notify()] method.");
                 }
 
-                $notification = app(ResetPasswordNotification::class, ['token' => $token]);
+                $notification = new ResetPasswordNotification($token);
                 $notification->url = Filament::getResetPasswordUrl($token, $user);
 
                 $user->notify($notification);
@@ -90,20 +100,6 @@ class RequestPasswordReset extends SimplePage
             ->send();
 
         $this->form->fill();
-    }
-
-    protected function getRateLimitedNotification(TooManyRequestsException $exception): ?Notification
-    {
-        return Notification::make()
-            ->title(__('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled.title', [
-                'seconds' => $exception->secondsUntilAvailable,
-                'minutes' => $exception->minutesUntilAvailable,
-            ]))
-            ->body(array_key_exists('body', __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled') ?: []) ? __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled.body', [
-                'seconds' => $exception->secondsUntilAvailable,
-                'minutes' => $exception->minutesUntilAvailable,
-            ]) : null)
-            ->danger();
     }
 
     public function form(Form $form): Form

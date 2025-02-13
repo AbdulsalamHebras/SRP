@@ -12,10 +12,13 @@ Filament requires the following to run:
 - Laravel v10.0+
 - Livewire v3.0+
 
+> **Livewire v3 is recently released!**<br />
+> The Livewire team have done a great job in making it stable, but it was a complete rewrite of Livewire v2. You may encounter issues, so we recommend testing your application thoroughly before using Filament v3 in production.
+
 Require the Notifications package using Composer:
 
 ```bash
-composer require filament/notifications:"^3.2" -W
+composer require filament/notifications:"^3.1" -W
 ```
 
 ## New Laravel projects
@@ -71,7 +74,6 @@ Add Tailwind's CSS layers to your `resources/css/app.css`:
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@tailwind variants;
 ```
 
 Create a `postcss.config.js` file in the root of your project and register Tailwind CSS, PostCSS Nesting and Autoprefixer as plugins:

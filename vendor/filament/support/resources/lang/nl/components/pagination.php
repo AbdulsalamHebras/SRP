@@ -22,16 +22,8 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Eerste',
-        ],
-
         'go_to_page' => [
             'label' => 'Ga naar pagina :page',
-        ],
-
-        'last' => [
-            'label' => 'Laatste',
         ],
 
         'next' => [

@@ -22,16 +22,8 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Эхний',
-        ],
-
         'go_to_page' => [
-            'label' => 'Хуудас руу очих :page',
-        ],
-
-        'last' => [
-            'label' => 'Сүүлийн',
+            'label' => 'Хуудасруу очих :page',
         ],
 
         'next' => [

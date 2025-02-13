@@ -2,4 +2,6 @@
 
 namespace Filament\Infolists\Components;
 
-class ViewEntry extends Entry {}
+class ViewEntry extends Entry
+{
+}

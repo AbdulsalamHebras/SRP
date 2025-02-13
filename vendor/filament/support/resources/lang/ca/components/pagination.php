@@ -13,7 +13,7 @@ return [
             'label' => 'Per pàgina',
 
             'options' => [
-                'all' => 'Tots',
+                'all' => 'All',
             ],
 
         ],
@@ -22,16 +22,8 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Primera',
-        ],
-
         'go_to_page' => [
             'label' => 'Anar a la pàgina :page',
-        ],
-
-        'last' => [
-            'label' => 'Última',
         ],
 
         'next' => [

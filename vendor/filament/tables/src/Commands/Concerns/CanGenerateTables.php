@@ -2,6 +2,7 @@
 
 namespace Filament\Tables\Commands\Concerns;
 
+use Doctrine\DBAL\Types;
 use Filament\Tables;
 use Illuminate\Support\Str;
 
@@ -15,26 +16,27 @@ trait CanGenerateTables
             return '//';
         }
 
-        $schema = $this->getModelSchema($model);
         $table = $this->getModelTable($model);
+
+        if (blank($table)) {
+            return '//';
+        }
 
         $columns = [];
 
-        foreach ($schema->getColumns($table) as $column) {
-            if ($column['auto_increment']) {
+        foreach ($table->getColumns() as $column) {
+            if ($column->getAutoincrement()) {
                 continue;
             }
 
-            $type = $this->parseColumnType($column);
-
-            if (in_array($type['name'], [
-                'json',
-                'text',
+            if (in_array($column->getType()::class, [
+                Types\JsonType::class,
+                Types\TextType::class,
             ])) {
                 continue;
             }
 
-            $columnName = $column['name'];
+            $columnName = $column->getName();
 
             if (str($columnName)->endsWith([
                 '_token',
@@ -49,10 +51,10 @@ trait CanGenerateTables
             }
 
             if (str($columnName)->endsWith('_id')) {
-                $guessedRelationshipName = $this->guessBelongsToRelationshipName($columnName, $model);
+                $guessedRelationshipName = $this->guessBelongsToRelationshipName($column, $model);
 
                 if (filled($guessedRelationshipName)) {
-                    $guessedRelationshipTitleColumnName = $this->guessBelongsToRelationshipTitleColumnName($columnName, app($model)->{$guessedRelationshipName}()->getModel()::class);
+                    $guessedRelationshipTitleColumnName = $this->guessBelongsToRelationshipTitleColumnName($column, app($model)->{$guessedRelationshipName}()->getModel()::class);
 
                     $columnName = "{$guessedRelationshipName}.{$guessedRelationshipTitleColumnName}";
                 }
@@ -68,7 +70,7 @@ trait CanGenerateTables
                 $columnData['label'] = [Str::upper($columnName)];
             }
 
-            if ($type['name'] === 'boolean') {
+            if ($column->getType() instanceof Types\BooleanType) {
                 $columnData['type'] = Tables\Columns\IconColumn::class;
                 $columnData['boolean'] = [];
             } else {
@@ -77,40 +79,42 @@ trait CanGenerateTables
                     default => Tables\Columns\TextColumn::class,
                 };
 
-                if (in_array($type['name'], [
-                    'string',
-                    'char',
+                if (in_array($column->getType()::class, [
+                    Types\StringType::class,
                 ]) && ($columnData['type'] === Tables\Columns\TextColumn::class)) {
                     $columnData['searchable'] = [];
                 }
 
-                if (in_array($type['name'], [
-                    'date',
+                if (in_array($column->getType()::class, [
+                    Types\DateImmutableType::class,
+                    Types\DateType::class,
                 ])) {
                     $columnData['date'] = [];
                     $columnData['sortable'] = [];
                 }
 
-                if (in_array($type['name'], [
-                    'datetime',
-                    'timestamp',
+                if (in_array($column->getType()::class, [
+                    Types\DateTimeImmutableType::class,
+                    Types\DateTimeType::class,
+                    Types\DateTimeTzImmutableType::class,
+                    Types\DateTimeTzType::class,
                 ])) {
                     $columnData['dateTime'] = [];
                     $columnData['sortable'] = [];
                 }
 
-                if (in_array($type['name'], [
-                    'integer',
-                    'decimal',
-                    'float',
-                    'double',
-                    'money',
+                if (in_array($column->getType()::class, [
+                    Types\BigIntType::class,
+                    Types\DecimalType::class,
+                    Types\FloatType::class,
+                    Types\IntegerType::class,
+                    Types\SmallIntType::class,
                 ])) {
                     $columnData[in_array($columnName, [
                         'cost',
                         'money',
                         'price',
-                    ]) || $type['name'] === 'money' ? 'money' : 'numeric'] = [];
+                    ]) ? 'money' : 'numeric'] = [];
                     $columnData['sortable'] = [];
                 }
             }

@@ -33,10 +33,7 @@ class TableWidget extends Widget implements Actions\Contracts\HasActions, Forms\
 
     protected function paginateTableQuery(Builder $query): Paginator | CursorPaginator
     {
-        return $query->simplePaginate(
-            perPage: ($this->getTableRecordsPerPage() === 'all') ? $query->count() : $this->getTableRecordsPerPage(),
-            pageName: $this->getTablePaginationPageName(),
-        );
+        return $query->simplePaginate(($this->getTableRecordsPerPage() === 'all') ? $query->count() : $this->getTableRecordsPerPage());
     }
 
     /**

@@ -2,15 +2,15 @@
 
 return [
 
-    'label' => 'Navigasi penomboran',
+    'label' => 'Navigasi Penomboran',
 
-    'overview' => '{1} Memaparkan 1 rekod|Memaparkan :first hingga :last daripada :total rekod',
+    'overview' => 'Menunjukkan :first ke :last dari :total rekod',
 
     'fields' => [
 
         'records_per_page' => [
 
-            'label' => 'per halaman',
+            'label' => 'setiap halaman',
 
             'options' => [
                 'all' => 'Semua',
@@ -22,16 +22,8 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Pertama',
-        ],
-
         'go_to_page' => [
             'label' => 'Pergi ke halaman :page',
-        ],
-
-        'last' => [
-            'label' => 'Akhir',
         ],
 
         'next' => [

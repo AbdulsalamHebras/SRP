@@ -6,7 +6,6 @@ use Closure;
 use Filament\Infolists\Components\Contracts\HasAffixActions;
 use Filament\Infolists\Components\TextEntry\TextEntrySize;
 use Filament\Support\Concerns\CanBeCopied;
-use Filament\Support\Concerns\HasLineClamp;
 
 class TextEntry extends Entry implements HasAffixActions
 {
@@ -18,7 +17,6 @@ class TextEntry extends Entry implements HasAffixActions
     use Concerns\HasIcon;
     use Concerns\HasIconColor;
     use Concerns\HasWeight;
-    use HasLineClamp;
 
     /**
      * @var view-string

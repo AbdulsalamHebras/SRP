@@ -7,8 +7,6 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\HtmlString;
 
-use function Filament\Support\is_app_url;
-
 class ViewManager
 {
     /**
@@ -17,11 +15,6 @@ class ViewManager
     protected array $renderHooks = [];
 
     protected bool $hasSpaMode = false;
-
-    /**
-     * @var array<string>
-     */
-    protected array $spaModeUrlExceptions = [];
 
     /**
      * @param  string | array<string> | null  $scopes
@@ -81,31 +74,8 @@ class ViewManager
         $this->hasSpaMode = $condition;
     }
 
-    /**
-     * @param  array<string>  $exceptions
-     */
-    public function spaUrlExceptions(array $exceptions): void
+    public function hasSpaMode(): bool
     {
-        $this->spaModeUrlExceptions = [
-            ...$this->spaModeUrlExceptions,
-            ...$exceptions,
-        ];
-    }
-
-    public function hasSpaMode(?string $url = null): bool
-    {
-        if (! $this->hasSpaMode) {
-            return false;
-        }
-
-        if (blank($url)) {
-            return true;
-        }
-
-        if (count($this->spaModeUrlExceptions) && str($url)->is($this->spaModeUrlExceptions)) {
-            return false;
-        }
-
-        return is_app_url($url);
+        return $this->hasSpaMode;
     }
 }

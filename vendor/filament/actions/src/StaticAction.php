@@ -2,7 +2,6 @@
 
 namespace Filament\Actions;
 
-use Closure;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasBadge;
 use Filament\Support\Concerns\HasColor;
@@ -11,9 +10,8 @@ use Filament\Support\Concerns\HasIcon;
 use Illuminate\Support\Js;
 use Illuminate\Support\Traits\Conditionable;
 
-class StaticAction extends ViewComponent implements Contracts\Groupable
+class StaticAction extends ViewComponent
 {
-    use Concerns\BelongsToGroup;
     use Concerns\CanBeDisabled;
     use Concerns\CanBeHidden;
     use Concerns\CanBeLabeledFrom;
@@ -52,8 +50,6 @@ class StaticAction extends ViewComponent implements Contracts\Groupable
     protected string $viewIdentifier = 'action';
 
     protected ?string $livewireTarget = null;
-
-    protected string | Closure | null $alpineClickHandler = null;
 
     final public function __construct(?string $name)
     {
@@ -108,14 +104,6 @@ class StaticAction extends ViewComponent implements Contracts\Groupable
     public function isLink(): bool
     {
         return $this->getView() === static::LINK_VIEW;
-    }
-
-    public function alpineClickHandler(string | Closure | null $handler): static
-    {
-        $this->alpineClickHandler = $handler;
-        $this->livewireClickHandlerEnabled(blank($handler));
-
-        return $this;
     }
 
     public static function getDefaultName(): ?string
@@ -179,10 +167,6 @@ class StaticAction extends ViewComponent implements Contracts\Groupable
 
     public function getAlpineClickHandler(): ?string
     {
-        if (filled($handler = $this->evaluate($this->alpineClickHandler))) {
-            return $handler;
-        }
-
         if (! $this->shouldClose()) {
             return null;
         }

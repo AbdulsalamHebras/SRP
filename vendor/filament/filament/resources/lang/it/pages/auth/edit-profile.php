@@ -43,7 +43,7 @@ return [
     'actions' => [
 
         'cancel' => [
-            'label' => 'Indietro',
+            'label' => 'indietro',
         ],
 
     ],

@@ -11,67 +11,15 @@ return [
             ],
 
             'add' => [
-
                 'label' => 'Thêm vào :label',
-
-                'modal' => [
-
-                    'heading' => 'Thêm vào :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Thêm',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'add_between' => [
-
                 'label' => 'Chèn vào giữa các khối',
-
-                'modal' => [
-
-                    'heading' => 'Thêm vào :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Thêm',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'delete' => [
                 'label' => 'Xóa',
-            ],
-
-            'edit' => [
-
-                'label' => 'Chỉnh sửa',
-
-                'modal' => [
-
-                    'heading' => 'Chỉnh sửa khối',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'Lưu thay đổi',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'reorder' => [
@@ -469,31 +417,6 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Thêm thẻ mới',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Ẩn mật khẩu',
-            ],
-
-            'show_password' => [
-                'label' => 'Hiện mật khẩu',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Có',
-            'false' => 'Không',
-        ],
-
     ],
 
     'wizard' => [

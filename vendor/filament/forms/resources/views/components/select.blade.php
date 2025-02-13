@@ -32,10 +32,8 @@
         :suffix-icon="$suffixIcon"
         :suffix-icon-color="$getSuffixIconColor()"
         :valid="! $errors->has($statePath)"
-        :attributes="
-            \Filament\Support\prepare_inherited_attributes($getExtraAttributeBag())
-                ->class(['fi-fo-select'])
-        "
+        class="fi-fo-select"
+        :attributes="\Filament\Support\prepare_inherited_attributes($getExtraAttributeBag())"
     >
         @if ((! ($isSearchable() || $isMultiple()) && $isNative()))
             <x-filament::input.select
@@ -96,23 +94,9 @@
             </x-filament::input.select>
         @else
             <div
-                class="hidden"
-                x-data="{
-                    isDisabled: @js($isDisabled),
-                    init: function () {
-                        const container = $el.nextElementSibling
-                        container.dispatchEvent(
-                            new CustomEvent('set-select-property', {
-                                detail: { isDisabled: this.isDisabled },
-                            }),
-                        )
-                    },
-                }"
-            ></div>
-            <div
                 x-ignore
                 @if (FilamentView::hasSpaMode())
-                    {{-- format-ignore-start --}}ax-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
+                    ax-load="visible"
                 @else
                     ax-load
                 @endif
@@ -155,9 +139,9 @@
                         })"
                 wire:ignore
                 x-on:keydown.esc="select.dropdown.isActive && $event.stopPropagation()"
-                x-on:set-select-property="$event.detail.isDisabled ? select.disable() : select.enable()"
                 {{
                     $attributes
+                        ->merge($getExtraAttributes(), escape: false)
                         ->merge($getExtraAlpineAttributes(), escape: false)
                         ->class([
                             '[&_.choices\_\_inner]:ps-0' => $isPrefixInline && (count($prefixActions) || $prefixIcon || filled($prefixLabel)),
@@ -173,9 +157,6 @@
                                 'id' => $getId(),
                                 'multiple' => $isMultiple(),
                             ], escape: false)
-                            ->class([
-                                'h-9 w-full rounded-lg border-none bg-transparent !bg-none',
-                            ])
                     }}
                 ></select>
             </div>

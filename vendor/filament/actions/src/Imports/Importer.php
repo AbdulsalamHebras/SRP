@@ -37,7 +37,8 @@ abstract class Importer
         protected Import $import,
         protected array $columnMap,
         protected array $options,
-    ) {}
+    ) {
+    }
 
     /**
      * @param  array<string, mixed>  $data
@@ -56,12 +57,6 @@ abstract class Importer
             return;
         }
 
-        $recordExists = $this->record->exists;
-
-        if (! $recordExists) {
-            $this->checkColumnMappingRequirementsForNewRecords();
-        }
-
         $this->callHook('beforeValidate');
         $this->validateData();
         $this->callHook('afterValidate');
@@ -69,6 +64,8 @@ abstract class Importer
         $this->callHook('beforeFill');
         $this->fillRecord();
         $this->callHook('afterFill');
+
+        $recordExists = $this->record->exists;
 
         $this->callHook('beforeSave');
         $this->callHook($recordExists ? 'beforeUpdate' : 'beforeCreate');
@@ -83,12 +80,7 @@ abstract class Importer
 
         foreach ($this->getCachedColumns() as $column) {
             $columnName = $column->getName();
-
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
-
-            $rowColumnName = $this->columnMap[$columnName];
+            $rowColumnName = $this->columnMap[$columnName] ?? null;
 
             if (! array_key_exists($rowColumnName, $this->data)) {
                 continue;
@@ -98,31 +90,6 @@ abstract class Importer
         }
 
         $this->data = $data;
-    }
-
-    /**
-     * @throws ValidationException
-     */
-    public function checkColumnMappingRequirementsForNewRecords(): void
-    {
-        foreach ($this->getCachedColumns() as $column) {
-            $columnName = $column->getName();
-
-            if (filled($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
-
-            if (! $column->isMappingRequiredForNewRecordsOnly()) {
-                continue;
-            }
-
-            Validator::validate(
-                data: [$columnName => null],
-                rules: [$columnName => ['required']],
-                messages: ["{$columnName}.required" => __('filament-actions::import.failure_csv.column_mapping_required_for_new_record')],
-                attributes: [$columnName => $column->getLabel()],
-            );
-        }
     }
 
     public function castData(): void
@@ -154,12 +121,14 @@ abstract class Importer
      */
     public function validateData(): void
     {
-        Validator::validate(
+        $validator = Validator::make(
             $this->data,
             $this->getValidationRules(),
             $this->getValidationMessages(),
             $this->getValidationAttributes(),
         );
+
+        $validator->validate();
     }
 
     /**
@@ -171,10 +140,6 @@ abstract class Importer
 
         foreach ($this->getCachedColumns() as $column) {
             $columnName = $column->getName();
-
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
 
             $rules[$columnName] = $column->getDataValidationRules();
 
@@ -205,19 +170,13 @@ abstract class Importer
         $attributes = [];
 
         foreach ($this->getCachedColumns() as $column) {
-            $columnName = $column->getName();
-
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
-
             $validationAttribute = $column->getValidationAttribute();
 
             if (blank($validationAttribute)) {
                 continue;
             }
 
-            $attributes[$columnName] = $validationAttribute;
+            $attributes[$column->getName()] = $validationAttribute;
         }
 
         return $attributes;
@@ -227,10 +186,6 @@ abstract class Importer
     {
         foreach ($this->getCachedColumns() as $column) {
             $columnName = $column->getName();
-
-            if (blank($this->columnMap[$columnName] ?? null)) {
-                continue;
-            }
 
             if (! array_key_exists($columnName, $this->data)) {
                 continue;
@@ -276,11 +231,6 @@ abstract class Importer
 
     abstract public static function getCompletedNotificationBody(Import $import): string;
 
-    public static function getCompletedNotificationTitle(Import $import): string
-    {
-        return __('filament-actions::import.notifications.completed.title');
-    }
-
     /**
      * @return array<int, object>
      */
@@ -291,7 +241,7 @@ abstract class Importer
         ];
     }
 
-    public function getJobRetryUntil(): ?CarbonInterface
+    public function getJobRetryUntil(): CarbonInterface
     {
         return now()->addDay();
     }
@@ -310,11 +260,6 @@ abstract class Importer
     }
 
     public function getJobConnection(): ?string
-    {
-        return null;
-    }
-
-    public function getJobBatchName(): ?string
     {
         return null;
     }

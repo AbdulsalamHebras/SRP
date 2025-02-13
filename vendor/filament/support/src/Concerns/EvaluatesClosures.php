@@ -72,11 +72,8 @@ trait EvaluatesClosures
         }
 
         if (
-            (
-                isset($this->evaluationIdentifier) &&
-                ($parameterName === $this->evaluationIdentifier)
-            ) ||
-            ($typedParameterClassName === static::class)
+            isset($this->evaluationIdentifier) &&
+            ($parameterName === $this->evaluationIdentifier)
         ) {
             return $this;
         }

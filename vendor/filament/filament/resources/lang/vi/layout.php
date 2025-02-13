@@ -52,12 +52,4 @@ return [
 
     ],
 
-    'avatar' => [
-        'alt' => 'Ảnh đại diện của :name',
-    ],
-
-    'logo' => [
-        'alt' => 'Logo :name',
-    ],
-
 ];

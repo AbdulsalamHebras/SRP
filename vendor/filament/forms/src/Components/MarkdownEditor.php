@@ -9,8 +9,6 @@ class MarkdownEditor extends Field implements Contracts\CanBeLengthConstrained, 
 {
     use Concerns\CanBeLengthConstrained;
     use Concerns\HasFileAttachments;
-    use Concerns\HasMaxHeight;
-    use Concerns\HasMinHeight;
     use Concerns\HasPlaceholder;
     use Concerns\InteractsWithToolbarButtons;
     use HasExtraAlpineAttributes;

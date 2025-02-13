@@ -3,23 +3,14 @@
 namespace Filament\Forms\Components\Concerns;
 
 use Closure;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 trait CanDisableOptions
 {
-    /**
-     * @var array<bool | Closure>
-     */
-    protected array $isOptionDisabled = [];
+    protected bool | Closure | null $isOptionDisabled = null;
 
-    public function disableOptionWhen(bool | Closure | null $callback, bool $merge = false): static
+    public function disableOptionWhen(bool | Closure $callback): static
     {
-        if ($merge) {
-            $this->isOptionDisabled[] = $callback;
-        } else {
-            $this->isOptionDisabled = Arr::wrap($callback);
-        }
+        $this->isOptionDisabled = $callback;
 
         return $this;
     }
@@ -29,16 +20,11 @@ trait CanDisableOptions
      */
     public function getEnabledOptions(): array
     {
-        return collect($this->getOptions())
-            ->reduce(function (Collection $carry, $label, $value): Collection {
-                if (is_array($label)) {
-                    return $carry->merge($label);
-                }
-
-                return $carry->put($value, $label);
-            }, collect())
-            ->filter(fn ($label, $value) => ! $this->isOptionDisabled($value, $label))
-            ->all();
+        return array_filter(
+            $this->getOptions(),
+            fn ($label, $value) => ! $this->isOptionDisabled($value, $label),
+            ARRAY_FILTER_USE_BOTH,
+        );
     }
 
     /**
@@ -46,16 +32,18 @@ trait CanDisableOptions
      */
     public function isOptionDisabled($value, string $label): bool
     {
-        return collect($this->isOptionDisabled)
-            ->contains(fn (bool | Closure $isOptionDisabled): bool => (bool) $this->evaluate($isOptionDisabled, [
-                'label' => $label,
-                'value' => $value,
-            ]));
+        if ($this->isOptionDisabled === null) {
+            return false;
+        }
+
+        return (bool) $this->evaluate($this->isOptionDisabled, [
+            'label' => $label,
+            'value' => $value,
+        ]);
     }
 
     public function hasDynamicDisabledOptions(): bool
     {
-        return collect($this->isOptionDisabled)
-            ->contains(fn (bool | Closure $isOptionDisabled): bool => $isOptionDisabled instanceof Closure);
+        return $this->isOptionDisabled instanceof Closure;
     }
 }

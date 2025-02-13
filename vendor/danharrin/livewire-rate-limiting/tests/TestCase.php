@@ -3,6 +3,7 @@
 namespace DanHarrin\LivewireRateLimiting\Tests;
 
 use Livewire\LivewireServiceProvider;
+use Livewire\Volt\Volt;
 use Livewire\Volt\VoltServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase

@@ -1,6 +1,5 @@
 import * as FilePond from 'filepond'
 import Cropper from 'cropperjs'
-import mime from 'mime'
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size'
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop'
@@ -51,13 +50,10 @@ export default function fileUploadFormComponent({
     isOpenable,
     isPreviewable,
     isReorderable,
-    itemPanelAspectRatio,
     loadingIndicatorPosition,
     locale,
-    maxFiles,
     maxSize,
     minSize,
-    maxParallelUploads,
     panelAspectRatio,
     panelLayout,
     placeholder,
@@ -69,7 +65,6 @@ export default function fileUploadFormComponent({
     shouldTransformImage,
     state,
     uploadButtonPosition,
-    uploadingMessage,
     uploadProgressIndicatorPosition,
     uploadUsing,
 }) {
@@ -83,8 +78,6 @@ export default function fileUploadFormComponent({
         state,
 
         lastState: null,
-
-        error: null,
 
         uploadedFileIndex: {},
 
@@ -117,16 +110,12 @@ export default function fileUploadFormComponent({
                 imageResizeTargetWidth,
                 imageResizeMode,
                 imageResizeUpscale,
-                imageTransformOutputStripImageHead: false,
                 itemInsertLocation: shouldAppendFiles ? 'after' : 'before',
                 ...(placeholder && { labelIdle: placeholder }),
-                maxFiles,
                 maxFileSize: maxSize,
                 minFileSize: minSize,
-                ...(maxParallelUploads && { maxParallelUploads }),
                 styleButtonProcessItemPosition: uploadButtonPosition,
                 styleButtonRemoveItemPosition: removeUploadedFileButtonPosition,
-                styleItemPanelAspectRatio: itemPanelAspectRatio,
                 styleLoadIndicatorPosition: loadingIndicatorPosition,
                 stylePanelAspectRatio: panelAspectRatio,
                 stylePanelLayout: panelLayout,
@@ -200,14 +189,6 @@ export default function fileUploadFormComponent({
                     oncancel: () => this.closeEditor(),
                     onclose: () => this.closeEditor(),
                 },
-                fileValidateTypeDetectType: (source, detectedType) => {
-                    return new Promise((resolve, reject) => {
-                        const mimeType =
-                            detectedType ||
-                            mime.getType(source.name.split('.').pop())
-                        mimeType ? resolve(mimeType) : reject()
-                    })
-                },
             })
 
             this.$watch('state', async () => {
@@ -250,7 +231,7 @@ export default function fileUploadFormComponent({
                     .map((file) =>
                         file.source instanceof File
                             ? file.serverId
-                            : (this.uploadedFileIndex[file.source] ?? null),
+                            : this.uploadedFileIndex[file.source] ?? null,
                     ) // file.serverId is null for a file that is not yet uploaded
                     .filter((fileKey) => fileKey)
 
@@ -290,9 +271,7 @@ export default function fileUploadFormComponent({
                     return
                 }
 
-                this.dispatchFormEvent('form-processing-started', {
-                    message: uploadingMessage,
-                })
+                this.dispatchFormEvent('file-upload-started')
             })
 
             const handleFileProcessing = async () => {
@@ -310,7 +289,7 @@ export default function fileUploadFormComponent({
                     return
                 }
 
-                this.dispatchFormEvent('form-processing-finished')
+                this.dispatchFormEvent('file-upload-finished')
             }
 
             this.pond.on('processfile', handleFileProcessing)
@@ -318,24 +297,6 @@ export default function fileUploadFormComponent({
             this.pond.on('processfileabort', handleFileProcessing)
 
             this.pond.on('processfilerevert', handleFileProcessing)
-
-            if (panelLayout === 'compact circle') {
-                // The compact circle layout does not have enough space to render an error message inside the input.
-                // As such, we need to display the error message outside of the input, using the `error` Alpine.js
-                // property that is output as a message in the field's view.
-
-                this.pond.on('error', (error) => {
-                    // FilePond has a weird English translation for the error message when a file of an unexpected
-                    // type is uploaded, for example: `File of invalid type: Expects  or image/*`. This is a
-                    // hacky workaround to fix the message to be `File of invalid type: Expects image/*`.
-                    this.error = `${error.main}: ${error.sub}`.replace(
-                        'Expects  or',
-                        'Expects',
-                    )
-                })
-
-                this.pond.on('removefile', () => (this.error = null))
-            }
         },
 
         destroy: function () {
@@ -345,12 +306,11 @@ export default function fileUploadFormComponent({
             this.pond = null
         },
 
-        dispatchFormEvent: function (name, detail = {}) {
+        dispatchFormEvent: function (name) {
             this.$el.closest('form')?.dispatchEvent(
                 new CustomEvent(name, {
                     composed: true,
                     cancelable: true,
-                    detail,
                 }),
             )
         },
@@ -384,10 +344,7 @@ export default function fileUploadFormComponent({
                     options: {
                         type: 'local',
                         ...(!uploadedFile.type ||
-                        (isPreviewable &&
-                            (/^audio/.test(uploadedFile.type) ||
-                                /^image/.test(uploadedFile.type) ||
-                                /^video/.test(uploadedFile.type)))
+                        /^image/.test(uploadedFile.type)
                             ? {}
                             : {
                                   file: {
@@ -748,8 +705,6 @@ export default function fileUploadFormComponent({
 }
 
 import ar from 'filepond/locale/ar-ar'
-import ca from 'filepond/locale/ca-ca'
-import ckb from 'filepond/locale/ku-ckb'
 import cs from 'filepond/locale/cs-cz'
 import da from 'filepond/locale/da-dk'
 import de from 'filepond/locale/de-de'
@@ -761,7 +716,6 @@ import fr from 'filepond/locale/fr-fr'
 import hu from 'filepond/locale/hu-hu'
 import id from 'filepond/locale/id-id'
 import it from 'filepond/locale/it-it'
-import km from 'filepond/locale/km-km'
 import nl from 'filepond/locale/nl-nl'
 import no from 'filepond/locale/no_nb'
 import pl from 'filepond/locale/pl-pl'
@@ -778,8 +732,6 @@ import zh_TW from 'filepond/locale/zh-tw'
 
 const locales = {
     ar,
-    ca,
-    ckb,
     cs,
     da,
     de,
@@ -791,7 +743,6 @@ const locales = {
     hu,
     id,
     it,
-    km,
     nl,
     no,
     pl,

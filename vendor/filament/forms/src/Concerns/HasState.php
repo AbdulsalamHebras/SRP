@@ -2,7 +2,6 @@
 
 namespace Filament\Forms\Concerns;
 
-use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 
@@ -69,14 +68,14 @@ trait HasState
      * @param  array<string, mixed>  $state
      * @return array<string, mixed>
      */
-    public function dehydrateState(array &$state = [], bool $isDehydrated = true): array
+    public function dehydrateState(array &$state = []): array
     {
-        foreach ($this->getComponents(withHidden: true) as $component) {
-            if ($component->isHiddenAndNotDehydrated()) {
+        foreach ($this->getComponents() as $component) {
+            if ($component->isHidden()) {
                 continue;
             }
 
-            $component->dehydrateState($state, $isDehydrated);
+            $component->dehydrateState($state);
         }
 
         return $state;
@@ -88,8 +87,8 @@ trait HasState
      */
     public function mutateDehydratedState(array &$state = []): array
     {
-        foreach ($this->getComponents(withHidden: true) as $component) {
-            if ($component->isHiddenAndNotDehydrated()) {
+        foreach ($this->getComponents() as $component) {
+            if ($component->isHidden()) {
                 continue;
             }
 
@@ -131,8 +130,8 @@ trait HasState
      */
     public function mutateStateForValidation(array &$state = []): array
     {
-        foreach ($this->getComponents(withHidden: true) as $component) {
-            if ($component->isHiddenAndNotDehydrated()) {
+        foreach ($this->getComponents() as $component) {
+            if ($component->isHidden()) {
                 continue;
             }
 
@@ -221,29 +220,21 @@ trait HasState
     /**
      * @return array<string, mixed>
      */
-    public function getState(bool $shouldCallHooksBefore = true, ?Closure $afterValidate = null): array
+    public function getState(bool $shouldCallHooksBefore = true): array
     {
         $state = $this->validate();
 
         if ($shouldCallHooksBefore) {
             $this->callBeforeStateDehydrated();
-
-            $afterValidate || $this->saveRelationships();
-            $afterValidate || $this->loadStateFromRelationships(andHydrate: true);
+            $this->saveRelationships();
+            $this->loadStateFromRelationships(andHydrate: true);
         }
 
         $this->dehydrateState($state);
         $this->mutateDehydratedState($state);
 
         if ($statePath = $this->getStatePath()) {
-            $state = data_get($state, $statePath) ?? [];
-        }
-
-        if ($afterValidate) {
-            value($afterValidate, $state);
-
-            $shouldCallHooksBefore && $this->saveRelationships();
-            $shouldCallHooksBefore && $this->loadStateFromRelationships(andHydrate: true);
+            return data_get($state, $statePath) ?? [];
         }
 
         return $state;
@@ -261,33 +252,29 @@ trait HasState
      * @param  array<string>  $keys
      * @return array<string, mixed>
      */
-    public function getStateOnly(array $keys, bool $shouldCallHooksBefore = true): array
+    public function getStateOnly(array $keys): array
     {
-        return Arr::only($this->getState($shouldCallHooksBefore), $keys);
+        return Arr::only($this->getState(), $keys);
     }
 
     /**
      * @param  array<string>  $keys
      * @return array<string, mixed>
      */
-    public function getStateExcept(array $keys, bool $shouldCallHooksBefore = true): array
+    public function getStateExcept(array $keys): array
     {
-        return Arr::except($this->getState($shouldCallHooksBefore), $keys);
+        return Arr::except($this->getState(), $keys);
     }
 
     public function getStatePath(bool $isAbsolute = true): string
     {
-        if (! $isAbsolute) {
-            return $this->statePath ?? '';
-        }
-
         if (isset($this->cachedAbsoluteStatePath)) {
             return $this->cachedAbsoluteStatePath;
         }
 
         $pathComponents = [];
 
-        if ($parentComponentStatePath = $this->getParentComponent()?->getStatePath()) {
+        if ($isAbsolute && $parentComponentStatePath = $this->getParentComponent()?->getStatePath()) {
             $pathComponents[] = $parentComponentStatePath;
         }
 

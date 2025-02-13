@@ -3,7 +3,6 @@
 namespace Filament\Widgets\StatsOverviewWidget;
 
 use Closure;
-use Filament\Support\Concerns\Macroable;
 use Filament\Support\Enums\IconPosition;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
@@ -13,10 +12,8 @@ use Illuminate\View\ComponentAttributeBag;
 
 class Stat extends Component implements Htmlable
 {
-    use Macroable;
-
     /**
-     * @var array<float> | null
+     * @var array<string, mixed> | null
      */
     protected ?array $chart = null;
 
@@ -156,7 +153,7 @@ class Stat extends Component implements Htmlable
     }
 
     /**
-     * @param  array<float> | null  $chart
+     * @param  array<int> | null  $chart
      */
     public function chart(?array $chart): static
     {
@@ -190,7 +187,7 @@ class Stat extends Component implements Htmlable
     }
 
     /**
-     * @return array<float> | null
+     * @return array<string, mixed> | null
      */
     public function getChart(): ?array
     {

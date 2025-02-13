@@ -16,7 +16,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Locked;
-use Throwable;
 
 use function Filament\authorize;
 use function Filament\Support\is_app_url;
@@ -26,7 +25,6 @@ use function Filament\Support\is_app_url;
  */
 abstract class EditTenantProfile extends Page
 {
-    use Concerns\CanUseDatabaseTransactions;
     use Concerns\HasRoutes;
     use Concerns\InteractsWithFormActions;
 
@@ -53,13 +51,6 @@ abstract class EditTenantProfile extends Page
     public static function getRelativeRouteName(): string
     {
         return 'profile';
-    }
-
-    public static function getRouteName(?string $panel = null): string
-    {
-        $panel = $panel ? Filament::getPanel($panel) : Filament::getCurrentPanel();
-
-        return $panel->generateRouteName('tenant.' . static::getRelativeRouteName());
     }
 
     public static function isTenantSubscriptionRequired(Panel $panel): bool
@@ -110,8 +101,6 @@ abstract class EditTenantProfile extends Page
     public function save(): void
     {
         try {
-            $this->beginDatabaseTransaction();
-
             $this->callHook('beforeValidate');
 
             $data = $this->form->getState();
@@ -125,18 +114,8 @@ abstract class EditTenantProfile extends Page
             $this->handleRecordUpdate($this->tenant, $data);
 
             $this->callHook('afterSave');
-
-            $this->commitDatabaseTransaction();
         } catch (Halt $exception) {
-            $exception->shouldRollbackDatabaseTransaction() ?
-                $this->rollBackDatabaseTransaction() :
-                $this->commitDatabaseTransaction();
-
             return;
-        } catch (Throwable $exception) {
-            $this->rollBackDatabaseTransaction();
-
-            throw $exception;
         }
 
         $this->getSavedNotification()?->send();

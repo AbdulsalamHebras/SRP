@@ -11,63 +11,15 @@ return [
             ],
 
             'add' => [
-                'label' => ':labelga qo\'shish',
-
-                'modal' => [
-
-                    'heading' => ':labelga qo\'shish',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Qo\'shish',
-                        ],
-
-                    ],
-
-                ],
+                'label' => ':label ga qo\'shish',
             ],
 
             'add_between' => [
                 'label' => 'Orasiga kiritish',
-
-                'modal' => [
-
-                    'heading' => ':labelga qo\'shish',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Qo\'shish',
-                        ],
-
-                    ],
-
-                ],
             ],
 
             'delete' => [
                 'label' => 'O\'chirish',
-            ],
-
-            'edit' => [
-
-                'label' => 'O\'zgartirish',
-
-                'modal' => [
-
-                    'heading' => 'O\'zgartirish',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'O\'zgarishlarni saqlash',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'reorder' => [
@@ -301,7 +253,7 @@ return [
         'actions' => [
 
             'add' => [
-                'label' => ':label qo\'shish',
+                'label' => ':label - qo\'shish',
             ],
 
             'add_between' => [
@@ -439,7 +391,7 @@ return [
 
         'loading_message' => 'Yuklanmoqda...',
 
-        'max_items_message' => 'Faqat :countta tanlash mumkin.',
+        'max_items_message' => 'Faqat :count tanlash mumkin.',
 
         'no_search_results_message' => 'So\'rovingizga mos keladigan natijalar yo\'q.',
 
@@ -452,31 +404,6 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Yangi teg',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Parolni yashirish',
-            ],
-
-            'show_password' => [
-                'label' => 'Parolni ko\'rsatish',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Ha',
-            'false' => 'Yo\'q',
-        ],
-
     ],
 
     'wizard' => [

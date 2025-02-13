@@ -241,15 +241,6 @@ return [
 
     ],
 
-    'radio' => [
-
-        'boolean' => [
-            'true' => '是',
-            'false' => '否',
-        ],
-
-    ],
-
     'repeater' => [
 
         'actions' => [

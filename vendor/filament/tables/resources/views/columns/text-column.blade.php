@@ -43,17 +43,7 @@
             $arrayState = implode(
                 ', ',
                 array_map(
-                    function ($value) {
-                        if ($value instanceof \Filament\Support\Contracts\HasLabel) {
-                            return $value->getLabel();
-                        }
-
-                        if (is_array($value)) {
-                            return json_encode($value);
-                        }
-
-                        return $value;
-                    },
+                    fn ($value) => $value instanceof \Filament\Support\Contracts\HasLabel ? $value->getLabel() : $value,
                     $arrayState,
                 ),
             );
@@ -92,6 +82,7 @@
                 'list-inside list-disc' => $isBulleted,
                 'gap-1.5' => $isBadge,
                 'flex-wrap' => $isBadge && (! $isListWithLineBreaks),
+                'whitespace-normal' => $canWrap,
                 match ($alignment) {
                     Alignment::Start => 'text-start',
                     Alignment::Center => 'text-center',
@@ -132,7 +123,6 @@
                         $icon = $getIcon($state);
                         $iconColor = $getIconColor($state) ?? $color;
                         $itemIsCopyable = $isCopyable($state);
-                        $lineClamp = $getLineClamp($state);
                         $size = $getSize($state);
                         $weight = $getWeight($state);
 
@@ -173,18 +163,6 @@
                             'max-w-max' => ! ($isBulleted || $isBadge),
                             'w-max' => $isBadge,
                             'cursor-pointer' => $itemIsCopyable,
-                            match ($color) {
-                                null => 'text-gray-950 dark:text-white',
-                                'gray' => 'text-gray-500 dark:text-gray-400',
-                                default => 'text-custom-600 dark:text-custom-400',
-                            } => $isBulleted,
-                        ])
-                        @style([
-                            \Filament\Support\get_color_css_variables(
-                                $color,
-                                shades: [400, 600],
-                                alias: 'tables::columns.text-column.item.container',
-                            ) => $isBulleted && (! in_array($color, [null, 'gray'])),
                         ])
                     >
                         @if ($isBadge)
@@ -201,10 +179,10 @@
                                     'fi-ta-text-item inline-flex items-center gap-1.5',
                                     'group/item' => $url,
                                     match ($color) {
-                                        null, 'gray' => null,
+                                        null => null,
+                                        'gray' => 'fi-color-gray',
                                         default => 'fi-color-custom',
                                     },
-                                    is_string($color) ? "fi-color-{$color}" : null,
                                 ])
                             >
                                 @if ($icon && in_array($iconPosition, [IconPosition::Before, 'before']))
@@ -219,8 +197,6 @@
                                     @class([
                                         'fi-ta-text-item-label',
                                         'group-hover/item:underline group-focus-visible/item:underline' => $url,
-                                        'whitespace-normal' => $canWrap,
-                                        'line-clamp-[--line-clamp]' => $lineClamp,
                                         match ($size) {
                                             TextColumnSize::ExtraSmall, 'xs' => 'text-xs',
                                             TextColumnSize::Small, 'sm', null => 'text-sm leading-6',
@@ -257,7 +233,6 @@
                                             shades: [400, 600],
                                             alias: 'tables::columns.text-column.item.label',
                                         ) => ! in_array($color, [null, 'gray']),
-                                        "--line-clamp: {$lineClamp}" => $lineClamp,
                                     ])
                                 >
                                     {{ $formattedState }}

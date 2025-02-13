@@ -2,4 +2,6 @@
 
 namespace Filament\Support\Assets;
 
-class Theme extends Css {}
+class Theme extends Css
+{
+}

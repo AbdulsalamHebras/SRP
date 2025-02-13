@@ -12,6 +12,4 @@ interface HasRecord
     public function getRecord(): ?Model;
 
     public function getRecordTitle(): ?string;
-
-    public function hasRecord(): bool;
 }

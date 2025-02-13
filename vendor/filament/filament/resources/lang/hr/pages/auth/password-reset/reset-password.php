@@ -2,14 +2,14 @@
 
 return [
 
-    'title' => 'Resetiraj svoju lozinku',
+    'title' => 'Resetirajte svoju lozinku',
 
-    'heading' => 'Resetiraj svoju lozinku',
+    'heading' => 'Resetirajte svoju lozinku',
 
     'form' => [
 
         'email' => [
-            'label' => 'Adresa e-pošte',
+            'label' => 'Email adresa',
         ],
 
         'password' => [
@@ -35,7 +35,7 @@ return [
 
         'throttled' => [
             'title' => 'Previše pokušaja resetiranja.',
-            'body' => 'Molim te, pokušaj ponovno za :seconds sekundi.',
+            'body' => 'Molim pokušajte ponovno za :seconds sekundi.',
         ],
 
     ],

@@ -2,7 +2,7 @@
 
 namespace Filament\Actions\Exports\Jobs;
 
-use Filament\Actions\Exports\Enums\ExportFormat;
+use Filament\Actions\Exports\Enums\DownloadFileFormat;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
 use Filament\Notifications\Actions\Action as NotificationAction;
@@ -27,13 +27,11 @@ class ExportCompletion implements ShouldQueue
 
     /**
      * @param  array<string, string>  $columnMap
-     * @param  array<ExportFormat>  $formats
      * @param  array<string, mixed>  $options
      */
     public function __construct(
         protected Export $export,
         protected array $columnMap,
-        protected array $formats = [],
         protected array $options = [],
     ) {
         $this->exporter = $this->export->getExporter(
@@ -53,7 +51,7 @@ class ExportCompletion implements ShouldQueue
         $failedRowsCount = $this->export->getFailedRowsCount();
 
         Notification::make()
-            ->title($this->exporter::getCompletedNotificationTitle($this->export))
+            ->title(__('filament-actions::export.notifications.completed.title'))
             ->body($this->exporter::getCompletedNotificationBody($this->export))
             ->when(
                 ! $failedRowsCount,
@@ -69,18 +67,15 @@ class ExportCompletion implements ShouldQueue
             )
             ->when(
                 $failedRowsCount < $this->export->total_rows,
-                fn (Notification $notification) => $notification->actions(array_map(
-                    fn (ExportFormat $format): NotificationAction => $format->getDownloadNotificationAction($this->export),
-                    $this->formats,
-                )),
+                fn (Notification $notification) => $notification->actions([
+                    NotificationAction::make('download_csv')
+                        ->label(__('filament-actions::export.notifications.completed.actions.download_csv.label'))
+                        ->url(route('filament.exports.download', ['export' => $this->export, 'format' => DownloadFileFormat::Csv])),
+                    NotificationAction::make('download_xlsx')
+                        ->label(__('filament-actions::export.notifications.completed.actions.download_xlsx.label'))
+                        ->url(route('filament.exports.download', ['export' => $this->export, 'format' => DownloadFileFormat::Xlsx])),
+                ]),
             )
-            ->when(
-                ($this->connection === 'sync') ||
-                    (blank($this->connection) && (config('queue.default') === 'sync')),
-                fn (Notification $notification) => $notification
-                    ->persistent()
-                    ->send(),
-                fn (Notification $notification) => $notification->sendToDatabase($this->export->user, isEventDispatched: true),
-            );
+            ->sendToDatabase($this->export->user);
     }
 }

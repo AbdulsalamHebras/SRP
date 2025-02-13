@@ -9,12 +9,10 @@ use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
-#[AsCommand(name: 'make:filament-widget')]
 class MakeWidgetCommand extends Command
 {
     use CanManipulateFiles;
@@ -81,7 +79,7 @@ class MakeWidgetCommand extends Command
             $panel = $this->option('panel');
 
             if ($panel) {
-                $panel = Filament::getPanel($panel, isStrict: false);
+                $panel = Filament::getPanel($panel);
             }
 
             if (! $panel) {
@@ -114,13 +112,6 @@ class MakeWidgetCommand extends Command
             $widgetDirectories = $panel->getWidgetDirectories();
             $widgetNamespaces = $panel->getWidgetNamespaces();
 
-            foreach ($widgetDirectories as $widgetIndex => $widgetDirectory) {
-                if (str($widgetDirectory)->startsWith(base_path('vendor'))) {
-                    unset($widgetDirectories[$widgetIndex]);
-                    unset($widgetNamespaces[$widgetIndex]);
-                }
-            }
-
             $namespace = (count($widgetNamespaces) > 1) ?
                 select(
                     label: 'Which namespace would you like to create this in?',
@@ -133,13 +124,6 @@ class MakeWidgetCommand extends Command
         } else {
             $resourceDirectories = $panel->getResourceDirectories();
             $resourceNamespaces = $panel->getResourceNamespaces();
-
-            foreach ($resourceDirectories as $resourceIndex => $resourceDirectory) {
-                if (str($resourceDirectory)->startsWith(base_path('vendor'))) {
-                    unset($resourceDirectories[$resourceIndex]);
-                    unset($resourceNamespaces[$resourceIndex]);
-                }
-            }
 
             $resourceNamespace = (count($resourceNamespaces) > 1) ?
                 select(

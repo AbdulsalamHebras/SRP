@@ -6,13 +6,10 @@
 
         <x-filament::modal
             :alignment="$action?->getModalAlignment()"
-            :autofocus="$action?->isModalAutofocused()"
             :close-button="$action?->hasModalCloseButton()"
             :close-by-clicking-away="$action?->isModalClosedByClickingAway()"
-            :close-by-escaping="$action?->isModalClosedByEscaping()"
             :description="$action?->getModalDescription()"
             display-classes="block"
-            :extra-modal-window-attribute-bag="$action?->getExtraModalWindowAttributeBag()"
             :footer-actions="$action?->getVisibleModalFooterActions()"
             :footer-actions-alignment="$action?->getModalFooterActionsAlignment()"
             :heading="$action?->getModalHeading()"
@@ -27,7 +24,7 @@
             :wire:key="$action ? $this->getId() . '.actions.' . $action->getName() . '.modal' : null"
             x-on:closed-form-component-action-modal.window="if (($event.detail.id === '{{ $this->getId() }}') && $wire.mountedActions.length) open()"
             x-on:modal-closed.stop="
-                const mountedActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedActionShouldOpenModal(mountedAction: $action)) }}
+                const mountedActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedActionShouldOpenModal()) }}
 
                 if (! mountedActionShouldOpenModal) {
                     return
@@ -37,7 +34,7 @@
                     return
                 }
 
-                $wire.unmountAction(false, false)
+                $wire.unmountAction(false)
             "
             x-on:opened-form-component-action-modal.window="if ($event.detail.id === '{{ $this->getId() }}') close()"
         >
@@ -46,8 +43,8 @@
 
                 @if (count(($infolist = $action->getInfolist())?->getComponents() ?? []))
                     {{ $infolist }}
-                @elseif ($this->mountedActionHasForm(mountedAction: $action))
-                    {{ $this->getMountedActionForm(mountedAction: $action) }}
+                @elseif ($this->mountedActionHasForm())
+                    {{ $this->getMountedActionForm() }}
                 @endif
 
                 {{ $action->getModalContentFooter() }}
@@ -68,13 +65,10 @@
 
         <x-filament::modal
             :alignment="$action?->getModalAlignment()"
-            :autofocus="$action?->isModalAutofocused()"
             :close-button="$action?->hasModalCloseButton()"
             :close-by-clicking-away="$action?->isModalClosedByClickingAway()"
-            :close-by-escaping="$action?->isModalClosedByEscaping()"
             :description="$action?->getModalDescription()"
             display-classes="block"
-            :extra-modal-window-attribute-bag="$action?->getExtraModalWindowAttributeBag()"
             :footer-actions="$action?->getVisibleModalFooterActions()"
             :footer-actions-alignment="$action?->getModalFooterActionsAlignment()"
             :heading="$action?->getModalHeading()"
@@ -89,7 +83,7 @@
             :wire:key="$action ? $this->getId() . '.table.actions.' . $action->getName() . '.modal' : null"
             x-on:closed-form-component-action-modal.window="if (($event.detail.id === '{{ $this->getId() }}') && $wire.mountedTableActions.length) open()"
             x-on:modal-closed.stop="
-                const mountedTableActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedTableActionShouldOpenModal(mountedAction: $action)) }}
+                const mountedTableActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedTableActionShouldOpenModal()) }}
 
                 if (! mountedTableActionShouldOpenModal) {
                     return
@@ -99,7 +93,7 @@
                     return
                 }
 
-                $wire.unmountTableAction(false, false)
+                $wire.unmountTableAction(false)
             "
             x-on:opened-form-component-action-modal.window="if ($event.detail.id === '{{ $this->getId() }}') close()"
         >
@@ -108,7 +102,7 @@
 
                 @if (count(($infolist = $action->getInfolist())?->getComponents() ?? []))
                     {{ $infolist }}
-                @elseif ($this->mountedTableActionHasForm(mountedAction: $action))
+                @elseif ($this->mountedTableActionHasForm())
                     {{ $this->getMountedTableActionForm() }}
                 @endif
 
@@ -124,13 +118,10 @@
 
         <x-filament::modal
             :alignment="$action?->getModalAlignment()"
-            :autofocus="$action?->isModalAutofocused()"
             :close-button="$action?->hasModalCloseButton()"
             :close-by-clicking-away="$action?->isModalClosedByClickingAway()"
-            :close-by-escaping="$action?->isModalClosedByEscaping()"
             :description="$action?->getModalDescription()"
             display-classes="block"
-            :extra-modal-window-attribute-bag="$action?->getExtraModalWindowAttributeBag()"
             :footer-actions="$action?->getVisibleModalFooterActions()"
             :footer-actions-alignment="$action?->getModalFooterActionsAlignment()"
             :heading="$action?->getModalHeading()"
@@ -145,7 +136,7 @@
             :wire:key="$action ? $this->getId() . '.table.bulk-actions.' . $action->getName() . '.modal' : null"
             x-on:closed-form-component-action-modal.window="if (($event.detail.id === '{{ $this->getId() }}') && $wire.mountedTableBulkAction) open()"
             x-on:modal-closed.stop="
-                const mountedTableBulkActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedTableBulkActionShouldOpenModal(mountedBulkAction: $action)) }}
+                const mountedTableBulkActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedTableBulkActionShouldOpenModal()) }}
 
                 if (! mountedTableBulkActionShouldOpenModal) {
                     return
@@ -164,8 +155,8 @@
 
                 @if (count(($infolist = $action->getInfolist())?->getComponents() ?? []))
                     {{ $infolist }}
-                @elseif ($this->mountedTableBulkActionHasForm(mountedBulkAction: $action))
-                    {{ $this->getMountedTableBulkActionForm(mountedBulkAction: $action) }}
+                @elseif ($this->mountedTableBulkActionHasForm())
+                    {{ $this->getMountedTableBulkActionForm() }}
                 @endif
 
                 {{ $action->getModalContentFooter() }}
@@ -186,13 +177,10 @@
 
         <x-filament::modal
             :alignment="$action?->getModalAlignment()"
-            :autofocus="$action?->isModalAutofocused()"
             :close-button="$action?->hasModalCloseButton()"
             :close-by-clicking-away="$action?->isModalClosedByClickingAway()"
-            :close-by-escaping="$action?->isModalClosedByEscaping()"
             :description="$action?->getModalDescription()"
             display-classes="block"
-            :extra-modal-window-attribute-bag="$action?->getExtraModalWindowAttributeBag()"
             :footer-actions="$action?->getVisibleModalFooterActions()"
             :footer-actions-alignment="$action?->getModalFooterActionsAlignment()"
             :heading="$action?->getModalHeading()"
@@ -207,7 +195,7 @@
             :wire:key="$action ? $this->getId() . '.infolist.actions.' . $action->getName() . '.modal' : null"
             x-on:closed-form-component-action-modal.window="if (($event.detail.id === '{{ $this->getId() }}') && $wire.mountedInfolistActions.length) open()"
             x-on:modal-closed.stop="
-                const mountedInfolistActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedInfolistActionShouldOpenModal(mountedAction: $action)) }}
+                const mountedInfolistActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedInfolistActionShouldOpenModal()) }}
 
                 if (! mountedInfolistActionShouldOpenModal) {
                     return
@@ -217,7 +205,7 @@
                     return
                 }
 
-                $wire.unmountInfolistAction(false, false)
+                $wire.unmountInfolistAction(false)
             "
             x-on:opened-form-component-action-modal.window="if ($event.detail.id === '{{ $this->getId() }}') close()"
         >
@@ -226,8 +214,8 @@
 
                 @if (count(($infolist = $action->getInfolist())?->getComponents() ?? []))
                     {{ $infolist }}
-                @elseif ($this->mountedInfolistActionHasForm(mountedAction: $action))
-                    {{ $this->getMountedInfolistActionForm(mountedAction: $action) }}
+                @elseif ($this->mountedInfolistActionHasForm())
+                    {{ $this->getMountedInfolistActionForm() }}
                 @endif
 
                 {{ $action->getModalContentFooter() }}
@@ -248,13 +236,10 @@
     <form wire:submit.prevent="callMountedFormComponentAction">
         <x-filament::modal
             :alignment="$action?->getModalAlignment()"
-            :autofocus="$action?->isModalAutofocused()"
             :close-button="$action?->hasModalCloseButton()"
             :close-by-clicking-away="$action?->isModalClosedByClickingAway()"
-            :close-by-escaping="$action?->isModalClosedByEscaping()"
             :description="$action?->getModalDescription()"
             display-classes="block"
-            :extra-modal-window-attribute-bag="$action?->getExtraModalWindowAttributeBag()"
             :footer-actions="$action?->getVisibleModalFooterActions()"
             :footer-actions-alignment="$action?->getModalFooterActionsAlignment()"
             :heading="$action?->getModalHeading()"
@@ -271,7 +256,7 @@
                 const mountedFormComponentActionShouldOpenModal = {{ \Illuminate\Support\Js::from($action && $this->mountedFormComponentActionShouldOpenModal()) }}
 
                 if (mountedFormComponentActionShouldOpenModal) {
-                    $wire.unmountFormComponentAction(false, false)
+                    $wire.unmountFormComponentAction(false)
                 }
             "
         >
@@ -280,8 +265,8 @@
 
                 @if (count(($infolist = $action->getInfolist())?->getComponents() ?? []))
                     {{ $infolist }}
-                @elseif ($this->mountedFormComponentActionHasForm(mountedAction: $action))
-                    {{ $this->getMountedFormComponentActionForm(mountedAction: $action) }}
+                @elseif ($this->mountedFormComponentActionHasForm())
+                    {{ $this->getMountedFormComponentActionForm() }}
                 @endif
 
                 {{ $action->getModalContentFooter() }}

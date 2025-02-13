@@ -12,7 +12,6 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
-use Znck\Eloquent\Relations\BelongsToThrough;
 
 class IsRelatedToOperator extends Operator
 {
@@ -74,7 +73,7 @@ class IsRelatedToOperator extends Operator
 
         $values = $relationshipQuery
             ->when(
-                $this->getRelationship() instanceof BelongsToThrough,
+                $this->getRelationship() instanceof \Znck\Eloquent\Relations\BelongsToThrough,
                 fn (Builder $query) => $query->distinct(),
             )
             ->whereKey($values)

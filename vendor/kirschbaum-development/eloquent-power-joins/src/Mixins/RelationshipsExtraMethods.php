@@ -3,21 +3,22 @@
 namespace Kirschbaum\PowerJoins\Mixins;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Database\MySqlConnection;
+use Stringable;
 use Illuminate\Support\Str;
-use Kirschbaum\PowerJoins\PowerJoinClause;
 use Kirschbaum\PowerJoins\StaticCache;
+use Kirschbaum\PowerJoins\PowerJoinClause;
+use Kirschbaum\PowerJoins\Tests\Models\Post;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 /**
  * @method \Illuminate\Database\Eloquent\Model getModel()
@@ -34,21 +35,19 @@ use Kirschbaum\PowerJoins\StaticCache;
  * @method string getFirstKeyName()
  * @method string getQualifiedLocalKeyName()
  * @method string getExistenceCompareKey()
- *
  * @mixin \Illuminate\Database\Eloquent\Relations\Relation
  * @mixin \Illuminate\Database\Eloquent\Relations\HasOneOrMany
  * @mixin \Illuminate\Database\Eloquent\Relations\BelongsToMany
- *
  * @property \Illuminate\Database\Eloquent\Builder $query
- * @property Model $parent
- * @property Model $throughParent
+ * @property \Illuminate\Database\Eloquent\Model $parent
+ * @property \Illuminate\Database\Eloquent\Model $throughParent
  * @property string $foreignKey
  * @property string $parentKey
  * @property string $ownerKey
  * @property string $localKey
  * @property string $secondKey
  * @property string $secondLocalKey
- * @property Model $farParent
+ * @property \Illuminate\Database\Eloquent\Model $farParent
  */
 class RelationshipsExtraMethods
 {
@@ -57,12 +56,12 @@ class RelationshipsExtraMethods
      */
     public function performJoinForEloquentPowerJoins()
     {
-        return function ($builder, $joinType = 'leftJoin', $callback = null, $alias = null, bool $disableExtraConditions = false, ?string $morphable = null, bool $hasCheck = false) {
+        return function ($builder, $joinType = 'leftJoin', $callback = null, $alias = null, bool $disableExtraConditions = false, string $morphable = null) {
             return match (true) {
                 $this instanceof MorphToMany => $this->performJoinForEloquentPowerJoinsForMorphToMany($builder, $joinType, $callback, $alias, $disableExtraConditions),
                 $this instanceof BelongsToMany => $this->performJoinForEloquentPowerJoinsForBelongsToMany($builder, $joinType, $callback, $alias, $disableExtraConditions),
                 $this instanceof MorphOneOrMany => $this->performJoinForEloquentPowerJoinsForMorph($builder, $joinType, $callback, $alias, $disableExtraConditions),
-                $this instanceof HasMany || $this instanceof HasOne => $this->performJoinForEloquentPowerJoinsForHasMany($builder, $joinType, $callback, $alias, $disableExtraConditions, $hasCheck),
+                $this instanceof HasMany || $this instanceof HasOne => $this->performJoinForEloquentPowerJoinsForHasMany($builder, $joinType, $callback, $alias, $disableExtraConditions),
                 $this instanceof HasManyThrough || $this instanceof HasOneThrough => $this->performJoinForEloquentPowerJoinsForHasManyThrough($builder, $joinType, $callback, $alias, $disableExtraConditions),
                 $this instanceof MorphTo => $this->performJoinForEloquentPowerJoinsForMorphTo($builder, $joinType, $callback, $alias, $disableExtraConditions, $morphable),
                 default => $this->performJoinForEloquentPowerJoinsForBelongsTo($builder, $joinType, $callback, $alias, $disableExtraConditions),
@@ -252,9 +251,9 @@ class RelationshipsExtraMethods
      */
     protected function performJoinForEloquentPowerJoinsForMorphTo()
     {
-        return function ($builder, $joinType, $callback = null, $alias = null, bool $disableExtraConditions = false, ?string $morphable = null) {
+        return function ($builder, $joinType, $callback = null, $alias = null, bool $disableExtraConditions = false, string $morphable = null) {
             /** @var Model */
-            $modelInstance = new $morphable();
+            $modelInstance = new $morphable;
 
             $builder->{$joinType}($modelInstance->getTable(), function ($join) use ($modelInstance, $callback, $disableExtraConditions) {
                 $join->on(
@@ -285,48 +284,17 @@ class RelationshipsExtraMethods
      */
     protected function performJoinForEloquentPowerJoinsForHasMany()
     {
-        return function ($builder, $joinType, $callback = null, $alias = null, bool $disableExtraConditions = false, bool $hasCheck = false) {
-            $joinedModel = $this->query->getModel();
-            $joinedTable = $alias ?: $joinedModel->getTable();
+        return function ($builder, $joinType, $callback = null, $alias = null, bool $disableExtraConditions = false) {
+            $joinedTable = $alias ?: $this->query->getModel()->getTable();
             $parentTable = StaticCache::getTableOrAliasForModel($this->parent);
             $isOneOfMany = method_exists($this, 'isOneOfMany') ? $this->isOneOfMany() : false;
 
-            if ($isOneOfMany && !$hasCheck) {
-                $column = $this->getOneOfManySubQuery()->getQuery()->columns[0];
-                $fkColumn = $this->getOneOfManySubQuery()->getQuery()->columns[1];
+            if ($isOneOfMany) {
+                foreach ($this->getOneOfManySubQuery()->getQuery()->columns as $column) {
+                    $builder->addSelect($column);
+                }
 
-                $builder->where(function ($query) use ($column, $joinType, $joinedModel, $builder, $fkColumn) {
-                    $query->whereIn($joinedModel->getQualifiedKeyName(), function ($query) use ($column, $joinedModel, $builder, $fkColumn) {
-                        $columnValue = $column->getValue($builder->getGrammar());
-                        $direction = Str::contains($columnValue, 'min(') ? 'asc' : 'desc';
-
-                        $columnName = Str::of($columnValue)->after('(')->before(')')->__toString();
-                        $columnName = Str::replace(['"', "'", '`'], '', $columnName);
-
-                        if ($builder->getConnection() instanceof MySqlConnection) {
-                            $query->select('*')->from(function ($query) use ($joinedModel, $columnName, $fkColumn, $direction, $builder) {
-                                $query
-                                    ->select($joinedModel->getQualifiedKeyName())
-                                    ->from($joinedModel->getTable())
-                                    ->whereColumn($fkColumn, $builder->getModel()->getQualifiedKeyName())
-                                    ->orderBy($columnName, $direction)
-                                    ->take(1);
-                            });
-                        } else {
-                            $query
-                                ->select($joinedModel->getQualifiedKeyName())
-                                ->distinct($columnName)
-                                ->from($joinedModel->getTable())
-                                ->whereColumn($fkColumn, $builder->getModel()->getQualifiedKeyName())
-                                ->orderBy($columnName, $direction)
-                                ->take(1);
-                        }
-                    });
-
-                    if ($joinType === 'leftPowerJoin') {
-                        $query->orWhereRaw('1 = 1');
-                    }
-                });
+                $builder->take(1);
             }
 
             $builder->{$joinType}($this->query->getModel()->getTable(), function ($join) use ($callback, $joinedTable, $parentTable, $alias, $disableExtraConditions) {
@@ -395,7 +363,7 @@ class RelationshipsExtraMethods
                 }
             }, $this->getThroughParent());
 
-            $builder->{$joinType}($this->getModel()->getTable(), function (PowerJoinClause $join) use ($callback, $throughTable, $farTable, $alias2) {
+            $builder->{$joinType}($this->getModel()->getTable(), function (PowerJoinClause $join) use ($callback, $throughTable, $farTable, $alias1, $alias2) {
                 if ($alias2) {
                     $join->as($alias2);
                 }
@@ -424,9 +392,9 @@ class RelationshipsExtraMethods
      */
     public function performHavingForEloquentPowerJoins()
     {
-        return function ($builder, $operator, $count, ?string $morphable = null) {
+        return function ($builder, $operator, $count, string $morphable = null) {
             if ($morphable) {
-                $modelInstance = new $morphable();
+                $modelInstance = new $morphable;
 
                 $builder
                     ->selectRaw(sprintf('count(%s) as %s_count', $modelInstance->getQualifiedKeyName(), Str::replace('.', '_', $modelInstance->getTable())))
@@ -444,12 +412,12 @@ class RelationshipsExtraMethods
      */
     public function usesSoftDeletes()
     {
-        /*
+        /**
          * @param \Illuminate\Database\Eloquent\Model|array $model
          */
         return function ($model) {
             if ($model instanceof Model) {
-                return in_array(SoftDeletes::class, class_uses_recursive($model), true);
+                return in_array(SoftDeletes::class, class_uses_recursive($model));
             }
 
             return array_key_exists(SoftDeletingScope::class, $model);
@@ -484,7 +452,7 @@ class RelationshipsExtraMethods
                     continue;
                 }
 
-                if (!in_array($condition['type'], ['Basic', 'Null', 'NotNull', 'Nested'], true)) {
+                if (!in_array($condition['type'], ['Basic', 'Null', 'NotNull', 'Nested'])) {
                     continue;
                 }
 
@@ -530,11 +498,11 @@ class RelationshipsExtraMethods
     public function shouldNotApplyExtraCondition()
     {
         return function ($condition) {
-            if (isset($condition['column']) && ($condition['column'] === '' || Str::endsWith($condition['column'], '.'))) {
+            if (isset($condition['column']) && Str::endsWith($condition['column'], '.')) {
                 return true;
             }
 
-            if (!$key = $this->getPowerJoinExistenceCompareKey()) {
+            if (! $key = $this->getPowerJoinExistenceCompareKey()) {
                 return true;
             }
 
@@ -543,7 +511,7 @@ class RelationshipsExtraMethods
             }
 
             if (is_array($key)) {
-                return in_array($condition['column'], $key, true);
+                return in_array($condition['column'], $key);
             }
 
             return $condition['column'] === $key;

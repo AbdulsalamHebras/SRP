@@ -4,7 +4,6 @@ namespace Filament\Actions;
 
 use Filament\Actions\Testing\TestsActions;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Routing\Router;
 use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -26,11 +25,6 @@ class ActionsServiceProvider extends PackageServiceProvider
             ->hasViews();
     }
 
-    public function packageRegistered(): void
-    {
-        app(Router::class)->middlewareGroup('filament.actions', ['web', 'auth']);
-    }
-
     public function packageBooted(): void
     {
         if ($this->app->runningInConsole()) {
@@ -41,7 +35,7 @@ class ActionsServiceProvider extends PackageServiceProvider
             }
         }
 
-        Testable::mixin(new TestsActions);
+        Testable::mixin(new TestsActions());
     }
 
     /**

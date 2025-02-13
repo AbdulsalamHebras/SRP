@@ -2,7 +2,6 @@
 
 namespace Filament\Forms\Concerns;
 
-use Closure;
 use Filament\Forms\Components\Component;
 
 trait HasStateBindingModifiers
@@ -14,11 +13,11 @@ trait HasStateBindingModifiers
 
     protected int | string | null $liveDebounce = null;
 
-    protected bool | Closure | null $isLive = null;
+    protected ?bool $isLive = null;
 
     protected bool $isLiveOnBlur = false;
 
-    public function live(bool $onBlur = false, int | string | null $debounce = null, bool | Closure | null $condition = true): static
+    public function live(bool $onBlur = false, int | string | null $debounce = null, ?bool $condition = true): static
     {
         $this->isLive = $condition;
         $this->isLiveOnBlur = $onBlur;
@@ -60,11 +59,11 @@ trait HasStateBindingModifiers
 
     public function applyStateBindingModifiers(string $expression, bool $isOptimisticallyLive = true): string
     {
-        $entangled = str($expression)->is('$entangle(*)');
+        $entangled = str($expression)->contains('entangle');
 
         $modifiers = $this->getStateBindingModifiers(withBlur: ! $entangled, withDebounce: ! $entangled, isOptimisticallyLive: $isOptimisticallyLive);
 
-        if ($entangled) {
+        if (str($expression)->is('$entangle(*)')) {
             return (string) str($expression)->replaceLast(
                 ')',
                 in_array('live', $modifiers) ? ', true)' : ', false)',
@@ -86,9 +85,7 @@ trait HasStateBindingModifiers
             return $this->stateBindingModifiers;
         }
 
-        $isLive = $this->evaluate($this->isLive);
-
-        if ($isLive === false) {
+        if ($this->isLive === false) {
             return [];
         }
 
@@ -108,16 +105,16 @@ trait HasStateBindingModifiers
             return ['live', 'debounce', $this->liveDebounce];
         }
 
-        if ($isLive) {
+        if ($this->isLive) {
             return ['live'];
         }
 
         if ($this instanceof Component) {
-            return $this->getContainer()->getStateBindingModifiers($withBlur, $withDebounce, $isOptimisticallyLive);
+            return $this->getContainer()->getStateBindingModifiers();
         }
 
         if ($this->getParentComponent()) {
-            return $this->getParentComponent()->getStateBindingModifiers($withBlur, $withDebounce, $isOptimisticallyLive);
+            return $this->getParentComponent()->getStateBindingModifiers();
         }
 
         return [];
@@ -125,10 +122,8 @@ trait HasStateBindingModifiers
 
     public function isLive(): bool
     {
-        $isLive = $this->evaluate($this->isLive);
-
-        if ($isLive !== null) {
-            return $isLive;
+        if ($this->isLive !== null) {
+            return $this->isLive;
         }
 
         if ($this instanceof Component) {
@@ -144,9 +139,7 @@ trait HasStateBindingModifiers
 
     public function isLiveOnBlur(): bool
     {
-        $isLive = $this->evaluate($this->isLive);
-
-        if ($isLive !== null) {
+        if ($this->isLive !== null) {
             return $this->isLiveOnBlur;
         }
 

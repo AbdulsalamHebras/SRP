@@ -15,24 +15,6 @@ return [
 
         ],
 
-        'key_value' => [
-
-            'columns' => [
-
-                'key' => [
-                    'label' => 'Khóa',
-                ],
-
-                'value' => [
-                    'label' => 'Giá trị',
-                ],
-
-            ],
-
-            'placeholder' => 'Không có mục',
-
-        ],
-
     ],
 
 ];

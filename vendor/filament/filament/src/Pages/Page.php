@@ -8,7 +8,6 @@ use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\Widgets\Widget;
 use Filament\Widgets\WidgetConfiguration;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +19,7 @@ abstract class Page extends BasePage
     use Concerns\HasSubNavigation;
     use Concerns\InteractsWithHeaderActions;
 
-    protected static string $layout;
+    protected static string $layout = 'filament-panels::components.layout.index';
 
     /** @var class-string<Cluster> | null */
     protected static ?string $cluster = null;
@@ -28,8 +27,6 @@ abstract class Page extends BasePage
     protected static bool $isDiscovered = true;
 
     protected static ?string $navigationGroup = null;
-
-    protected static ?string $navigationBadgeTooltip = null;
 
     protected static ?string $navigationParentItem = null;
 
@@ -42,11 +39,6 @@ abstract class Page extends BasePage
     protected static ?int $navigationSort = null;
 
     protected static bool $shouldRegisterNavigation = true;
-
-    public function getLayout(): string
-    {
-        return static::$layout ?? 'filament-panels::components.layout.index';
-    }
 
     /**
      * @param  array<mixed>  $parameters
@@ -105,7 +97,6 @@ abstract class Page extends BasePage
                 ->isActiveWhen(fn (): bool => request()->routeIs(static::getNavigationItemActiveRoutePattern()))
                 ->sort(static::getNavigationSort())
                 ->badge(static::getNavigationBadge(), color: static::getNavigationBadgeColor())
-                ->badgeTooltip(static::getNavigationBadgeTooltip())
                 ->url(static::getNavigationUrl()),
         ];
     }
@@ -147,12 +138,12 @@ abstract class Page extends BasePage
         return static::$navigationParentItem;
     }
 
-    public static function getActiveNavigationIcon(): string | Htmlable | null
+    public static function getActiveNavigationIcon(): ?string
     {
         return static::$activeNavigationIcon ?? static::getNavigationIcon();
     }
 
-    public static function getNavigationIcon(): string | Htmlable | null
+    public static function getNavigationIcon(): ?string
     {
         return static::$navigationIcon;
     }
@@ -176,11 +167,6 @@ abstract class Page extends BasePage
     public static function getNavigationBadgeColor(): string | array | null
     {
         return null;
-    }
-
-    public static function getNavigationBadgeTooltip(): ?string
-    {
-        return static::$navigationBadgeTooltip;
     }
 
     public static function getNavigationSort(): ?int
@@ -315,5 +301,10 @@ abstract class Page extends BasePage
         }
 
         return $name;
+    }
+
+    public static function canAccess(): bool
+    {
+        return true;
     }
 }

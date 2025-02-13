@@ -29,7 +29,9 @@ class DatabaseNotifications extends Component
     public static ?string $authGuard = null;
 
     #[On('databaseNotificationsSent')]
-    public function refresh(): void {}
+    public function refresh(): void
+    {
+    }
 
     #[On('notificationClosed')]
     public function removeNotification(string $id): void
@@ -72,7 +74,7 @@ class DatabaseNotifications extends Component
             return $this->getNotificationsQuery()->get();
         }
 
-        return $this->getNotificationsQuery()->simplePaginate(50, pageName: 'database-notifications-page');
+        return $this->getNotificationsQuery()->simplePaginate(50);
     }
 
     public function isPaginated(): bool

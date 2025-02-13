@@ -1,8 +1,6 @@
 @php
     $isContained = $isContained();
     $statePath = $getStatePath();
-    $previousAction = $getAction('previous');
-    $nextAction = $getAction('next');
 @endphp
 
 <div
@@ -21,7 +19,7 @@
             this.step = this.getSteps()[nextStepIndex]
 
             this.autofocusFields()
-            this.scroll()
+            this.scrollToTop()
         },
 
         previousStep: function () {
@@ -34,15 +32,11 @@
             this.step = this.getSteps()[previousStepIndex]
 
             this.autofocusFields()
-            this.scroll()
+            this.scrollToTop()
         },
 
-        scroll: function () {
-            this.$nextTick(() => {
-                this.$refs.header.children[
-                    this.getStepIndex(this.step)
-                ].scrollIntoView({ behavior: 'smooth', block: 'start' })
-            })
+        scrollToTop: function () {
+            this.$root.scrollIntoView({ behavior: 'smooth', block: 'start' })
         },
 
         autofocusFields: function () {
@@ -54,15 +48,7 @@
         },
 
         getStepIndex: function (step) {
-            let index = this.getSteps().findIndex(
-                (indexedStep) => indexedStep === step,
-            )
-
-            if (index === -1) {
-                return 0
-            }
-
-            return index
+            return this.getSteps().findIndex((indexedStep) => indexedStep === step)
         },
 
         getSteps: function () {
@@ -133,11 +119,10 @@
         @endif
         role="list"
         @class([
-            'fi-fo-wizard-header grid divide-y divide-gray-200 dark:divide-white/5 md:grid-flow-col md:divide-y-0 md:overflow-x-auto',
+            'fi-fo-wizard-header grid divide-y divide-gray-200 md:grid-flow-col md:divide-y-0 dark:divide-white/5',
             'border-b border-gray-200 dark:border-white/10' => $isContained,
             'rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10' => ! $isContained,
         ])
-        x-ref="header"
     >
         @foreach ($getChildComponentContainer()->getComponents() as $step)
             <li
@@ -153,7 +138,7 @@
                     x-on:click="step = @js($step->getId())"
                     x-bind:disabled="! isStepAccessible(@js($step->getId()))"
                     role="step"
-                    class="fi-fo-wizard-header-step-button flex h-full items-center gap-x-4 px-6 py-4 text-start"
+                    class="fi-fo-wizard-header-step-button flex h-full w-full items-center gap-x-4 px-6 py-4"
                 >
                     <div
                         class="fi-fo-wizard-header-step-icon-ctn flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -167,13 +152,9 @@
                                 getStepIndex(step) < {{ $loop->index }},
                         }"
                     >
-                        @php
-                            $completedIcon = $step->getCompletedIcon();
-                        @endphp
-
                         <x-filament::icon
-                            :alias="filled($completedIcon) ? null : 'forms::components.wizard.completed-step'"
-                            :icon="$completedIcon ?? 'heroicon-o-check'"
+                            alias="forms::components.wizard.completed-step"
+                            icon="heroicon-o-check"
                             x-cloak="x-cloak"
                             x-show="getStepIndex(step) > {{ $loop->index }}"
                             class="fi-fo-wizard-header-step-icon h-6 w-6 text-white"
@@ -206,7 +187,7 @@
                         @endif
                     </div>
 
-                    <div class="grid justify-items-start md:w-max md:max-w-60">
+                    <div class="grid justify-items-start">
                         @if (! $step->isLabelHidden())
                             <span
                                 class="fi-fo-wizard-header-step-label text-sm font-medium"
@@ -241,7 +222,7 @@
                             fill="none"
                             preserveAspectRatio="none"
                             viewBox="0 0 22 80"
-                            class="h-full w-full text-gray-200 dark:text-white/5 rtl:rotate-180"
+                            class="h-full w-full text-gray-200 rtl:rotate-180 dark:text-white/5"
                         >
                             <path
                                 d="M0 -2L20 40L0 82"
@@ -267,14 +248,8 @@
             'mt-6' => ! $isContained,
         ])
     >
-        <span
-            x-cloak
-            @if (! $previousAction->isDisabled())
-                x-on:click="previousStep"
-            @endif
-            x-show="! isFirstStep()"
-        >
-            {{ $previousAction }}
+        <span x-cloak x-on:click="previousStep" x-show="! isFirstStep()">
+            {{ $getAction('previous') }}
         </span>
 
         <span x-show="isFirstStep()">
@@ -283,18 +258,16 @@
 
         <span
             x-cloak
-            @if (! $nextAction->isDisabled())
-                x-on:click="
-                    $wire.dispatchFormEvent(
-                        'wizard::nextStep',
-                        '{{ $statePath }}',
-                        getStepIndex(step),
-                    )
-                "
-            @endif
+            x-on:click="
+                $wire.dispatchFormEvent(
+                    'wizard::nextStep',
+                    '{{ $statePath }}',
+                    getStepIndex(step),
+                )
+            "
             x-show="! isLastStep()"
         >
-            {{ $nextAction }}
+            {{ $getAction('next') }}
         </span>
 
         <span x-show="isLastStep()">

@@ -4,17 +4,17 @@ return [
 
     'title' => 'Prijava',
 
-    'heading' => 'Prijavi se',
+    'heading' => 'Prijavite se',
 
     'actions' => [
 
         'register' => [
             'before' => 'ili',
-            'label' => 'se registriraj za korisnički račun',
+            'label' => 'se registrirajte za korisnički račun',
         ],
 
         'request_password_reset' => [
-            'label' => 'Zaboravljena lozinka?',
+            'label' => 'Zaboravili ste lozinku?',
         ],
 
     ],
@@ -22,7 +22,7 @@ return [
     'form' => [
 
         'email' => [
-            'label' => 'Adresa e-pošte',
+            'label' => 'Email adresa',
         ],
 
         'password' => [
@@ -36,7 +36,7 @@ return [
         'actions' => [
 
             'authenticate' => [
-                'label' => 'Prijavi se',
+                'label' => 'Prijavite se',
             ],
 
         ],
@@ -53,7 +53,7 @@ return [
 
         'throttled' => [
             'title' => 'Previše pokušaja prijave',
-            'body' => 'Molim te, pokušaj ponovno za :seconds sekundi.',
+            'body' => 'Molim pokušajte ponovno za :seconds sekundi.',
         ],
 
     ],

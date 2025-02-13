@@ -8,7 +8,7 @@ return [
 
         'modal' => [
 
-            'heading' => 'Ջնջել :labelը',
+            'heading' => 'Ջնջել :label',
 
             'actions' => [
 
@@ -36,7 +36,7 @@ return [
 
         'modal' => [
 
-            'heading' => 'Ջնջել ընտրված :labelը',
+            'heading' => 'Ջնջել ընտրված :label',
 
             'actions' => [
 

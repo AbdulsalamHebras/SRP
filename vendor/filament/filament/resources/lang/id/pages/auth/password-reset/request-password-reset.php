@@ -9,7 +9,7 @@ return [
     'actions' => [
 
         'login' => [
-            'label' => 'Kembali ke halaman masuk',
+            'label' => 'kembali ke halaman masuk',
         ],
 
     ],

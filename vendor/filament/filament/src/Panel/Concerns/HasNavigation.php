@@ -3,13 +3,15 @@
 namespace Filament\Panel\Concerns;
 
 use Closure;
-use Filament\Navigation\NavigationBuilder;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
-use Filament\Navigation\NavigationManager;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 trait HasNavigation
 {
+    protected bool $isNavigationMounted = false;
+
     /**
      * @var array<string | int, NavigationGroup | string>
      */
@@ -21,8 +23,6 @@ trait HasNavigation
     protected array $navigationItems = [];
 
     protected Closure | bool $navigationBuilder = true;
-
-    protected ?NavigationManager $navigationManager = null;
 
     public function navigation(Closure | bool $builder = true): static
     {
@@ -36,10 +36,23 @@ trait HasNavigation
      */
     public function buildNavigation(): array
     {
-        /** @var NavigationBuilder $builder */
+        /** @var \Filament\Navigation\NavigationBuilder $builder */
         $builder = app()->call($this->navigationBuilder);
 
         return $builder->getNavigation();
+    }
+
+    public function mountNavigation(): void
+    {
+        foreach ($this->getPages() as $page) {
+            $page::registerNavigationItems();
+        }
+
+        foreach ($this->getResources() as $resource) {
+            $resource::registerNavigationItems();
+        }
+
+        $this->isNavigationMounted = true;
     }
 
     /**
@@ -47,12 +60,6 @@ trait HasNavigation
      */
     public function navigationGroups(array $groups): static
     {
-        if (isset($this->navigationManager)) {
-            $this->navigationManager->navigationGroups($groups);
-
-            return $this;
-        }
-
         $this->navigationGroups = [
             ...$this->navigationGroups,
             ...$groups,
@@ -66,12 +73,6 @@ trait HasNavigation
      */
     public function navigationItems(array $items): static
     {
-        if (isset($this->navigationManager)) {
-            $this->navigationManager->navigationItems($items);
-
-            return $this;
-        }
-
         $this->navigationItems = [
             ...$this->navigationItems,
             ...$items,
@@ -85,23 +86,95 @@ trait HasNavigation
         return $this->navigationBuilder !== false;
     }
 
-    public function hasNavigationBuilder(): bool
-    {
-        return $this->navigationBuilder instanceof Closure;
-    }
-
     /**
      * @return array<NavigationGroup>
      */
     public function getNavigation(): array
     {
-        $this->navigationManager = app(NavigationManager::class);
-
-        try {
-            return app(NavigationManager::class)->get();
-        } finally {
-            $this->navigationManager = null;
+        if ($this->navigationBuilder instanceof Closure) {
+            return $this->buildNavigation();
         }
+
+        if (! $this->isNavigationMounted) {
+            $this->mountNavigation();
+        }
+
+        $groups = collect($this->getNavigationGroups());
+
+        return collect($this->getNavigationItems())
+            ->filter(fn (NavigationItem $item): bool => $item->isVisible())
+            ->sortBy(fn (NavigationItem $item): int => $item->getSort())
+            ->groupBy(fn (NavigationItem $item): ?string => $item->getGroup())
+            ->map(function (Collection $items, ?string $groupIndex) use ($groups): NavigationGroup {
+                $parentItems = $items->groupBy(fn (NavigationItem $item): ?string => $item->getParentItem());
+
+                $items = $parentItems->get('')
+                    ->keyBy(fn (NavigationItem $item): string => $item->getLabel());
+
+                $parentItems->except([''])->each(function (Collection $parentItemItems, string $parentItemLabel) use ($items) {
+                    if (! $items->has($parentItemLabel)) {
+                        return;
+                    }
+
+                    $items->get($parentItemLabel)->childItems($parentItemItems);
+                });
+
+                if (blank($groupIndex)) {
+                    return NavigationGroup::make()->items($items);
+                }
+
+                $registeredGroup = $groups
+                    ->first(function (NavigationGroup | string $registeredGroup, string | int $registeredGroupIndex) use ($groupIndex) {
+                        if ($registeredGroupIndex === $groupIndex) {
+                            return true;
+                        }
+
+                        if ($registeredGroup === $groupIndex) {
+                            return true;
+                        }
+
+                        if (! $registeredGroup instanceof NavigationGroup) {
+                            return false;
+                        }
+
+                        return $registeredGroup->getLabel() === $groupIndex;
+                    });
+
+                if ($registeredGroup instanceof NavigationGroup) {
+                    return $registeredGroup->items($items);
+                }
+
+                return NavigationGroup::make($registeredGroup ?? $groupIndex)
+                    ->items($items);
+            })
+            ->sortBy(function (NavigationGroup $group, ?string $groupIndex): int {
+                if (blank($group->getLabel())) {
+                    return -1;
+                }
+
+                $registeredGroups = $this->getNavigationGroups();
+
+                $groupsToSearch = $registeredGroups;
+
+                if (Arr::first($registeredGroups) instanceof NavigationGroup) {
+                    $groupsToSearch = [
+                        ...array_keys($registeredGroups),
+                        ...array_map(fn (NavigationGroup $registeredGroup): string => $registeredGroup->getLabel(), array_values($registeredGroups)),
+                    ];
+                }
+
+                $sort = array_search(
+                    $groupIndex,
+                    $groupsToSearch,
+                );
+
+                if ($sort === false) {
+                    return count($registeredGroups);
+                }
+
+                return $sort;
+            })
+            ->all();
     }
 
     /**
