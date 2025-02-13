@@ -6,10 +6,6 @@ return [
 
     'actions' => [
 
-        'billing' => [
-            'label' => 'Abonnement verwalten',
-        ],
-
         'logout' => [
             'label' => 'Abmelden',
         ],
@@ -50,14 +46,6 @@ return [
 
         ],
 
-    ],
-
-    'avatar' => [
-        'alt' => 'Avatar von :name',
-    ],
-
-    'logo' => [
-        'alt' => 'Logo von :name',
     ],
 
 ];

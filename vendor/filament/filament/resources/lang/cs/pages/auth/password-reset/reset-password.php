@@ -14,7 +14,7 @@ return [
 
         'password' => [
             'label' => 'Heslo',
-            'validation_attribute' => 'heslo',
+            'validation_attribute' => 'password',
         ],
 
         'password_confirmation' => [

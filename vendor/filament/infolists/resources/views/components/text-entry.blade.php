@@ -114,12 +114,11 @@
                                 $icon = $getIcon($state);
                                 $iconColor = $getIconColor($state);
                                 $itemIsCopyable = $isCopyable($state);
-                                $lineClamp = $getLineClamp($state);
                                 $size = $getSize($state);
                                 $weight = $getWeight($state);
 
                                 $proseClasses = \Illuminate\Support\Arr::toCssClasses([
-                                    'fi-in-text-item-prose prose max-w-none dark:prose-invert [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
+                                    'prose max-w-none dark:prose-invert [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
                                     'pt-2' => ! $isLabelHidden(),
                                     match ($size) {
                                         TextEntrySize::ExtraSmall, 'xs' => 'prose-xs',
@@ -167,18 +166,6 @@
                                     'max-w-max' => ! ($isBulleted || $isBadge),
                                     'w-max' => $isBadge,
                                     'cursor-pointer' => $itemIsCopyable,
-                                    match ($color) {
-                                        null => 'text-gray-950 dark:text-white',
-                                        'gray' => 'text-gray-500 dark:text-gray-400',
-                                        default => 'text-custom-600 dark:text-custom-400',
-                                    } => $isBulleted,
-                                ])
-                                @style([
-                                    \Filament\Support\get_color_css_variables(
-                                        $color,
-                                        shades: [400, 600],
-                                        alias: 'infolists::components.text-entry.item.container',
-                                    ) => $isBulleted && (! in_array($color, [null, 'gray'])),
                                 ])
                             >
                                 @if ($isBadge)
@@ -195,10 +182,10 @@
                                             'fi-in-text-item inline-flex items-center gap-1.5',
                                             'group/item' => $url,
                                             match ($color) {
-                                                null, 'gray' => null,
+                                                null => null,
+                                                'gray' => 'fi-color-gray',
                                                 default => 'fi-color-custom',
                                             },
-                                            is_string($color) ? "fi-color-{$color}" : null,
                                         ])
                                     >
                                         @if ($icon && in_array($iconPosition, [IconPosition::Before, 'before']))
@@ -213,7 +200,6 @@
                                             @class([
                                                 'group-hover/item:underline group-focus-visible/item:underline' => $url,
                                                 $proseClasses => $isProse || $isMarkdown,
-                                                'line-clamp-[--line-clamp]' => $lineClamp,
                                                 match ($size) {
                                                     TextEntrySize::ExtraSmall, 'xs' => 'text-xs',
                                                     TextEntrySize::Small, 'sm', null => 'text-sm leading-6',
@@ -250,7 +236,6 @@
                                                     shades: [400, 600],
                                                     alias: 'infolists::components.text-entry.item.label',
                                                 ) => ! in_array($color, [null, 'gray']),
-                                                "--line-clamp: {$lineClamp}" => $lineClamp,
                                             ])
                                         >
                                             {{ $formattedState }}

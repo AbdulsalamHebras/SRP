@@ -7,15 +7,15 @@ return [
     'actions' => [
 
         'cancel' => [
-            'label' => 'Prekid',
+            'label' => 'Prekiniti',
         ],
 
         'confirm' => [
-            'label' => 'Potvrdi',
+            'label' => 'Konfirmisati',
         ],
 
         'submit' => [
-            'label' => 'Pošalji',
+            'label' => 'Poslati',
         ],
 
     ],

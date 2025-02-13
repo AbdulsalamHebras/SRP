@@ -24,3 +24,76 @@
 .search-box button:hover {
     background-color: #0056b3;
 }
+.dropdown {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+}
+.dropdown-container {
+    display: flex; /* لجعل الحاوية مرتبة بعناصر داخلية */
+    flex-direction: column; /* ترتيب رأسي للعناصر */
+    align-items: center; /* محاذاة العناصر إلى الوسط */
+    gap: 10px; /* مسافة بين العناصر */
+    margin-top: 10px;
+    width: 100%; /* لتحديد عرض الحاوية */
+}
+.dropdown-toggle {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 200px;
+    text-align: right;
+    color: #333;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-search {
+    margin: 0 auto;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+    display: block;
+
+}
+
+.dropdown-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-list li {
+    padding: 10px;
+    cursor: pointer;
+    text-align: right;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.dropdown-list li:hover {
+    background-color: #f9f9f9;
+}
+

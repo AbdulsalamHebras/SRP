@@ -11,7 +11,8 @@ class Markdown implements Htmlable, Stringable
     final public function __construct(
         protected string $text,
         protected bool $isInline = false,
-    ) {}
+    ) {
+    }
 
     public static function inline(string $text): static
     {

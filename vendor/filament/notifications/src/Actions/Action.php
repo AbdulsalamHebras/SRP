@@ -3,12 +3,13 @@
 namespace Filament\Notifications\Actions;
 
 use Closure;
+use Filament\Actions\Contracts\Groupable;
 use Filament\Actions\StaticAction;
 use Filament\Support\Enums\ActionSize;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Str;
 
-class Action extends StaticAction implements Arrayable
+class Action extends StaticAction implements Arrayable, Groupable
 {
     protected string $viewIdentifier = 'action';
 
@@ -112,10 +113,6 @@ class Action extends StaticAction implements Arrayable
 
     public function getAlpineClickHandler(): ?string
     {
-        if (filled($handler = parent::getAlpineClickHandler())) {
-            return $handler;
-        }
-
         if ($this->shouldMarkAsRead()) {
             return 'markAsRead()';
         }
@@ -124,7 +121,7 @@ class Action extends StaticAction implements Arrayable
             return 'markAsUnread()';
         }
 
-        return null;
+        return parent::getAlpineClickHandler();
     }
 
     /**

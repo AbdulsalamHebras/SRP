@@ -6,100 +6,48 @@ return [
 
         'actions' => [
 
-            'clone' => [
+            'clone_item' => [
                 'label' => 'Хуулбарлах',
             ],
 
-            'add' => [
-
+            'create_item' => [
                 'label' => 'Нэмэх :label',
-
-                'modal' => [
-
-                    'heading' => 'Нэмэх :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Нэмэх',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
-            'add_between' => [
-
-                'label' => 'Блок хооронд нэмэх',
-
-                'modal' => [
-
-                    'heading' => 'Нэмэх :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Нэмэх',
-                        ],
-
-                    ],
-
-                ],
-
+            'create_item_between' => [
+                'label' => 'Оруулах',
             ],
 
-            'delete' => [
+            'delete_item' => [
                 'label' => 'Устгах',
             ],
 
-            'edit' => [
-
-                'label' => 'Засах',
-
-                'modal' => [
-
-                    'heading' => 'Блокыг засах',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'Өөрчлөлтийг хадгалах',
-                        ],
-
-                    ],
-
-                ],
-
-            ],
-
-            'reorder' => [
+            'move_item' => [
                 'label' => 'Зөөх',
             ],
 
-            'move_down' => [
+            'move_item_down' => [
                 'label' => 'Доош зөөх',
             ],
 
-            'move_up' => [
+            'move_item_up' => [
                 'label' => 'Дээш зөөх',
             ],
 
-            'collapse' => [
-                'label' => 'Хураах',
+            'collapse_item' => [
+                'label' => 'Хаах',
             ],
 
-            'expand' => [
-                'label' => 'Задлах',
+            'expand_item' => [
+                'label' => 'Нээх',
             ],
 
             'collapse_all' => [
-                'label' => 'Бүгдийг хураах',
+                'label' => 'Бүгдийг хаах',
             ],
 
             'expand_all' => [
-                'label' => 'Бүгдийг задлах',
+                'label' => 'Бүгдийг нээх',
             ],
 
         ],
@@ -111,139 +59,11 @@ return [
         'actions' => [
 
             'deselect_all' => [
-                'label' => 'Бүх сонголтыг цуцлах',
+                'label' => 'Бүгдийг эс сонгох',
             ],
 
             'select_all' => [
                 'label' => 'Бүгдийг сонгох',
-            ],
-
-        ],
-
-    ],
-
-    'file_upload' => [
-
-        'editor' => [
-
-            'actions' => [
-
-                'cancel' => [
-                    'label' => 'Цуцлах',
-                ],
-
-                'drag_crop' => [
-                    'label' => 'Чирэх горим "тайрах"',
-                ],
-
-                'drag_move' => [
-                    'label' => 'Чирэх горим "зөөх"',
-                ],
-
-                'flip_horizontal' => [
-                    'label' => 'Хөндлөх эргүүлэх',
-                ],
-
-                'flip_vertical' => [
-                    'label' => 'Босоо эргүүлэх',
-                ],
-
-                'move_down' => [
-                    'label' => 'Зургийг доош зөөх',
-                ],
-
-                'move_left' => [
-                    'label' => 'Зургийг зүүн тийш зөөх',
-                ],
-
-                'move_right' => [
-                    'label' => 'Зургийг баруун тийш зөөх',
-                ],
-
-                'move_up' => [
-                    'label' => 'Зургийг дээш зөөх',
-                ],
-
-                'reset' => [
-                    'label' => 'Дахин эхлэх',
-                ],
-
-                'rotate_left' => [
-                    'label' => 'Нар буруу эргүүлэх',
-                ],
-
-                'rotate_right' => [
-                    'label' => 'Нар зөв эргүүлэх',
-                ],
-
-                'set_aspect_ratio' => [
-                    'label' => 'Харьцаа сонгох :ratio',
-                ],
-
-                'save' => [
-                    'label' => 'Хадгалах',
-                ],
-
-                'zoom_100' => [
-                    'label' => 'Зургийг 100% харах',
-                ],
-
-                'zoom_in' => [
-                    'label' => 'Томруулах',
-                ],
-
-                'zoom_out' => [
-                    'label' => 'Жижигрүүлэх',
-                ],
-
-            ],
-
-            'fields' => [
-
-                'height' => [
-                    'label' => 'Өндөр',
-                    'unit' => 'px',
-                ],
-
-                'rotation' => [
-                    'label' => 'Эргүүлэх',
-                    'unit' => 'градус',
-                ],
-
-                'width' => [
-                    'label' => 'Өргөн',
-                    'unit' => 'px',
-                ],
-
-                'x_position' => [
-                    'label' => 'X',
-                    'unit' => 'px',
-                ],
-
-                'y_position' => [
-                    'label' => 'Y',
-                    'unit' => 'px',
-                ],
-
-            ],
-
-            'aspect_ratios' => [
-
-                'label' => 'Харьцаа',
-
-                'no_fixed' => [
-                    'label' => 'Чөлөөт',
-                ],
-
-            ],
-
-            'svg' => [
-
-                'messages' => [
-                    'confirmation' => 'SVG файлуудыг засварлахыг зөвлөдөггүй, учир нь хэмжээг өөрчлөх үед чанар алдагддаг.\n Та үргэлжлүүлэх үү?',
-                    'disabled' => 'SVG файлуудыг засварлах боломжийг идэвхгүй болгосон, учир нь хэмжээг өөрчлөх үед чанар алдагддаг.',
-                ],
-
             ],
 
         ],
@@ -255,7 +75,7 @@ return [
         'actions' => [
 
             'add' => [
-                'label' => 'Мөр нэмэх',
+                'label' => 'Шинэ мөр',
             ],
 
             'delete' => [
@@ -263,7 +83,7 @@ return [
             ],
 
             'reorder' => [
-                'label' => 'Мөрийн дарааллыг өөрчлөх',
+                'label' => 'Мөрийг эрэмбэлэх',
             ],
 
         ],
@@ -271,7 +91,7 @@ return [
         'fields' => [
 
             'key' => [
-                'label' => 'Түлхүүр',
+                'label' => 'Түлхүүр үг',
             ],
 
             'value' => [
@@ -286,27 +106,15 @@ return [
 
         'toolbar_buttons' => [
             'attach_files' => 'Файл хавсаргах',
-            'blockquote' => 'Ишлэл',
-            'bold' => 'Өргөн',
-            'bullet_list' => 'Цэгтэй жагсаалт',
-            'code_block' => 'Кодын блок',
-            'heading' => 'Толгой',
-            'italic' => 'Налуу',
-            'link' => 'Холбоос',
-            'ordered_list' => 'Дугаарлалттай жагсаалт',
-            'redo' => 'Сэргээх',
-            'strike' => 'Зураас',
-            'table' => 'Хүснэгт',
-            'undo' => 'Буцаах',
-        ],
-
-    ],
-
-    'radio' => [
-
-        'boolean' => [
-            'true' => 'Тийм',
-            'false' => 'Үгүй',
+            'bold' => 'Bold',
+            'bullet_list' => 'Bullet list',
+            'code_block' => 'Code block',
+            'edit' => 'Edit',
+            'italic' => 'Italic',
+            'link' => 'Link',
+            'ordered_list' => 'Numbered list',
+            'preview' => 'Урьдчилж харах',
+            'strike' => 'Strikethrough',
         ],
 
     ],
@@ -315,48 +123,44 @@ return [
 
         'actions' => [
 
-            'add' => [
+            'create_item' => [
                 'label' => 'Нэмэх :label',
             ],
 
-            'add_between' => [
-                'label' => 'Завсарт нь нэмэх',
-            ],
-
-            'delete' => [
+            'delete_item' => [
                 'label' => 'Устгах',
             ],
 
-            'clone' => [
+            'clone_item' => [
                 'label' => 'Хуулбарлах',
             ],
 
-            'reorder' => [
+            'move_item' => [
                 'label' => 'Зөөх',
             ],
 
-            'move_down' => [
+            'move_item_down' => [
                 'label' => 'Доош зөөх',
             ],
 
-            'move_up' => [
+            'move_item_up' => [
                 'label' => 'Дээш зөөх',
             ],
 
-            'collapse' => [
-                'label' => 'Хураах',
+            'collapse_item' => [
+                'label' => 'Хаах',
             ],
 
-            'expand' => [
-                'label' => 'Задлах',
+            'expand_item' => [
+                'label' => 'Нээх',
             ],
 
             'collapse_all' => [
-                'label' => 'Бүгдийг хураах',
+                'label' => 'Бүгдийг хаах',
             ],
 
             'expand_all' => [
-                'label' => 'Бүгдийг задлах',
+                'label' => 'Бүгдийг нээх',
             ],
 
         ],
@@ -370,13 +174,13 @@ return [
             'link' => [
 
                 'actions' => [
-                    'link' => 'Холбоос',
-                    'unlink' => 'Холбоосыг цуцлах',
+                    'link' => 'Линк',
+                    'unlink' => 'Unlink',
                 ],
 
-                'label' => 'Вэб хаяг (URL)',
+                'label' => 'URL',
 
-                'placeholder' => 'Вэб хаяг (URL) оруулах ',
+                'placeholder' => 'URL оруулах',
 
             ],
 
@@ -384,20 +188,19 @@ return [
 
         'toolbar_buttons' => [
             'attach_files' => 'Файл хавсаргах',
-            'blockquote' => 'Ишлэл',
-            'bold' => 'Өргөн',
-            'bullet_list' => 'Цэгтэй жагсаалт',
-            'code_block' => 'Кодын блок',
-            'h1' => 'Гарчиг',
-            'h2' => 'Толгой',
-            'h3' => 'Дэд толгой',
-            'italic' => 'Налуу',
-            'link' => 'Холбоос',
-            'ordered_list' => 'Дугаарлалттай жагсаалт',
-            'redo' => 'Сэргээх',
-            'strike' => 'Зураас',
-            'underline' => 'Доогуур зураас',
-            'undo' => 'Буцаах',
+            'blockquote' => 'Blockquote',
+            'bold' => 'Bold',
+            'bullet_list' => 'Bullet list',
+            'code_block' => 'Code block',
+            'h1' => 'Title',
+            'h2' => 'Heading',
+            'h3' => 'Subheading',
+            'italic' => 'Italic',
+            'link' => 'Линк',
+            'ordered_list' => 'Numbered list',
+            'redo' => 'Дахин хий',
+            'strike' => 'Strikethrough',
+            'undo' => 'Буцаа',
         ],
 
     ],
@@ -418,28 +221,6 @@ return [
                             'label' => 'Үүсгэх',
                         ],
 
-                        'create_another' => [
-                            'label' => 'Үүсгээд & дахин шинийг эхлэх',
-                        ],
-
-                    ],
-
-                ],
-
-            ],
-
-            'edit_option' => [
-
-                'modal' => [
-
-                    'heading' => 'Засах',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'Хадгалах',
-                        ],
-
                     ],
 
                 ],
@@ -455,45 +236,20 @@ return [
 
         'loading_message' => 'Ачааллаж байна...',
 
-        'max_items_message' => 'Зөвхөн :count сонгох боломжтой.',
+        'max_items_message' => 'Зөвхөн :count - г сонгоно.',
 
-        'no_search_results_message' => 'Хайлтанд тохирох сонголт олдсонгүй.',
+        'no_search_results_message' => 'Таны хайлтанд тохирох утга олдсонгүй.',
 
-        'placeholder' => 'Сонголтоо хийнэ үү',
+        'placeholder' => 'Сонгох',
 
-        'searching_message' => 'Хайж байна...',
+        'searching_message' => 'Хайх...',
 
-        'search_prompt' => 'Хайх үгээ бичнэ үү...',
+        'search_prompt' => 'Бичиж байна...',
 
     ],
 
     'tags_input' => [
-        'placeholder' => 'Шинэ шошго',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Нууц үгийг нуух',
-            ],
-
-            'show_password' => [
-                'label' => 'Нууц үгийг харуулах',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Тийм',
-            'false' => 'Үгүй',
-        ],
-
+        'placeholder' => 'Шинэ таг',
     ],
 
     'wizard' => [
@@ -505,7 +261,7 @@ return [
             ],
 
             'next_step' => [
-                'label' => 'Дараагийн',
+                'label' => 'Дараах',
             ],
 
         ],

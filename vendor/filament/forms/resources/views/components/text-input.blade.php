@@ -4,7 +4,6 @@
 
     $datalistOptions = $getDatalistOptions();
     $extraAlpineAttributes = $getExtraAlpineAttributes();
-    $hasInlineLabel = $hasInlineLabel();
     $id = $getId();
     $isConcealed = $isConcealed();
     $isDisabled = $isDisabled();
@@ -40,17 +39,8 @@
 <x-dynamic-component
     :component="$getFieldWrapperView()"
     :field="$field"
-    :has-inline-label="$hasInlineLabel"
+    :inline-label-vertical-alignment="\Filament\Support\Enums\VerticalAlignment::Center"
 >
-    <x-slot
-        name="label"
-        @class([
-            'sm:pt-1.5' => $hasInlineLabel,
-        ])
-    >
-        {{ $getLabel() }}
-    </x-slot>
-
     <x-filament::input.wrapper
         :disabled="$isDisabled"
         :inline-prefix="$isPrefixInline"
@@ -97,9 +87,6 @@
                         'x-bind:type' => $isPasswordRevealable ? 'isPasswordRevealed ? \'text\' : \'password\'' : null,
                         'x-mask' . ($mask instanceof \Filament\Support\RawJs ? ':dynamic' : '') => filled($mask) ? $mask : null,
                     ], escape: false)
-                    ->class([
-                        '[&::-ms-reveal]:hidden' => $isPasswordRevealable,
-                    ])
             "
         />
     </x-filament::input.wrapper>
@@ -107,7 +94,7 @@
     @if ($datalistOptions)
         <datalist id="{{ $id }}-list">
             @foreach ($datalistOptions as $option)
-                <option value="{{ $option }}"></option>
+                <option value="{{ $option }}" />
             @endforeach
         </datalist>
     @endif

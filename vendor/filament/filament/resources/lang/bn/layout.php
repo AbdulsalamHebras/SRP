@@ -2,7 +2,7 @@
 
 return [
 
-    'direction' => 'ltr',
+    'direction' => 'বাম থেকে ডানে',
 
     'actions' => [
 

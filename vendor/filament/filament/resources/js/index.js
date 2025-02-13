@@ -37,11 +37,7 @@ document.addEventListener('alpine:init', () => {
         },
     })
 
-    const theme =
-        localStorage.getItem('theme') ??
-        getComputedStyle(document.documentElement).getPropertyValue(
-            '--default-theme-mode',
-        )
+    const theme = localStorage.getItem('theme') ?? 'system'
 
     window.Alpine.store(
         'theme',

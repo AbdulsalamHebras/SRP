@@ -4,6 +4,7 @@ namespace Filament\Infolists\Concerns;
 
 use Exception;
 use Filament\Actions\Contracts\HasActions;
+use Filament\Forms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Actions\Action;
@@ -13,7 +14,6 @@ use Filament\Support\Exceptions\Cancel;
 use Filament\Support\Exceptions\Halt;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Validation\ValidationException;
-use Throwable;
 
 use function Livewire\store;
 
@@ -98,57 +98,36 @@ trait InteractsWithInfolists
 
         $action->mergeArguments($arguments);
 
-        $form = $this->getMountedInfolistActionForm(mountedAction: $action);
+        $form = $this->getMountedInfolistActionForm();
 
         $result = null;
 
         try {
-            $action->beginDatabaseTransaction();
-
-            if ($this->mountedInfolistActionHasForm(mountedAction: $action)) {
+            if ($this->mountedInfolistActionHasForm()) {
                 $action->callBeforeFormValidated();
 
-                $form->getState(afterValidate: function (array $state) use ($action) {
-                    $action->callAfterFormValidated();
+                $action->formData($form->getState());
 
-                    $action->formData($state);
-
-                    $action->callBefore();
-                });
-            } else {
-                $action->callBefore();
+                $action->callAfterFormValidated();
             }
+
+            $action->callBefore();
 
             $result = $action->call([
                 'form' => $form,
             ]);
 
             $result = $action->callAfter() ?? $result;
-
-            $action->commitDatabaseTransaction();
         } catch (Halt $exception) {
-            $exception->shouldRollbackDatabaseTransaction() ?
-                $action->rollBackDatabaseTransaction() :
-                $action->commitDatabaseTransaction();
-
             return null;
         } catch (Cancel $exception) {
-            $exception->shouldRollbackDatabaseTransaction() ?
-                $action->rollBackDatabaseTransaction() :
-                $action->commitDatabaseTransaction();
         } catch (ValidationException $exception) {
-            $action->rollBackDatabaseTransaction();
-
-            if (! $this->mountedInfolistActionShouldOpenModal(mountedAction: $action)) {
+            if (! $this->mountedInfolistActionShouldOpenModal()) {
                 $action->resetArguments();
                 $action->resetFormData();
 
                 $this->unmountInfolistAction();
             }
-
-            throw $exception;
-        } catch (Throwable $exception) {
-            $action->rollBackDatabaseTransaction();
 
             throw $exception;
         }
@@ -194,18 +173,18 @@ trait InteractsWithInfolists
 
         $this->cacheForm(
             'mountedInfolistActionForm',
-            fn () => $this->getMountedInfolistActionForm(mountedAction: $action),
+            fn () => $this->getMountedInfolistActionForm(),
         );
 
         try {
-            $hasForm = $this->mountedInfolistActionHasForm(mountedAction: $action);
+            $hasForm = $this->mountedInfolistActionHasForm();
 
             if ($hasForm) {
                 $action->callBeforeFormFilled();
             }
 
             $action->mount([
-                'form' => $this->getMountedInfolistActionForm(mountedAction: $action),
+                'form' => $this->getMountedInfolistActionForm(),
             ]);
 
             if ($hasForm) {
@@ -219,7 +198,7 @@ trait InteractsWithInfolists
             return null;
         }
 
-        if (! $this->mountedInfolistActionShouldOpenModal(mountedAction: $action)) {
+        if (! $this->mountedInfolistActionShouldOpenModal()) {
             return $this->callMountedInfolistAction();
         }
 
@@ -244,16 +223,25 @@ trait InteractsWithInfolists
         $this->dispatch('open-modal', id: "{$this->getId()}-infolist-action");
     }
 
-    public function mountedInfolistActionShouldOpenModal(?Action $mountedAction = null): bool
+    public function mountedInfolistActionShouldOpenModal(): bool
     {
-        return ($mountedAction ?? $this->getMountedInfolistAction())->shouldOpenModal(
-            checkForFormUsing: $this->mountedInfolistActionHasForm(...),
-        );
+        $action = $this->getMountedInfolistAction();
+
+        if ($action->isModalHidden()) {
+            return false;
+        }
+
+        return $action->hasCustomModalHeading() ||
+            $action->hasModalDescription() ||
+            $action->hasModalContent() ||
+            $action->hasModalContentFooter() ||
+            $action->getInfolist() ||
+            $this->mountedInfolistActionHasForm();
     }
 
-    public function mountedInfolistActionHasForm(?Action $mountedAction = null): bool
+    public function mountedInfolistActionHasForm(): bool
     {
-        return (bool) count($this->getMountedInfolistActionForm(mountedAction: $mountedAction)?->getComponents() ?? []);
+        return (bool) count($this->getMountedInfolistActionForm()?->getComponents() ?? []);
     }
 
     public function getMountedInfolistAction(): ?Action
@@ -276,11 +264,11 @@ trait InteractsWithInfolists
         return $infolist->getComponent($this->mountedInfolistActionsComponent);
     }
 
-    public function getMountedInfolistActionForm(?Action $mountedAction = null): ?Form
+    public function getMountedInfolistActionForm(): ?Form
     {
-        $mountedAction ??= $this->getMountedInfolistAction();
+        $action = $this->getMountedInfolistAction();
 
-        if (! $mountedAction) {
+        if (! $action) {
             return null;
         }
 
@@ -288,15 +276,15 @@ trait InteractsWithInfolists
             return $this->getForm('mountedInfolistActionForm');
         }
 
-        return $mountedAction->getForm(
+        return $action->getForm(
             $this->makeForm()
-                ->model($mountedAction->getRecord())
+                ->model($action->getRecord())
                 ->statePath('mountedInfolistActionsData.' . array_key_last($this->mountedInfolistActionsData))
                 ->operation(implode('.', $this->mountedInfolistActions)),
         );
     }
 
-    public function unmountInfolistAction(bool $shouldCancelParentActions = true, bool $shouldCloseModal = true): void
+    public function unmountInfolistAction(bool $shouldCancelParentActions = true): void
     {
         $action = $this->getMountedInfolistAction();
 
@@ -326,9 +314,7 @@ trait InteractsWithInfolists
             $this->mountedInfolistActionsComponent = null;
             $this->mountedInfolistActionsInfolist = null;
 
-            if ($shouldCloseModal) {
-                $this->dispatch('close-modal', id: "{$this->getId()}-infolist-action");
-            }
+            $this->dispatch('close-modal', id: "{$this->getId()}-infolist-action");
 
             return;
         }
@@ -349,7 +335,7 @@ trait InteractsWithInfolists
     }
 
     /**
-     * @return array<string, Form>
+     * @return array<string, Forms\Form>
      */
     protected function getInteractsWithInfolistsForms(): array
     {

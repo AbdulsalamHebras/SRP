@@ -10,8 +10,6 @@ enum FontWeight
 
     case Light;
 
-    case Normal;
-
     case Medium;
 
     case SemiBold;

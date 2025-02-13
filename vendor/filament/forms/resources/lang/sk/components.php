@@ -11,67 +11,15 @@ return [
             ],
 
             'add' => [
-
                 'label' => 'Pridať do :label',
-
-                'modal' => [
-
-                    'heading' => 'Pridať do :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Pridať',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'add_between' => [
-
                 'label' => 'Pridať medzi bloky',
-
-                'modal' => [
-
-                    'heading' => 'Pridať do :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Pridať',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'delete' => [
                 'label' => 'Odstrániť',
-            ],
-
-            'edit' => [
-
-                'label' => 'Upraviť',
-
-                'modal' => [
-
-                    'heading' => 'Upraviť blok',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'Uložiť zmeny',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'reorder' => [
@@ -302,15 +250,6 @@ return [
 
     ],
 
-    'radio' => [
-
-        'boolean' => [
-            'true' => 'Áno',
-            'false' => 'Nie',
-        ],
-
-    ],
-
     'repeater' => [
 
         'actions' => [
@@ -376,7 +315,7 @@ return [
 
                 'label' => 'URL adresa',
 
-                'placeholder' => 'Zadajte adresu URL',
+                'placeholder' => 'Zdajte adresu URL',
 
             ],
 
@@ -469,31 +408,6 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Nová značka',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Skryť heslo',
-            ],
-
-            'show_password' => [
-                'label' => 'Zobraziť heslo',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Áno',
-            'false' => 'Nie',
-        ],
-
     ],
 
     'wizard' => [

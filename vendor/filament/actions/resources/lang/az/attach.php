@@ -25,7 +25,7 @@ return [
                 ],
 
                 'attach_another' => [
-                    'label' => 'İlişdir və başqasına başla',
+                    'label' => 'İlişdir ve başqasına başla',
                 ],
 
             ],

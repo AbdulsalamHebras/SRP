@@ -2,17 +2,16 @@
     $id = $getId();
     $isContained = $getContainer()->getParentComponent()->isContained();
 
-    $activeTabClasses = \Illuminate\Support\Arr::toCssClasses([
-        'fi-active',
+    $visibleTabClasses = \Illuminate\Support\Arr::toCssClasses([
         'p-6' => $isContained,
         'mt-6' => ! $isContained,
     ]);
 
-    $inactiveTabClasses = 'invisible absolute h-0 overflow-hidden p-0';
+    $invisibleTabClasses = 'invisible h-0 overflow-y-hidden p-0';
 @endphp
 
 <div
-    x-bind:class="tab === @js($id) ? @js($activeTabClasses) : @js($inactiveTabClasses)"
+    x-bind:class="tab === @js($id) ? @js($visibleTabClasses) : @js($invisibleTabClasses)"
     {{
         $attributes
             ->merge([

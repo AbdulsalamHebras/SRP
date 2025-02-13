@@ -9,9 +9,4 @@ interface CanBeLengthConstrained
     public function getMaxLength(): ?int;
 
     public function getMinLength(): ?int;
-
-    /**
-     * @return array<string>
-     */
-    public function getLengthValidationRules(): array;
 }

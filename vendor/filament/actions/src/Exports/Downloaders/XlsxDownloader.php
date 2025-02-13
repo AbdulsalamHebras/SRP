@@ -15,15 +15,10 @@ class XlsxDownloader implements Downloader
     public function __invoke(Export $export): StreamedResponse
     {
         $disk = $export->getFileDisk();
-        $directory = $export->getFileDirectory();
-
-        if (! $disk->exists($directory)) {
-            abort(404);
-        }
 
         $fileName = $export->file_name . '.xlsx';
 
-        if ($disk->exists($filePath = $directory . DIRECTORY_SEPARATOR . $fileName)) {
+        if ($disk->exists($filePath = $export->getFileDirectory() . DIRECTORY_SEPARATOR . $fileName)) {
             return $disk->download($filePath);
         }
 
@@ -41,12 +36,12 @@ class XlsxDownloader implements Downloader
             }
         };
 
-        return response()->streamDownload(function () use ($disk, $directory, $fileName, $writer, $writeRowsFromFile) {
+        return response()->streamDownload(function () use ($disk, $export, $fileName, $writer, $writeRowsFromFile) {
             $writer->openToBrowser($fileName);
 
-            $writeRowsFromFile($directory . DIRECTORY_SEPARATOR . 'headers.csv');
+            $writeRowsFromFile($export->getFileDirectory() . DIRECTORY_SEPARATOR . 'headers.csv');
 
-            foreach ($disk->files($directory) as $file) {
+            foreach ($disk->files($export->getFileDirectory()) as $file) {
                 if (str($file)->endsWith('headers.csv')) {
                     continue;
                 }

@@ -3,7 +3,6 @@
     'activeIcon' => null,
     'badge' => null,
     'badgeColor' => null,
-    'badgeTooltip' => null,
     'icon' => null,
     'shouldOpenUrlInNewTab' => false,
     'url' => null,
@@ -44,7 +43,7 @@
 
         <span
             @class([
-                'fi-topbar-item-label text-sm font-medium',
+                'fi-topbar-item-label font-medium text-sm',
                 'text-gray-700 dark:text-gray-200' => ! $active,
                 'text-primary-600 dark:text-primary-400' => $active,
             ])
@@ -53,11 +52,7 @@
         </span>
 
         @if (filled($badge))
-            <x-filament::badge
-                :color="$badgeColor"
-                size="sm"
-                :tooltip="$badgeTooltip"
-            >
+            <x-filament::badge :color="$badgeColor" size="sm">
                 {{ $badge }}
             </x-filament::badge>
         @endif

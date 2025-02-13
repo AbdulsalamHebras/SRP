@@ -2,12 +2,10 @@
     use Filament\Support\Facades\FilamentView;
 
     $isDisabled = $isDisabled();
-    $isLive = $isLive();
     $isLiveOnBlur = $isLiveOnBlur();
     $isLiveDebounced = $isLiveDebounced();
     $isPrefixInline = $isPrefixInline();
     $isSuffixInline = $isSuffixInline();
-    $liveDebounce = $getLiveDebounce();
     $prefixActions = $getPrefixActions();
     $prefixIcon = $getPrefixIcon();
     $prefixLabel = $getPrefixLabel();
@@ -43,7 +41,7 @@
         <div
             x-ignore
             @if (FilamentView::hasSpaMode())
-                {{-- format-ignore-start --}}ax-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
+                ax-load="visible"
             @else
                 ax-load
             @endif
@@ -51,11 +49,9 @@
             x-data="colorPickerFormComponent({
                         isAutofocused: @js($isAutofocused()),
                         isDisabled: @js($isDisabled),
-                        isLive: @js($isLive),
                         isLiveDebounced: @js($isLiveDebounced),
                         isLiveOnBlur: @js($isLiveOnBlur),
-                        liveDebounce: @js($liveDebounce),
-                        state: $wire.$entangle('{{ $statePath }}'),
+                        state: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')", isOptimisticallyLive: false) }},
                     })"
             x-on:keydown.esc="isOpen() && $event.stopPropagation()"
             {{ $getExtraAlpineAttributeBag()->class(['flex']) }}
@@ -75,20 +71,24 @@
                             'placeholder' => $getPlaceholder(),
                             'required' => $isRequired() && (! $isConcealed()),
                             'type' => 'text',
-                            'x-model' . ($isLiveDebounced ? '.debounce.' . $liveDebounce : null) => 'state',
-                            'x-on:blur' => $isLiveOnBlur ? 'isOpen() ? null : commitState()' : null,
+                            'x-model' . ($isLiveDebounced ? '.debounce.' . $getLiveDebounce() : null) => 'state',
+                            'x-on:blur' => $isLiveOnBlur ? 'isOpen() ? null : $wire.call(\'$refresh\')' : null,
                         ], escape: false)
                 "
             />
 
             <div
-                class="fi-fo-color-picker-preview my-auto me-3 h-5 w-5 shrink-0 select-none rounded-full"
+                class="flex min-h-full items-center pe-3"
                 x-on:click="togglePanelVisibility()"
-                x-bind:class="{
-                    'ring-1 ring-inset ring-gray-200 dark:ring-white/10': ! state,
-                }"
-                x-bind:style="{ 'background-color': state }"
-            ></div>
+            >
+                <div
+                    class="h-5 w-5 select-none rounded-full"
+                    x-bind:class="{
+                        'ring-1 ring-inset ring-gray-200 dark:ring-white/10': ! state,
+                    }"
+                    x-bind:style="{ 'background-color': state }"
+                ></div>
+            </div>
 
             <div
                 wire:ignore.self

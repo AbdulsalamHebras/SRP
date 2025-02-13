@@ -10,10 +10,6 @@ return [
 
     'columns' => [
 
-        'actions' => [
-            'label' => 'Acción|Acciones',
-        ],
-
         'text' => [
 
             'actions' => [
@@ -116,10 +112,6 @@ return [
     'filters' => [
 
         'actions' => [
-
-            'apply' => [
-                'label' => 'Aplicar filtros',
-            ],
 
             'remove' => [
                 'label' => 'Quitar filtro',

@@ -34,14 +34,6 @@ return [
             'label' => 'Précédent',
         ],
 
-        'first' => [
-            'label' => 'Première',
-        ],
-
-        'last' => [
-            'label' => 'Dernière',
-        ],
-
     ],
 
 ];

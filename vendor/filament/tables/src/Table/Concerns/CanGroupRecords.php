@@ -15,20 +15,13 @@ trait CanGroupRecords
     /**
      * @var array<string, Group>
      */
-    protected ?array $cachedGroups;
-
-    /**
-     * @var array<string | Group> | Closure
-     */
-    protected array | Closure $groups = [];
+    protected array $groups = [];
 
     protected bool | Closure $isGroupsOnly = false;
 
     protected bool | Closure $areGroupingSettingsInDropdownOnDesktop = false;
 
     protected bool | Closure $areGroupingSettingsHidden = false;
-
-    protected bool | Closure $isGroupingDirectionSettingHidden = false;
 
     protected ?Closure $modifyGroupRecordsTriggerActionUsing = null;
 
@@ -63,13 +56,6 @@ trait CanGroupRecords
         return $this;
     }
 
-    public function groupingDirectionSettingHidden(bool | Closure $condition = true): static
-    {
-        $this->isGroupingDirectionSettingHidden = $condition;
-
-        return $this;
-    }
-
     public function defaultGroup(string | Group | null $group): static
     {
         $this->defaultGroup = $group;
@@ -78,11 +64,17 @@ trait CanGroupRecords
     }
 
     /**
-     * @param  array<string | Group> | Closure  $groups
+     * @param  array<Group | string>  $groups
      */
-    public function groups(array | Closure $groups): static
+    public function groups(array $groups): static
     {
-        $this->groups = $groups;
+        foreach ($groups as $group) {
+            if (! $group instanceof Group) {
+                $group = Group::make($group);
+            }
+
+            $this->groups[$group->getId()] = $group;
+        }
 
         return $this;
     }
@@ -138,11 +130,6 @@ trait CanGroupRecords
         return (bool) $this->evaluate($this->areGroupingSettingsHidden);
     }
 
-    public function isGroupingDirectionSettingHidden(): bool
-    {
-        return (bool) $this->evaluate($this->isGroupingDirectionSettingHidden);
-    }
-
     public function getDefaultGroup(): ?Group
     {
         if ($this->defaultGroup === null) {
@@ -150,7 +137,7 @@ trait CanGroupRecords
         }
 
         if ($this->defaultGroup instanceof Group) {
-            return $this->defaultGroup->table($this);
+            return $this->defaultGroup;
         }
 
         $group = $this->getGroup($this->defaultGroup);
@@ -159,8 +146,7 @@ trait CanGroupRecords
             return $group;
         }
 
-        return Group::make($this->defaultGroup)
-            ->table($this);
+        return Group::make($this->defaultGroup);
     }
 
     /**
@@ -168,19 +154,7 @@ trait CanGroupRecords
      */
     public function getGroups(): array
     {
-        return $this->cachedGroups ??= array_reduce(
-            $this->evaluate($this->groups),
-            function (array $carry, $group): array {
-                if (! $group instanceof Group) {
-                    $group = Group::make($group);
-                }
-
-                $carry[$group->getId()] = $group->table($this);
-
-                return $carry;
-            },
-            initial: [],
-        );
+        return $this->groups;
     }
 
     public function getGroup(string $id): ?Group

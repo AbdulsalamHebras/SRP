@@ -209,7 +209,6 @@ return [
             'delete' => [
                 'label' => 'Удалить строку',
             ],
-
             'reorder' => [
                 'label' => 'Переместить строку',
             ],
@@ -246,15 +245,6 @@ return [
             'strike' => 'Зачеркнутый',
             'table' => 'Таблица',
             'undo' => 'Отменить',
-        ],
-
-    ],
-
-    'radio' => [
-
-        'boolean' => [
-            'true' => 'Да',
-            'false' => 'Нет',
         ],
 
     ],
@@ -411,36 +401,10 @@ return [
         'searching_message' => 'Поиск...',
 
         'search_prompt' => 'Введите текст для поиска...',
-
     ],
 
     'tags_input' => [
         'placeholder' => 'Новый тег',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Скрыть пароль',
-            ],
-
-            'show_password' => [
-                'label' => 'Показать пароль',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Да',
-            'false' => 'Нет',
-        ],
-
     ],
 
     'wizard' => [

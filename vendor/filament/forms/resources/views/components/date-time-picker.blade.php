@@ -3,13 +3,10 @@
 
     $datalistOptions = $getDatalistOptions();
     $extraAlpineAttributes = $getExtraAlpineAttributes();
-    $hasTime = $hasTime();
     $id = $getId();
     $isDisabled = $isDisabled();
     $isPrefixInline = $isPrefixInline();
     $isSuffixInline = $isSuffixInline();
-    $maxDate = $getMaxDate();
-    $minDate = $getMinDate();
     $prefixActions = $getPrefixActions();
     $prefixIcon = $getPrefixIcon();
     $prefixLabel = $getPrefixLabel();
@@ -51,8 +48,8 @@
                             'inlinePrefix' => $isPrefixInline && (count($prefixActions) || $prefixIcon || filled($prefixLabel)),
                             'inlineSuffix' => $isSuffixInline && (count($suffixActions) || $suffixIcon || filled($suffixLabel)),
                             'list' => $datalistOptions ? $id . '-list' : null,
-                            'max' => $hasTime ? $maxDate : ($maxDate ? \Carbon\Carbon::parse($maxDate)->toDateString() : null),
-                            'min' => $hasTime ? $minDate : ($minDate ? \Carbon\Carbon::parse($minDate)->toDateString() : null),
+                            'max' => $getMaxDate(),
+                            'min' => $getMinDate(),
                             'placeholder' => $getPlaceholder(),
                             'readonly' => $isReadOnly(),
                             'required' => $isRequired() && (! $isConcealed()),
@@ -67,7 +64,7 @@
             <div
                 x-ignore
                 @if (FilamentView::hasSpaMode())
-                    {{-- format-ignore-start --}}ax-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
+                    ax-load="visible"
                 @else
                     ax-load
                 @endif
@@ -77,7 +74,7 @@
                                 '{{ convert_date_format($getDisplayFormat())->to('day.js') }}',
                             firstDayOfWeek: {{ $getFirstDayOfWeek() }},
                             isAutofocused: @js($isAutofocused()),
-                            locale: @js($getLocale()),
+                            locale: @js(app()->getLocale()),
                             shouldCloseOnDateSelection: @js($shouldCloseOnDateSelection()),
                             state: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')") }},
                         })"
@@ -89,9 +86,17 @@
                         ->class(['fi-fo-date-time-picker'])
                 }}
             >
-                <input x-ref="maxDate" type="hidden" value="{{ $maxDate }}" />
+                <input
+                    x-ref="maxDate"
+                    type="hidden"
+                    value="{{ $getMaxDate() }}"
+                />
 
-                <input x-ref="minDate" type="hidden" value="{{ $minDate }}" />
+                <input
+                    x-ref="minDate"
+                    type="hidden"
+                    value="{{ $getMinDate() }}"
+                />
 
                 <input
                     x-ref="disabledDates"
@@ -117,7 +122,7 @@
                     aria-label="{{ $getPlaceholder() }}"
                     type="button"
                     tabindex="-1"
-                    @disabled($isDisabled || $isReadOnly())
+                    @disabled($isDisabled)
                     {{
                         $getExtraTriggerAttributeBag()->class([
                             'w-full',
@@ -132,7 +137,7 @@
                         x-model="displayText"
                         @if ($id = $getId()) id="{{ $id }}" @endif
                         @class([
-                            'fi-fo-date-time-picker-display-text-input w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 outline-none transition duration-75 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)] sm:text-sm sm:leading-6',
+                            'w-full border-none bg-transparent px-3 py-1.5 text-base text-gray-950 outline-none transition duration-75 placeholder:text-gray-400 focus:ring-0 disabled:text-gray-500 disabled:[-webkit-text-fill-color:theme(colors.gray.500)] sm:text-sm sm:leading-6 dark:text-white dark:placeholder:text-gray-500 dark:disabled:text-gray-400 dark:disabled:[-webkit-text-fill-color:theme(colors.gray.400)]',
                         ])
                     />
                 </button>
@@ -214,13 +219,11 @@
                                                 focusedDate.date() !== day &&
                                                 ! dayIsDisabled(day),
                                             'bg-gray-50 dark:bg-white/5':
-                                                focusedDate.date() === day &&
-                                                ! dayIsSelected(day) &&
-                                                ! dayIsDisabled(day),
+                                                focusedDate.date() === day && ! dayIsSelected(day),
                                             'text-primary-600 bg-gray-50 dark:bg-white/5 dark:text-primary-400':
                                                 dayIsSelected(day),
                                             'pointer-events-none': dayIsDisabled(day),
-                                            'opacity-50': dayIsDisabled(day),
+                                            'opacity-50': focusedDate.date() !== day && dayIsDisabled(day),
                                         }"
                                         class="rounded-full text-center text-sm leading-loose transition duration-75"
                                     ></div>
@@ -228,7 +231,7 @@
                             </div>
                         @endif
 
-                        @if ($hasTime)
+                        @if ($hasTime())
                             <div
                                 class="flex items-center justify-center rtl:flex-row-reverse"
                             >

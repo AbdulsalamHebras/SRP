@@ -8,7 +8,7 @@ return [
 
         'modal' => [
 
-            'heading' => ':labelni tahrirlash',
+            'heading' => ':label - tahrirlash',
 
             'actions' => [
 

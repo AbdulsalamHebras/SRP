@@ -34,7 +34,7 @@
     >
         <div
             @if (FilamentView::hasSpaMode())
-                {{-- format-ignore-start --}}ax-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
+                ax-load="visible"
             @else
                 ax-load
             @endif
@@ -103,7 +103,7 @@
                             @if ($isReorderable)
                                 x-bind:x-sortable-item="row.key"
                             @endif
-                            class="divide-x divide-gray-200 dark:divide-white/5 rtl:divide-x-reverse"
+                            class="divide-x divide-gray-200 rtl:divide-x-reverse dark:divide-white/5"
                         >
                             @if ($isReorderable && (! $isDisabled))
                                 <td class="p-0.5">

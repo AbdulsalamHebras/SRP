@@ -78,19 +78,17 @@ class ColumnGroup extends Component
     }
 
     /**
-     * @return array<string, Column>
+     * @return array<Column>
      */
     public function getColumns(): array
     {
-        return array_reduce($this->evaluate($this->columns) ?? [], function (array $result, Column $column): array {
-            $result[$column->getName()] = $column->group($this);
-
-            return $result;
-        }, []);
+        return array_map(function (Column $column): Column {
+            return $column->group($this);
+        }, $this->evaluate($this->columns) ?? []);
     }
 
     /**
-     * @return array<string, Column>
+     * @return array<Column>
      */
     public function getVisibleColumns(): array
     {

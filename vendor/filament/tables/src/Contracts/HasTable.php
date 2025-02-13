@@ -107,8 +107,6 @@ interface HasTable
 
     public function getFilteredSortedTableQuery(): Builder;
 
-    public function getTableQueryForExport(): Builder;
-
     public function makeFilamentTranslatableContentDriver(): ?TranslatableContentDriver;
 
     /**

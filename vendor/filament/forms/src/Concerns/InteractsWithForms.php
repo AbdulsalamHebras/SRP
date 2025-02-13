@@ -10,7 +10,6 @@ use Filament\Infolists\Infolist;
 use Filament\Support\Concerns\ResolvesDynamicLivewireProperties;
 use Filament\Support\Contracts\TranslatableContentDriver;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Renderless;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -47,51 +46,6 @@ trait InteractsWithForms
     {
         foreach ($this->getCachedForms() as $form) {
             $form->dispatchEvent(...$args);
-        }
-    }
-
-    /**
-     * @param  array<mixed>  $state
-     */
-    public function fillFormDataForTesting(array $state = []): void
-    {
-        if (! app()->runningUnitTests()) {
-            return;
-        }
-
-        foreach (Arr::dot($state) as $statePath => $value) {
-            $this->updatingInteractsWithForms($statePath);
-
-            data_set($this, $statePath, $value);
-
-            $this->updatedInteractsWithForms($statePath);
-        }
-
-        foreach ($state as $statePath => $value) {
-            if (! is_array($value)) {
-                continue;
-            }
-
-            $this->unsetMissingNumericArrayKeys($this->{$statePath}, $value);
-        }
-    }
-
-    /**
-     * @param  array<mixed>  $target
-     * @param  array<mixed>  $state
-     */
-    protected function unsetMissingNumericArrayKeys(array &$target, array $state): void
-    {
-        foreach ($target as $key => $value) {
-            if (is_numeric($key) && (! array_key_exists($key, $state))) {
-                unset($target[$key]);
-
-                continue;
-            }
-
-            if (is_array($value) && is_array($state[$key] ?? null)) {
-                $this->unsetMissingNumericArrayKeys($target[$key], $state[$key]);
-            }
         }
     }
 
@@ -245,7 +199,9 @@ trait InteractsWithForms
         }
     }
 
-    protected function onValidationError(ValidationException $exception): void {}
+    protected function onValidationError(ValidationException $exception): void
+    {
+    }
 
     /**
      * @param  array<string, mixed>  $attributes
@@ -288,8 +244,7 @@ trait InteractsWithForms
     {
         $statePath = (string) str($statePath)->before('.');
 
-        // https://github.com/filamentphp/filament/pull/13973
-        $this->oldFormState[$statePath] ??= data_get($this, $statePath);
+        $this->oldFormState[$statePath] = data_get($this, $statePath);
     }
 
     public function getOldFormState(string $statePath): mixed

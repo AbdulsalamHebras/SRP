@@ -15,24 +15,6 @@ return [
 
         ],
 
-        'key_value' => [
-
-            'columns' => [
-
-                'key' => [
-                    'label' => 'Kulcs',
-                ],
-
-                'value' => [
-                    'label' => 'Érték',
-                ],
-
-            ],
-
-            'placeholder' => 'Nincs megjeleníthető elem',
-
-        ],
-
     ],
 
 ];

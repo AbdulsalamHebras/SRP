@@ -6,7 +6,6 @@ use Closure;
 use Exception;
 use Filament\Support\Components\Component;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Htmlable;
 
 class NavigationItem extends Component
 {
@@ -16,9 +15,9 @@ class NavigationItem extends Component
 
     protected bool | Closure | null $isActive = null;
 
-    protected string | Htmlable | Closure | null $icon = null;
+    protected string | Closure | null $icon = null;
 
-    protected string | Htmlable | Closure | null $activeIcon = null;
+    protected string | Closure | null $activeIcon = null;
 
     protected string | Closure $label;
 
@@ -28,8 +27,6 @@ class NavigationItem extends Component
      * @var string | array{50: string, 100: string, 200: string, 300: string, 400: string, 500: string, 600: string, 700: string, 800: string, 900: string, 950: string} | Closure | null
      */
     protected string | array | Closure | null $badgeColor = null;
-
-    protected string | Closure | null $badgeTooltip = null;
 
     protected bool | Closure $shouldOpenUrlInNewTab = false;
 
@@ -86,16 +83,9 @@ class NavigationItem extends Component
         return $this;
     }
 
-    public function icon(string | Htmlable | Closure | null $icon): static
+    public function icon(string | Closure | null $icon): static
     {
         $this->icon = $icon;
-
-        return $this;
-    }
-
-    public function badgeTooltip(string | Closure | null $tooltip): static
-    {
-        $this->badgeTooltip = $tooltip;
 
         return $this;
     }
@@ -114,14 +104,14 @@ class NavigationItem extends Component
         return $this;
     }
 
-    public function activeIcon(string | Htmlable | Closure | null $activeIcon): static
+    public function activeIcon(string | Closure | null $activeIcon): static
     {
         $this->activeIcon = $activeIcon;
 
         return $this;
     }
 
-    public function isActiveWhen(?Closure $callback): static
+    public function isActiveWhen(Closure $callback): static
     {
         $this->isActive = $callback;
 
@@ -170,11 +160,6 @@ class NavigationItem extends Component
         return $this->evaluate($this->badgeColor);
     }
 
-    public function getBadgeTooltip(): ?string
-    {
-        return $this->evaluate($this->badgeTooltip);
-    }
-
     public function getGroup(): ?string
     {
         return $this->evaluate($this->group);
@@ -185,7 +170,7 @@ class NavigationItem extends Component
         return $this->evaluate($this->parentItem);
     }
 
-    public function getIcon(): string | Htmlable | null
+    public function getIcon(): ?string
     {
         $icon = $this->evaluate($this->icon);
 
@@ -210,7 +195,7 @@ class NavigationItem extends Component
         return ! $this->evaluate($this->isVisible);
     }
 
-    public function getActiveIcon(): string | Htmlable | null
+    public function getActiveIcon(): ?string
     {
         return $this->evaluate($this->activeIcon);
     }

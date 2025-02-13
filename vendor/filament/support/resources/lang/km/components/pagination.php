@@ -22,16 +22,8 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'ទីមួយ',
-        ],
-
         'go_to_page' => [
             'label' => 'ទៅកាន់​ទំព័រ :page',
-        ],
-
-        'last' => [
-            'label' => 'ចុងក្រោយ',
         ],
 
         'next' => [

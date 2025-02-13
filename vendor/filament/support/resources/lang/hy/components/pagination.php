@@ -4,34 +4,20 @@ return [
 
     'label' => 'Էջավորման նավիգացիա',
 
-    'overview' => 'Ցուցադրվում են :total արդյունքներից :first-ից :last-ը',
+    'overview' => 'Ցուցադրվում են :total արդյունքներից :first֊ից :last֊ը',
 
     'fields' => [
 
         'records_per_page' => [
-
-            'label' => 'Մեկ էջում',
-
-            'options' => [
-                'all' => 'Բոլորը',
-            ],
-
+            'label' => 'մեկ էջում',
         ],
 
     ],
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Առաջինը',
-        ],
-
         'go_to_page' => [
             'label' => 'Գնալ էջ :page',
-        ],
-
-        'last' => [
-            'label' => 'Վերջինը',
         ],
 
         'next' => [
@@ -39,7 +25,7 @@ return [
         ],
 
         'previous' => [
-            'label' => 'Նախորդը',
+            'label' => 'Նախորդ',
         ],
 
     ],

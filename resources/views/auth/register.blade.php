@@ -14,7 +14,9 @@
             <img src="https://via.placeholder.com/100" alt="Logo">
         </div>
         <!-- Form Fields -->
-        <form method="POST" action="{{route('register')}}" enctype="multipart/form-data" id="registrationForm">
+        <form method="POST"  enctype="multipart/form-data" id="registrationForm"
+            data-default-action="{{ route('register') }}"
+            data-company-action="{{ route('companies.register') }}">
             @csrf
             <input type="text" name="name" placeholder="اسم المستخدم" id="name"
                 class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"
@@ -60,15 +62,25 @@
                 </span>
             @enderror
             <div id="company-container">
-
                 <input type="text" name="jobField" placeholder="مجال العمل" id="jobField"
                 class="form-control @error('jobField') is-invalid @enderror" value="{{ old('jobField') }}">
                 @error('jobField')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
-                <input type="text" name="locatuin" placeholder="المحافظة" id="locatuin"
-                class="form-control @error('locatuin') is-invalid @enderror" value="{{ old('locatuin') }}">
-                @error('locatuin')
+                <select name="location" id="location" class="form-control @error('location') is-invalid @enderror">
+                    <option value="" disabled selected>اختر المحافظة</option>
+                    <option value="صنعاء" {{ old('location') == 'صنعاء' ? 'selected' : '' }}>صنعاء</option>
+                    <option value="عدن" {{ old('location') == 'عدن' ? 'selected' : '' }}>عدن</option>
+                    <option value="تعز" {{ old('location') == 'تعز' ? 'selected' : '' }}>تعز</option>
+                    <option value="الحديدة" {{ old('location') == 'الحديدة' ? 'selected' : '' }}>الحديدة</option>
+                    <option value="المكلا" {{ old('location') == 'المكلا' ? 'selected' : '' }}>المكلا</option>
+                    <option value="إب" {{ old('location') == 'إب' ? 'selected' : '' }}>إب</option>
+                    <option value="سيئون" {{ old('location') == 'سيئون' ? 'selected' : '' }}>سيئون</option>
+                    <option value="الغيضة" {{ old('location') == 'الغيضة' ? 'selected' : '' }}>الغيضة</option>
+                    <option value="ذمار" {{ old('location') == 'ذمار' ? 'selected' : '' }}>ذمار</option>
+                    <option value="حجة" {{ old('location') == 'حجة' ? 'selected' : '' }}>حجة</option>
+                </select>
+                @error('location')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
                 <label for="mission">المهمة</label>
@@ -134,40 +146,49 @@
             plugins: 'lists link',
             toolbar: 'bold italic underline strikethrough | bullist numlist blockquote | link',
             setup: function (editor) {
-                  editor.on('change', function () {
+                editor.on('change', function () {
                     tinymce.triggerSave();
                 });
             }
-            });
-
+        });
 
             const userType = document.getElementById('userType');
             const companyContainer = document.getElementById('company-container');
             const form = document.getElementById('registrationForm');
 
 
+            const defaultAction = form.getAttribute('data-default-action');
+            const companyAction = form.getAttribute('data-company-action');
 
             userType.addEventListener('change', function() {
                 if (userType.value === 'company') {
                     companyContainer.style.display = 'block';
 
-                    ["jobField","location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"].forEach(function(id) {
-                        document.getElementById(id).setAttribute('required', true);
+                    ["jobField", "location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"]
+                    .forEach(function(id) {
+                        let field = document.getElementById(id);
+                        if (field) {
+                            field.setAttribute('required', true);
+                        }
                     });
 
-                    form.setAttribute('action', '{{ route('companies.register') }}');
-
+                    form.setAttribute('action', companyAction);
                 } else {
                     companyContainer.style.display = 'none';
 
-                    ["jobField","location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"].forEach(function(id) {
-                        document.getElementById(id).removeAttribute('required');
+                    ["jobField", "location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"]
+                    .forEach(function(id) {
+                        let field = document.getElementById(id);
+                        if (field) {
+                            field.removeAttribute('required');
+                        }
                     });
 
-                    form.setAttribute('action', '{{ route('register') }}');
+                    form.setAttribute('action', defaultAction);
                 }
             });
         });
+
     </script>
 
 

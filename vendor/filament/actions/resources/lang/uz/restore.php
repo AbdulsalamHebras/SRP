@@ -8,7 +8,7 @@ return [
 
         'modal' => [
 
-            'heading' => ':labelni qayta tiklash',
+            'heading' => ':label ni qayta tiklash',
 
             'actions' => [
 
@@ -32,11 +32,11 @@ return [
 
     'multiple' => [
 
-        'label' => 'Tanlangan elementlarni qayta tiklash',
+        'label' => 'Tanlanganni qayta tiklash',
 
         'modal' => [
 
-            'heading' => ':labelni qayta tiklash',
+            'heading' => ':label - qayta tiklash',
 
             'actions' => [
 

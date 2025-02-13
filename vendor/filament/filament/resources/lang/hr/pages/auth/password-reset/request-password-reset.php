@@ -2,14 +2,14 @@
 
 return [
 
-    'title' => 'Resetiraj svoju lozinku',
+    'title' => 'Resetirajte svoju lozinku',
 
-    'heading' => 'Zaboravljena lozinka?',
+    'heading' => 'Zaboravili ste lozinku?',
 
     'actions' => [
 
         'login' => [
-            'label' => 'natrag na prijavu',
+            'label' => 'natrag na login',
         ],
 
     ],
@@ -17,13 +17,13 @@ return [
     'form' => [
 
         'email' => [
-            'label' => 'Adresa e-pošte',
+            'label' => 'Email adresa',
         ],
 
         'actions' => [
 
             'request' => [
-                'label' => 'Pošalji e-poštu',
+                'label' => 'Pošalji email',
             ],
 
         ],
@@ -34,7 +34,7 @@ return [
 
         'throttled' => [
             'title' => 'Previše zahtjeva',
-            'body' => 'Molim te, pokušaj ponovno za :seconds sekundi.',
+            'body' => 'Molim pokušajte ponovno za :seconds sekundi.',
         ],
 
     ],

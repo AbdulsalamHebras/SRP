@@ -27,5 +27,7 @@ trait Configurable
         return $this;
     }
 
-    protected function setUp(): void {}
+    protected function setUp(): void
+    {
+    }
 }

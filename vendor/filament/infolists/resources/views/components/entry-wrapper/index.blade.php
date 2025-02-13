@@ -52,13 +52,7 @@
     );
 @endphp
 
-<div
-    {{
-        $attributes
-            ->merge($entry?->getExtraEntryWrapperAttributes() ?? [])
-            ->class(['fi-in-entry-wrp'])
-    }}
->
+<div {{ $attributes->class(['fi-in-entry-wrp']) }}>
     @if ($label && $labelSrOnly)
         <dt class="sr-only">
             {{ $label }}
@@ -72,14 +66,7 @@
         ])
     >
         @if (($label && (! $labelSrOnly)) || $labelPrefix || $labelSuffix || filled($hint) || $hintIcon)
-            <div
-                @class([
-                    'flex items-center gap-x-3',
-                    'justify-between' => (! $labelSrOnly) || $labelPrefix || $labelSuffix,
-                    'justify-end' => $labelSrOnly && ! ($labelPrefix || $labelSuffix),
-                    ($label instanceof \Illuminate\View\ComponentSlot) ? $label->attributes->get('class') : null,
-                ])
-            >
+            <div class="flex items-center justify-between gap-x-3">
                 @if ($label && (! $labelSrOnly))
                     <x-filament-infolists::entry-wrapper.label
                         :prefix="$labelPrefix"
@@ -108,7 +95,7 @@
 
         <div
             @class([
-                'grid auto-cols-fr gap-y-2',
+                'grid gap-y-2',
                 'sm:col-span-2' => $hasInlineLabel,
             ])
         >

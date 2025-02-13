@@ -45,19 +45,11 @@ return [
             ],
 
             'system' => [
-                'label' => 'Omogući temu sustava',
+                'label' => 'Omogući sistemsku temu',
             ],
 
         ],
 
-    ],
-
-    'avatar' => [
-        'alt' => 'Avatar od :name',
-    ],
-
-    'logo' => [
-        'alt' => ':name logo',
     ],
 
 ];

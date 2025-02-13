@@ -8,7 +8,8 @@ class Set
 {
     public function __construct(
         protected Component $component,
-    ) {}
+    ) {
+    }
 
     public function __invoke(string | Component $path, mixed $state, bool $isAbsolute = false): mixed
     {

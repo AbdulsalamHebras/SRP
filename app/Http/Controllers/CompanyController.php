@@ -11,13 +11,21 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
+    public function index(){
+        $companies=Company::all();
+        return view("companies.index", compact('companies'));
+    }
+    public function details($id){
+        $company = Company::with('jobs')->where('id', $id)->first();
+        return view('companies.details',compact('company'));
+    }
     public function register(CompanyRequest $request)
     {
         $validated = $request->validated();
 
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
-            $logoName = time() . '_' . $logo->getClientOriginalName();
+            $logoName = $logo->getClientOriginalName();
             $logo->storeAs('logos', $logoName, 'public');  // Store logo in the 'public' directory
         } else {
             return back()->withErrors(['logo' => 'Logo is required.']);
@@ -25,7 +33,7 @@ class CompanyController extends Controller
 
         if ($request->hasFile('commercialRegister')) {
             $record = $request->file('commercialRegister');
-            $recordName = time() . '_' . $record->getClientOriginalName(); // Add timestamp to avoid duplicates
+            $recordName = $record->getClientOriginalName(); // Add timestamp to avoid duplicates
             $record->storeAs('records', $recordName, 'public'); // Store commercial register in the 'public' directory
         } else {
             return back()->withErrors(['commercialRegister' => 'Commercial register is required.']);
@@ -49,10 +57,7 @@ class CompanyController extends Controller
         return redirect()->route('companies.new-company')->with('success', 'Company registered successfully!');
     }
 
-    public function index(){
-        $companies=Company::all();
-        return view("companies.index", compact('companies'));
-    }
+
 
     public function destroy(Request $request){
         Auth::guard('company')->logout();

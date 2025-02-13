@@ -42,7 +42,7 @@ return [
 
     'actions' => [
 
-        'cancel' => [
+        'back' => [
             'label' => 'Mbrapa',
         ],
 

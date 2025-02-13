@@ -59,13 +59,7 @@ class StartsWithOperator extends Operator
         /** @var Connection $databaseConnection */
         $databaseConnection = $query->getConnection();
 
-        $isPostgres = $databaseConnection->getDriverName() === 'pgsql';
-
-        if ((Str::lower($qualifiedColumn) !== $qualifiedColumn) && $isPostgres) {
-            $qualifiedColumn = (string) str($qualifiedColumn)->wrap('"');
-        }
-
-        if ($isPostgres) {
+        if ($databaseConnection->getDriverName() === 'pgsql') {
             $qualifiedColumn = new Expression("lower({$qualifiedColumn}::text)");
             $text = Str::lower($text);
         }

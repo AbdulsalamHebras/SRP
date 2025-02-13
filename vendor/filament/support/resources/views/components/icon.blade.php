@@ -5,13 +5,13 @@
 ])
 
 @php
-    $icon = ($alias ? \Filament\Support\Facades\FilamentIcon::resolve($alias) : null) ?: ($icon ?? $slot);
+    $icon = ($alias ? \Filament\Support\Facades\FilamentIcon::resolve($alias) : null) ?: $icon;
 @endphp
 
 @if ($icon instanceof \Illuminate\Contracts\Support\Htmlable)
-    <span {{ $attributes->class($class) }}>
-        {{ $icon }}
-    </span>
+    <div {{ $attributes->class($class) }}>
+        {{ $icon ?? $slot }}
+    </div>
 @elseif (str_contains($icon, '/'))
     <img
         {{

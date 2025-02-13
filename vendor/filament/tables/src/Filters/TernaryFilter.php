@@ -57,12 +57,12 @@ class TernaryFilter extends SelectFilter
 
     public function getTrueLabel(): ?string
     {
-        return $this->evaluate($this->trueLabel);
+        return $this->trueLabel;
     }
 
     public function getFalseLabel(): ?string
     {
-        return $this->evaluate($this->falseLabel);
+        return $this->falseLabel;
     }
 
     public function getFormField(): Select

@@ -4,11 +4,11 @@ return [
 
     'single' => [
 
-        'label' => 'Yangi :labelni yaratish',
+        'label' => 'Yangi :label',
 
         'modal' => [
 
-            'heading' => 'Yangi :labelni yaratish',
+            'heading' => ':label - yaratish',
 
             'actions' => [
 
@@ -17,7 +17,7 @@ return [
                 ],
 
                 'create_another' => [
-                    'label' => 'Yaratish va yana boshqa yaratish',
+                    'label' => 'Yaratish va boshqa yaratish',
                 ],
 
             ],

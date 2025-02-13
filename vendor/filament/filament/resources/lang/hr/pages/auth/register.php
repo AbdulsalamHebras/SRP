@@ -18,7 +18,7 @@ return [
     'form' => [
 
         'email' => [
-            'label' => 'Adresa e-pošte',
+            'label' => 'Email adresa',
         ],
 
         'name' => [
@@ -48,7 +48,7 @@ return [
 
         'throttled' => [
             'title' => 'Previše pokušaja registracije',
-            'body' => 'Molim te, pokušaj ponovno za :seconds sekundi.',
+            'body' => 'Molim pokušajte ponovno za :seconds sekundi.',
         ],
 
     ],

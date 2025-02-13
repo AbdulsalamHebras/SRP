@@ -3,7 +3,6 @@
 namespace Filament\Forms\Concerns;
 
 use Filament\Forms\Components;
-use Filament\Forms\Components\Component;
 
 trait CanBeValidated
 {
@@ -14,11 +13,7 @@ trait CanBeValidated
     {
         $attributes = [];
 
-        foreach ($this->getComponents(withHidden: true) as $component) {
-            if ($component->isHiddenAndNotDehydrated()) {
-                continue;
-            }
-
+        foreach ($this->getComponents() as $component) {
             if ($component instanceof Components\Contracts\HasValidationRules) {
                 $component->dehydrateValidationAttributes($attributes);
             }
@@ -45,11 +40,7 @@ trait CanBeValidated
     {
         $messages = [];
 
-        foreach ($this->getComponents(withHidden: true) as $component) {
-            if ($component->isHiddenAndNotDehydrated()) {
-                continue;
-            }
-
+        foreach ($this->getComponents() as $component) {
             if ($component instanceof Components\Contracts\HasValidationRules) {
                 $component->dehydrateValidationMessages($messages);
             }
@@ -76,11 +67,7 @@ trait CanBeValidated
     {
         $rules = [];
 
-        foreach ($this->getComponents(withHidden: true) as $component) {
-            if ($component->isHiddenAndNotDehydrated()) {
-                continue;
-            }
-
+        foreach ($this->getComponents() as $component) {
             if ($component instanceof Components\Contracts\HasValidationRules) {
                 $component->dehydrateValidationRules($rules);
             }
@@ -105,10 +92,7 @@ trait CanBeValidated
      */
     public function validate(): array
     {
-        if (! count(array_filter(
-            $this->getComponents(withHidden: true),
-            fn (Component $component): bool => ! $component->isHiddenAndNotDehydrated(),
-        ))) {
+        if (! count($this->getComponents())) {
             return [];
         }
 
