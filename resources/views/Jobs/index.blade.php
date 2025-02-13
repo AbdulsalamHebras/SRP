@@ -15,12 +15,14 @@
             <p>تم العثور على <span></span> وظيفة</p>
 
         <div class="filters">
-            <label for="sort">الترتيب حسب:</label>
-            <select id="sort">
-                <option value="date">التاريخ</option>
-                <option value="type">نوع الوظيفة</option>
-                <option value="salary">الراتب</option>
-            </select>
+            <form method="GET" action="{{ route('jobs.index') }}">
+                <label for="sort">الترتيب حسب:</label>
+                <select id="sort" name="sort" onchange="this.form.submit()">
+                    <option value="date" {{ request('sort') == 'date' ? 'selected' : '' }}>التاريخ</option>
+                    <option value="type" {{ request('sort') == 'type' ? 'selected' : '' }}>نوع الوظيفة</option>
+                    <option value="salary" {{ request('sort') == 'salary' ? 'selected' : '' }}>الراتب</option>
+                </select>
+            </form>
         </div>
 
         <div class="job-listing">

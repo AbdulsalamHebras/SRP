@@ -8,23 +8,13 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    public function index(Request $ٌrequest){
-        $sort = $ٌrequest->input('sort');
-        $query = Job::query();
-
-        if ($sort == 'date') {
-            $query->orderBy('created_at', 'desc');
-        } elseif ($sort == 'type') {
-            $query->orderBy('jobType', 'asc');
-        } elseif ($sort == 'salary') {
-            $query->orderBy('maxSalary', 'desc');
-        }
-            $jobsNumber=Job::count();
-            $jobs = Job::with('company')->get();
-            return view("Jobs.index", compact('jobs','jobsNumber'));
-        }
+    public function index(){
+        $jobs = Job::with('company')->get();
+        return view("Jobs.index", compact('jobs'));
+    }
     public function details(string $id){
         $job = Job::with('company')->where('id', $id)->first();
+
 
         if (!$job) {
             abort(404);
