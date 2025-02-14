@@ -4,23 +4,26 @@ namespace Filament\Tables\Table\Concerns;
 
 use Closure;
 use Filament\Tables\Columns\Column;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 trait CanSortRecords
 {
-    protected string | Closure | null $defaultSort = null;
+    protected ?string $defaultSortColumn = null;
 
     protected string | Closure | null $defaultSortDirection = null;
 
-    protected bool | Closure | null $persistsSortInSession = false;
+    protected ?Closure $defaultSortQuery = null;
 
-    protected string | Htmlable | Closure | null $defaultSortOptionLabel = null;
+    protected bool | Closure | null $persistsSortInSession = false;
 
     public function defaultSort(string | Closure | null $column, string | Closure | null $direction = 'asc'): static
     {
-        $this->defaultSort = $column;
+        if ($column instanceof Closure) {
+            $this->defaultSortQuery = $column;
+        } else {
+            $this->defaultSortColumn = $column;
+        }
+
         $this->defaultSortDirection = $direction;
 
         return $this;
@@ -29,13 +32,6 @@ trait CanSortRecords
     public function persistSortInSession(bool | Closure $condition = true): static
     {
         $this->persistsSortInSession = $condition;
-
-        return $this;
-    }
-
-    public function defaultSortOptionLabel(string | Htmlable | Closure | null $label): static
-    {
-        $this->defaultSortOptionLabel = $label;
 
         return $this;
     }
@@ -59,36 +55,9 @@ trait CanSortRecords
         return $column;
     }
 
-    public function getDefaultSort(Builder $query, string $direction): string | Builder | null
-    {
-        return $this->evaluate($this->defaultSort, [
-            'direction' => $direction,
-            'query' => $query,
-        ]);
-    }
-
-    /**
-     * @deprecated Use `getDefaultSort()` instead.
-     */
     public function getDefaultSortColumn(): ?string
     {
-        if (! is_string($this->defaultSort)) {
-            return null;
-        }
-
-        return $this->defaultSort;
-    }
-
-    /**
-     * @deprecated Use `getDefaultSort()` instead.
-     */
-    public function getDefaultSortQuery(): ?Closure
-    {
-        if (! ($this->defaultSort instanceof Closure)) {
-            return null;
-        }
-
-        return $this->defaultSort;
+        return $this->defaultSortColumn;
     }
 
     public function getDefaultSortDirection(): ?string
@@ -100,6 +69,11 @@ trait CanSortRecords
         }
 
         return $direction;
+    }
+
+    public function getDefaultSortQuery(): ?Closure
+    {
+        return $this->defaultSortQuery;
     }
 
     public function getSortColumn(): ?string
@@ -115,10 +89,5 @@ trait CanSortRecords
     public function persistsSortInSession(): bool
     {
         return (bool) $this->evaluate($this->persistsSortInSession);
-    }
-
-    public function getDefaultSortOptionLabel(): string | Htmlable | null
-    {
-        return $this->evaluate($this->defaultSortOptionLabel) ?? '-';
     }
 }

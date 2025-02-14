@@ -22,16 +22,8 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Pierwsza',
-        ],
-
         'go_to_page' => [
             'label' => 'Przejdź do strony :page',
-        ],
-
-        'last' => [
-            'label' => 'Osatnia',
         ],
 
         'next' => [

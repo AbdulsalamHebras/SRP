@@ -4,11 +4,11 @@ return [
 
     'single' => [
 
-        'label' => 'Povežite',
+        'label' => 'Spajanje',
 
         'modal' => [
 
-            'heading' => 'Povežite :label',
+            'heading' => 'Spojite :label',
 
             'fields' => [
 
@@ -21,11 +21,11 @@ return [
             'actions' => [
 
                 'associate' => [
-                    'label' => 'Povežite',
+                    'label' => 'Spoji',
                 ],
 
                 'associate_another' => [
-                    'label' => 'Povežite i povežite još jedan',
+                    'label' => 'Spojite i spojite još jedan',
                 ],
 
             ],
@@ -35,7 +35,7 @@ return [
         'notifications' => [
 
             'associated' => [
-                'title' => 'Povezano',
+                'title' => 'Spojeno',
             ],
 
         ],

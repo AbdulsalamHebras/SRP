@@ -5,16 +5,8 @@
     $hasInlineLabel = $hasInlineLabel();
     $id = $getId();
     $isDisabled = $isDisabled();
-    $isPrefixInline = $isPrefixInline();
-    $isReorderable = (! $isDisabled) && $isReorderable();
-    $isSuffixInline = $isSuffixInline();
-    $prefixActions = $getPrefixActions();
-    $prefixIcon = $getPrefixIcon();
-    $prefixLabel = $getPrefixLabel();
+    $isReorderable = $isReorderable();
     $statePath = $getStatePath();
-    $suffixActions = $getSuffixActions();
-    $suffixIcon = $getSuffixIcon();
-    $suffixLabel = $getSuffixLabel();
 @endphp
 
 <x-dynamic-component
@@ -33,16 +25,6 @@
 
     <x-filament::input.wrapper
         :disabled="$isDisabled"
-        :inline-prefix="$isPrefixInline"
-        :inline-suffix="$isSuffixInline"
-        :prefix="$prefixLabel"
-        :prefix-actions="$prefixActions"
-        :prefix-icon="$prefixIcon"
-        :prefix-icon-color="$getPrefixIconColor()"
-        :suffix="$suffixLabel"
-        :suffix-actions="$suffixActions"
-        :suffix-icon="$suffixIcon"
-        :suffix-icon-color="$getSuffixIconColor()"
         :valid="! $errors->has($statePath)"
         :attributes="
             \Filament\Support\prepare_inherited_attributes($attributes)
@@ -52,7 +34,7 @@
     >
         <div
             @if (FilamentView::hasSpaMode())
-                {{-- format-ignore-start --}}ax-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
+                ax-load="visible"
             @else
                 ax-load
             @endif
@@ -69,8 +51,6 @@
                 :autofocus="$isAutofocused()"
                 :disabled="$isDisabled"
                 :id="$id"
-                :inline-prefix="$isPrefixInline && (count($prefixActions) || $prefixIcon || filled($prefixLabel))"
-                :inline-suffix="$isSuffixInline && (count($suffixActions) || $suffixIcon || filled($suffixLabel))"
                 :list="$id . '-suggestions'"
                 :placeholder="$getPlaceholder()"
                 type="text"
@@ -82,7 +62,7 @@
                 @foreach ($getSuggestions() as $suggestion)
                     <template
                         x-bind:key="@js($suggestion)"
-                        x-if="! (state?.includes(@js($suggestion)) ?? true)"
+                        x-if="! state.includes(@js($suggestion))"
                     >
                         <option value="{{ $suggestion }}" />
                     </template>
@@ -102,7 +82,10 @@
                                 x-sortable
                                 data-sortable-animation-duration="{{ $getReorderAnimationDuration() }}"
                             @endif
-                            class="fi-fo-tags-input-tags-ctn flex w-full flex-wrap gap-1.5 border-t border-t-gray-200 p-2 dark:border-t-white/10"
+                            @class([
+                                'flex w-full flex-wrap gap-1.5 p-2',
+                                'border-t border-t-gray-200 dark:border-t-white/10',
+                            ])
                         >
                             <template
                                 x-for="(tag, index) in state"
@@ -128,7 +111,7 @@
 
                                     <x-slot
                                         name="deleteButton"
-                                        x-on:click.stop="deleteTag(tag)"
+                                        x-on:click="deleteTag(tag)"
                                     ></x-slot>
                                 </x-filament::badge>
                             </template>

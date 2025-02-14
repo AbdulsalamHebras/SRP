@@ -15,13 +15,6 @@ class KeyValueEntry extends Entry
 
     protected string | Closure | null $valueLabel = null;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->placeholder(__('filament-infolists::components.entries.key_value.placeholder'));
-    }
-
     public function keyLabel(string | Closure | null $label): static
     {
         $this->keyLabel = $label;
@@ -32,16 +25,6 @@ class KeyValueEntry extends Entry
     public function valueLabel(string | Closure | null $label): static
     {
         $this->valueLabel = $label;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated Use `placeholder()` instead.
-     */
-    public function emptyMessage(string | Closure | null $message): static
-    {
-        $this->placeholder($message);
 
         return $this;
     }

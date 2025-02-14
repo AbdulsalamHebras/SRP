@@ -8,7 +8,7 @@ return [
 
         'modal' => [
 
-            'heading' => ':labelni bog\'lash',
+            'heading' => ':label - bog\'lash',
 
             'fields' => [
 
@@ -25,7 +25,7 @@ return [
                 ],
 
                 'associate_another' => [
-                    'label' => 'Bog\'lash va yana boshqa bog\'lash',
+                    'label' => 'Bog\'lash va boshqa bog\'lash',
                 ],
 
             ],

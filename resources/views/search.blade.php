@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="search-box">
-        <input type="text" placeholder="ابحث عن الوظائف والشركات">
+        <input type="text" placeholder="{{ request()->is('companies') ? 'ابحث عن الشركات' : 'ابحث عن الوظائف والشركات' }}">
         <div class="dropdown">
             <input class="dropdown-toggle" onclick="toggleDropdown()" id="locationInput" placeholder="جميع المواقع">
             <div class="dropdown-menu" id="dropdownMenu">

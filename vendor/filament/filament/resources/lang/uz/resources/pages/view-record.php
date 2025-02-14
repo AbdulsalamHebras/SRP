@@ -2,7 +2,7 @@
 
 return [
 
-    'title' => ':labelni ko\'rish',
+    'title' => 'Ko\'rish :label',
 
     'breadcrumb' => 'Ko\'rish',
 

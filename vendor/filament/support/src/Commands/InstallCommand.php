@@ -8,11 +8,9 @@ use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
-use Symfony\Component\Console\Attribute\AsCommand;
 
 use function Laravel\Prompts\confirm;
 
-#[AsCommand(name: 'filament:install')]
 class InstallCommand extends Command
 {
     use CanGeneratePanels;
@@ -20,7 +18,7 @@ class InstallCommand extends Command
 
     protected $signature = 'filament:install {--scaffold} {--actions} {--forms} {--infolists} {--notifications} {--panels} {--tables} {--widgets} {--F|force}';
 
-    protected $description = 'Install Filament';
+    protected $description = 'Install Filament.';
 
     public function __invoke(): int
     {
@@ -136,7 +134,7 @@ class InstallCommand extends Command
             '@tailwindcss/typography' => '^0.5.4',
             'autoprefixer' => '^10.4.7',
             'postcss' => '^8.4.14',
-            'postcss-nesting' => '^13.0.0',
+            'postcss-nesting' => '^12.0.1',
             'tailwindcss' => '^3.1',
             ...Arr::except($packages, [
                 'axios',
@@ -166,16 +164,11 @@ class InstallCommand extends Command
 
         file_put_contents(
             $path,
-            (string) str(json_encode($configuration, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES))
-                ->append(PHP_EOL)
-                ->replace(
-                    search: "    \"keywords\": [\n        \"laravel\",\n        \"framework\"\n    ],",
-                    replace: '    "keywords": ["laravel", "framework"],',
-                )
-                ->replace(
-                    search: "    \"keywords\": [\n        \"framework\",\n        \"laravel\"\n    ],",
-                    replace: '    "keywords": ["framework", "laravel"],',
-                ),
+            str_replace(
+                search: "    \"keywords\": [\n        \"framework\",\n        \"laravel\"\n    ],",
+                replace: '    "keywords": ["framework", "laravel"],',
+                subject: json_encode($configuration, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL,
+            ),
         );
     }
 }

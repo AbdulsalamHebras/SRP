@@ -22,14 +22,6 @@ return [
 
     ],
 
-    'content' => [
-
-        'tab' => [
-            'label' => 'Խմբագրել',
-        ],
-
-    ],
-
     'notifications' => [
 
         'saved' => [

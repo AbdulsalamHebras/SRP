@@ -2,7 +2,7 @@
 
 return [
 
-    'confirmation' => 'Jesi li siguran da želiš to učiniti?',
+    'confirmation' => 'Jeste li sigurni da želite to učiniti?',
 
     'actions' => [
 

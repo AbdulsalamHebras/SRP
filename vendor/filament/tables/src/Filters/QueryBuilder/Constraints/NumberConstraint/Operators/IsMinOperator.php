@@ -6,7 +6,8 @@ use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\QueryBuilder\Constraints\Operators\Operator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Number;
+
+use function Filament\Support\format_number;
 
 class IsMinOperator extends Operator
 {
@@ -34,7 +35,7 @@ class IsMinOperator extends Operator
                 'filament-tables::filters/query-builder.operators.number.is_min.summary.direct',
             [
                 'attribute' => $this->getAttributeLabel(),
-                'number' => Number::format($this->getSettings()['number']),
+                'number' => format_number($this->getSettings()['number']),
             ],
         );
     }

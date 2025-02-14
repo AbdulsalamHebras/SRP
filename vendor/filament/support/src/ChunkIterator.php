@@ -10,12 +10,11 @@ class ChunkIterator
     public function __construct(
         protected Iterator $iterator,
         protected int $chunkSize,
-    ) {}
+    ) {
+    }
 
     public function get(): Generator
     {
-        $this->iterator->rewind();
-
         $chunk = [];
 
         for ($i = 0; $this->iterator->valid(); $i++) {

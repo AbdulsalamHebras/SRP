@@ -4,11 +4,11 @@ return [
 
     'single' => [
 
-        'label' => 'Prisilno obriši',
+        'label' => 'Prisilno izbriši',
 
         'modal' => [
 
-            'heading' => 'Prisilno obriši :label',
+            'heading' => 'Prisilno izbriši :label',
 
             'actions' => [
 
@@ -32,11 +32,11 @@ return [
 
     'multiple' => [
 
-        'label' => 'Prisilno obriši odabrano',
+        'label' => 'Prisilno izbriši odabrano',
 
         'modal' => [
 
-            'heading' => 'Prisilno obriši odabrano',
+            'heading' => 'Prisilno izbriši odabrano :label',
 
             'actions' => [
 

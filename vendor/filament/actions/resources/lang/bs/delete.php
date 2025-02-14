@@ -13,7 +13,7 @@ return [
             'actions' => [
 
                 'delete' => [
-                    'label' => 'Izbrisati',
+                    'label' => 'Izbrišiti',
                 ],
 
             ],
@@ -32,16 +32,16 @@ return [
 
     'multiple' => [
 
-        'label' => 'Izbrišite izabrano',
+        'label' => 'Izbrišite izabrani',
 
         'modal' => [
 
-            'heading' => 'Izbrišite izabrani :label ',
+            'heading' => 'Izbriši izabrani :label ',
 
             'actions' => [
 
                 'delete' => [
-                    'label' => 'Izbrišite izabrani',
+                    'label' => 'Izbriši izabrani',
                 ],
 
             ],

@@ -13,7 +13,6 @@ use Filament\Infolists\Infolist;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 /**
@@ -37,7 +36,7 @@ class ViewRecord extends Page
      */
     public ?array $data = [];
 
-    public static function getNavigationIcon(): string | Htmlable | null
+    public static function getNavigationIcon(): ?string
     {
         return static::$navigationIcon
             ?? FilamentIcon::resolve('panels::resources.pages.view-record.navigation-item')
@@ -77,23 +76,22 @@ class ViewRecord extends Page
 
     protected function fillForm(): void
     {
+        $data = $this->getRecord()->attributesToArray();
+
         /** @internal Read the DocBlock above the following method. */
-        $this->fillFormWithDataAndCallHooks($this->getRecord());
+        $this->fillFormWithDataAndCallHooks($data);
     }
 
     /**
      * @internal Never override or call this method. If you completely override `fillForm()`, copy the contents of this method into your override.
      *
-     * @param  array<string, mixed>  $extraData
+     * @param  array<string, mixed>  $data
      */
-    protected function fillFormWithDataAndCallHooks(Model $record, array $extraData = []): void
+    protected function fillFormWithDataAndCallHooks(array $data): void
     {
         $this->callHook('beforeFill');
 
-        $data = $this->mutateFormDataBeforeFill([
-            ...$record->attributesToArray(),
-            ...$extraData,
-        ]);
+        $data = $this->mutateFormDataBeforeFill($data);
 
         $this->form->fill($data);
 
@@ -103,7 +101,7 @@ class ViewRecord extends Page
     /**
      * @param  array<string>  $attributes
      */
-    public function refreshFormData(array $attributes): void
+    protected function refreshFormData(array $attributes): void
     {
         $this->data = [
             ...$this->data,

@@ -17,10 +17,8 @@ use Kirschbaum\PowerJoins\StaticCache;
 
 /**
  * @mixin Builder
- *
  * @method \Illuminate\Database\Eloquent\Model getModel()
- *
- * @property Builder $query
+ * @property \Illuminate\Database\Eloquent\Builder $query
  */
 class JoinRelationship
 {
@@ -81,7 +79,7 @@ class JoinRelationship
 
     public function newPowerJoinClause(): Closure
     {
-        return function (QueryBuilder $parentQuery, string $type, string $table, ?Model $model = null) {
+        return function (QueryBuilder $parentQuery, $type, $table, Model $model = null) {
             return new PowerJoinClause($parentQuery, $type, $table, $model);
         };
     }
@@ -92,12 +90,12 @@ class JoinRelationship
     public function joinRelationship(): Closure
     {
         return function (
-            string $relationName,
-            Closure|array|string|null $callback = null,
-            string $joinType = 'join',
-            bool $useAlias = false,
+            $relationName,
+            $callback = null,
+            $joinType = 'join',
+            $useAlias = false,
             bool $disableExtraConditions = false,
-            ?string $morphable = null,
+            string $morphable = null
         ) {
             $joinType = JoinsHelper::$joinMethodsMap[$joinType] ?? $joinType;
             $useAlias = is_string($callback) ? false : $useAlias;
@@ -113,7 +111,7 @@ class JoinRelationship
             }
 
             if (Str::contains($relationName, '.')) {
-                $this->joinNestedRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions, $morphable);
+                $this->joinNestedRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions);
 
                 return $this;
             }
@@ -180,8 +178,8 @@ class JoinRelationship
      */
     public function joinRelationshipUsingAlias(): Closure
     {
-        return function (string $relationName, Closure|array|string|null $callback = null, bool $disableExtraConditions = false, ?string $morphable = null) {
-            return $this->joinRelationship($relationName, $callback, 'join', true, $disableExtraConditions, morphable: $morphable);
+        return function ($relationName, $callback = null, bool $disableExtraConditions = false) {
+            return $this->joinRelationship($relationName, $callback, 'join', true, $disableExtraConditions);
         };
     }
 
@@ -190,8 +188,8 @@ class JoinRelationship
      */
     public function leftJoinRelationshipUsingAlias(): Closure
     {
-        return function (string $relationName, Closure|array|string|null $callback = null, bool $disableExtraConditions = false, ?string $morphable = null) {
-            return $this->joinRelationship($relationName, $callback, 'leftJoin', true, $disableExtraConditions, morphable: $morphable);
+        return function ($relationName, $callback = null, bool $disableExtraConditions = false) {
+            return $this->joinRelationship($relationName, $callback, 'leftJoin', true, $disableExtraConditions);
         };
     }
 
@@ -200,50 +198,49 @@ class JoinRelationship
      */
     public function rightJoinRelationshipUsingAlias(): Closure
     {
-        return function (string $relationName, Closure|array|string|null $callback = null, bool $disableExtraConditions = false, ?string $morphable = null) {
-            return $this->joinRelationship($relationName, $callback, 'rightJoin', true, $disableExtraConditions, morphable: $morphable);
+        return function ($relationName, $callback = null, bool $disableExtraConditions = false) {
+            return $this->joinRelationship($relationName, $callback, 'rightJoin', true, $disableExtraConditions);
         };
     }
 
     public function joinRelation(): Closure
     {
         return function (
-            string $relationName,
-            Closure|array|string|null $callback = null,
-            string $joinType = 'join',
-            bool $useAlias = false,
-            bool $disableExtraConditions = false,
-            ?string $morphable = null,
+            $relationName,
+            $callback = null,
+            $joinType = 'join',
+            $useAlias = false,
+            bool $disableExtraConditions = false
         ) {
-            return $this->joinRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions, morphable: $morphable);
+            return $this->joinRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions);
         };
     }
 
     public function leftJoinRelationship(): Closure
     {
-        return function (string $relationName, Closure|array|string|null $callback = null, bool $useAlias = false, bool $disableExtraConditions = false, ?string $morphable = null) {
-            return $this->joinRelationship($relationName, $callback, 'leftJoin', $useAlias, $disableExtraConditions, morphable: $morphable);
+        return function ($relation, $callback = null, $useAlias = false, bool $disableExtraConditions = false) {
+            return $this->joinRelationship($relation, $callback, 'leftJoin', $useAlias, $disableExtraConditions);
         };
     }
 
     public function leftJoinRelation(): Closure
     {
-        return function (string $relation, Closure|array|string|null $callback = null, bool $useAlias = false, bool $disableExtraConditions = false, ?string $morphable = null) {
-            return $this->joinRelationship($relation, $callback, 'leftJoin', $useAlias, $disableExtraConditions, morphable: $morphable);
+        return function ($relation, $callback = null, $useAlias = false, bool $disableExtraConditions = false) {
+            return $this->joinRelationship($relation, $callback, 'leftJoin', $useAlias, $disableExtraConditions);
         };
     }
 
     public function rightJoinRelationship(): Closure
     {
-        return function (string $relation, Closure|array|string|null $callback = null, bool $useAlias = false, bool $disableExtraConditions = false, ?string $morphable = null) {
-            return $this->joinRelationship($relation, $callback, 'rightJoin', $useAlias, $disableExtraConditions, morphable: $morphable);
+        return function ($relation, $callback = null, $useAlias = false, bool $disableExtraConditions = false) {
+            return $this->joinRelationship($relation, $callback, 'rightJoin', $useAlias, $disableExtraConditions);
         };
     }
 
     public function rightJoinRelation(): Closure
     {
-        return function (string $relation, Closure|array|string|null $callback = null, bool $useAlias = false, bool $disableExtraConditions = false, ?string $morphable = null) {
-            return $this->joinRelationship($relation, $callback, 'rightJoin', $useAlias, $disableExtraConditions, morphable: $morphable);
+        return function ($relation, $callback = null, $useAlias = false, bool $disableExtraConditions = false) {
+            return $this->joinRelationship($relation, $callback, 'rightJoin', $useAlias, $disableExtraConditions);
         };
     }
 
@@ -254,11 +251,10 @@ class JoinRelationship
     {
         return function (
             string $relationships,
-            Closure|array|string|null $callback = null,
-            string $joinType = 'join',
-            bool $useAlias = false,
-            bool $disableExtraConditions = false,
-            ?string $morphable = null,
+            $callback = null,
+            $joinType = 'join',
+            $useAlias = false,
+            bool $disableExtraConditions = false
         ) {
             $relations = explode('.', $relationships);
             $joinHelper = JoinsHelper::make($this->getModel());
@@ -268,7 +264,7 @@ class JoinRelationship
             $part = [];
             foreach ($relations as $relationName) {
                 $part[] = $relationName;
-                $fullRelationName = join('.', $part);
+                $fullRelationName = join(".", $part);
 
                 $currentModel = $latestRelation ? $latestRelation->getModel() : $this->getModel();
                 $relation = $currentModel->{$relationName}();
@@ -319,6 +315,7 @@ class JoinRelationship
                     StaticCache::setTableAliasForModel($relation->getModel(), $alias);
                 }
 
+
                 if ($joinHelper->relationshipAlreadyJoined($this->getModel(), $relationJoinCache)) {
                     $latestRelation = $relation;
 
@@ -330,8 +327,7 @@ class JoinRelationship
                     $joinType,
                     $relationCallback,
                     $alias,
-                    $disableExtraConditions,
-                    $morphable
+                    $disableExtraConditions
                 );
 
                 $latestRelation = $relation;
@@ -339,7 +335,6 @@ class JoinRelationship
             }
 
             StaticCache::clear();
-
             return $this;
         };
     }
@@ -349,7 +344,7 @@ class JoinRelationship
      */
     public function orderByPowerJoins(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc', ?string $aggregation = null, string $joinType = 'join', $aliases = null) {
+        return function ($sort, $direction = 'asc', $aggregation = null, $joinType = 'join', $aliases = null) {
             if (is_array($sort)) {
                 $relationships = explode('.', $sort[0]);
                 $column = $sort[1];
@@ -360,7 +355,7 @@ class JoinRelationship
                 $latestRelationshipName = $relationships[count($relationships) - 1];
             }
 
-            $this->joinRelationship(relationName: implode('.', $relationships), callback: $aliases, joinType: $joinType);
+            $this->joinRelationship(implode('.', $relationships), $aliases, $joinType);
 
             $latestRelationshipModel = array_reduce($relationships, function ($model, $relationshipName) {
                 return $model->$relationshipName()->getModel();
@@ -415,15 +410,14 @@ class JoinRelationship
                     );
                 }
             }
-
             return $this;
         };
     }
 
     public function orderByLeftPowerJoins(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, joinType: 'leftJoin');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, null, 'leftJoin');
         };
     }
 
@@ -432,15 +426,15 @@ class JoinRelationship
      */
     public function orderByPowerJoinsCount(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'COUNT');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'COUNT');
         };
     }
 
     public function orderByLeftPowerJoinsCount(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'COUNT', joinType: 'leftJoin');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'COUNT', 'leftJoin');
         };
     }
 
@@ -449,15 +443,15 @@ class JoinRelationship
      */
     public function orderByPowerJoinsSum(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'SUM');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'SUM');
         };
     }
 
     public function orderByLeftPowerJoinsSum(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'SUM', joinType: 'leftJoin');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'SUM', 'leftJoin');
         };
     }
 
@@ -466,15 +460,15 @@ class JoinRelationship
      */
     public function orderByPowerJoinsAvg(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'AVG');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'AVG');
         };
     }
 
     public function orderByLeftPowerJoinsAvg(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'AVG', joinType: 'leftJoin');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'AVG', 'leftJoin');
         };
     }
 
@@ -483,15 +477,15 @@ class JoinRelationship
      */
     public function orderByPowerJoinsMin(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'MIN');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'MIN');
         };
     }
 
     public function orderByLeftPowerJoinsMin(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'MIN', joinType: 'leftJoin');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'MIN', 'leftJoin');
         };
     }
 
@@ -500,15 +494,15 @@ class JoinRelationship
      */
     public function orderByPowerJoinsMax(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'MAX');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'MAX');
         };
     }
 
     public function orderByLeftPowerJoinsMax(): Closure
     {
-        return function (string|array $sort, string $direction = 'asc') {
-            return $this->orderByPowerJoins(sort: $sort, direction: $direction, aggregation: 'MAX', joinType: 'leftJoin');
+        return function ($sort, $direction = 'asc') {
+            return $this->orderByPowerJoins($sort, $direction, 'MAX', 'leftJoin');
         };
     }
 
@@ -517,7 +511,7 @@ class JoinRelationship
      */
     public function powerJoinHas(): Closure
     {
-        return function (string $relation, string $operator = '>=', int $count = 1, $boolean = 'and', Closure|array|string|null $callback = null, ?string $morphable = null): static {
+        return function ($relation, $operator = '>=', $count = 1, $boolean = 'and', Closure|array $callback = null, string $morphable = null): static {
             if (is_null($this->getSelect())) {
                 $this->select(sprintf('%s.*', $this->getModel()->getTable()));
             }
@@ -535,17 +529,15 @@ class JoinRelationship
 
                 $relation = $this->getRelationWithoutConstraintsProxy($relation);
             }
-
-            $relation->performJoinForEloquentPowerJoins($this, 'leftPowerJoin', $callback, morphable: $morphable, hasCheck: true);
+            $relation->performJoinForEloquentPowerJoins($this, 'leftPowerJoin', $callback, morphable: $morphable);
             $relation->performHavingForEloquentPowerJoins($this, $operator, $count, morphable: $morphable);
-
             return $this;
         };
     }
 
     public function hasNestedUsingJoins(): Closure
     {
-        return function (string $relations, string $operator = '>=', int $count = 1, string $boolean = 'and', Closure|array|string|null $callback = null): static {
+        return function ($relations, $operator = '>=', $count = 1, $boolean = 'and', Closure|array $callback = null): static {
             $relations = explode('.', $relations);
 
             /** @var Relation */
@@ -568,14 +560,13 @@ class JoinRelationship
 
                 $latestRelation = $relation;
             }
-
             return $this;
         };
     }
 
     public function powerJoinDoesntHave(): Closure
     {
-        return function ($relation, $boolean = 'and', ?Closure $callback = null) {
+        return function ($relation, $boolean = 'and', Closure $callback = null) {
             return $this->powerJoinHas($relation, '<', 1, $boolean, $callback);
         };
     }

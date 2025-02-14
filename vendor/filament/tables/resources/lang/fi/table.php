@@ -10,10 +10,6 @@ return [
 
     'columns' => [
 
-        'actions' => [
-            'label' => 'Toiminta|Toiminnat',
-        ],
-
         'text' => [
 
             'actions' => [
@@ -116,10 +112,6 @@ return [
     'filters' => [
 
         'actions' => [
-
-            'apply' => [
-                'label' => 'Käytä suodattimet',
-            ],
 
             'remove' => [
                 'label' => 'Poista suodatin',

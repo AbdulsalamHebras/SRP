@@ -11,14 +11,7 @@ return [
     'columns' => [
 
         'text' => [
-
-            'actions' => [
-                'collapse_list' => ':count 개 더 접기',
-                'expand_list' => ':count 개 더 펼치기',
-            ],
-
             'more_list_items' => ':count 항목이 더 있습니다',
-
         ],
 
     ],
@@ -112,10 +105,6 @@ return [
     'filters' => [
 
         'actions' => [
-
-            'apply' => [
-                'label' => '필터 적용',
-            ],
 
             'remove' => [
                 'label' => '필터 삭제',

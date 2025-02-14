@@ -59,7 +59,7 @@
 
         </div>
 
-
+ 
     </div>
     @include('includes.footer')
     <script>

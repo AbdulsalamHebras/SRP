@@ -10,10 +10,6 @@ return [
 
     'columns' => [
 
-        'actions' => [
-            'label' => 'إجراء | إجراءات',
-        ],
-
         'text' => [
 
             'actions' => [
@@ -116,10 +112,6 @@ return [
     'filters' => [
 
         'actions' => [
-
-            'apply' => [
-                'label' => 'تطبيق التصفيات',
-            ],
 
             'remove' => [
                 'label' => 'إلغاء التصفيات',

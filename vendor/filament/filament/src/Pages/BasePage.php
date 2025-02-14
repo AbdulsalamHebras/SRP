@@ -37,11 +37,6 @@ abstract class BasePage extends Component implements HasActions, HasForms, HasIn
 
     protected ?string $maxContentWidth = null;
 
-    /**
-     * @var array<mixed>
-     */
-    protected array $extraBodyAttributes = [];
-
     public static string | Alignment $formActionsAlignment = Alignment::Start;
 
     public static bool $formActionsAreSticky = false;
@@ -50,22 +45,12 @@ abstract class BasePage extends Component implements HasActions, HasForms, HasIn
 
     public function render(): View
     {
-        return view($this->getView(), $this->getViewData())
-            ->layout($this->getLayout(), [
+        return view(static::$view, $this->getViewData())
+            ->layout(static::$layout, [
                 'livewire' => $this,
                 'maxContentWidth' => $this->getMaxContentWidth(),
                 ...$this->getLayoutData(),
             ]);
-    }
-
-    public function getView(): string
-    {
-        return static::$view;
-    }
-
-    public function getLayout(): string
-    {
-        return static::$layout;
     }
 
     public function getHeading(): string | Htmlable
@@ -89,14 +74,6 @@ abstract class BasePage extends Component implements HasActions, HasForms, HasIn
     public function getMaxContentWidth(): MaxWidth | string | null
     {
         return $this->maxContentWidth;
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function getExtraBodyAttributes(): array
-    {
-        return $this->extraBodyAttributes;
     }
 
     /**
@@ -126,7 +103,7 @@ abstract class BasePage extends Component implements HasActions, HasForms, HasIn
 
     protected function halt(): void
     {
-        throw new Halt;
+        throw new Halt();
     }
 
     protected function callHook(string $hook): void

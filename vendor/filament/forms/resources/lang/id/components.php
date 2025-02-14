@@ -11,67 +11,15 @@ return [
             ],
 
             'add' => [
-
                 'label' => 'Tambahkan :label',
-
-                'modal' => [
-
-                    'heading' => 'Tambah ke :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Tambah',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'add_between' => [
-
                 'label' => 'Sisipkan',
-
-                'modal' => [
-
-                    'heading' => 'Tambah ke :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Tambah',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'delete' => [
                 'label' => 'Hapus',
-            ],
-
-            'edit' => [
-
-                'label' => 'Ubah',
-
-                'modal' => [
-
-                    'heading' => 'Ubah blok',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'Simpan perubahan',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'reorder' => [
@@ -145,7 +93,7 @@ return [
                 ],
 
                 'flip_vertical' => [
-                    'label' => 'Balik gambar secara vertikal',
+                    'label' => 'Balik gambar vertical',
                 ],
 
                 'move_down' => [
@@ -298,15 +246,6 @@ return [
             'strike' => 'Coret',
             'table' => 'Table',
             'undo' => 'Batalkan',
-        ],
-
-    ],
-
-    'radio' => [
-
-        'boolean' => [
-            'true' => 'Ya',
-            'false' => 'Tidak',
         ],
 
     ],
@@ -469,31 +408,6 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Tag baru',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Sembunyikan kata sandi',
-            ],
-
-            'show_password' => [
-                'label' => 'Tampilkan kata sandi',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Ya',
-            'false' => 'Tidak',
-        ],
-
     ],
 
     'wizard' => [

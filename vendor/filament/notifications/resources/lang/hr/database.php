@@ -20,7 +20,7 @@ return [
 
         'empty' => [
             'heading' => 'Nema obavijesti',
-            'description' => 'Molim te, provjeri ponovno kasnije.',
+            'description' => 'Molim provjerite ponovno kasnije.',
         ],
 
     ],

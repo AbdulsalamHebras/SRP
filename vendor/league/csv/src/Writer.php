@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace League\Csv;
 
-use Closure;
-use Deprecated;
-
 use function array_map;
 use function array_reduce;
 use function implode;
@@ -30,11 +27,8 @@ use const STREAM_FILTER_WRITE;
  */
 class Writer extends AbstractCsv implements TabularDataWriter
 {
-    protected const ENCLOSE_ALL = 1;
-    protected const ENCLOSE_NECESSARY = 0;
-    protected const ENCLOSE_NONE = -1;
-
     protected const STREAM_FILTER_MODE = STREAM_FILTER_WRITE;
+
     /** @var array<callable> callable collection to format the record before insertion. */
     protected array $formatters = [];
     /** @var array<callable> callable collection to validate the record before insertion. */
@@ -42,11 +36,9 @@ class Writer extends AbstractCsv implements TabularDataWriter
     protected string $newline = "\n";
     protected int $flush_counter = 0;
     protected ?int $flush_threshold = null;
-    protected int $enclose_all = self::ENCLOSE_NECESSARY;
+    protected bool $enclose_all = false;
     /** @var array{0:array<string>,1:array<string>} */
-    protected array $enclosure_replace = [[], []];
-    /** @var Closure(array): (int|false) */
-    protected Closure $insertRecord;
+    protected array $enclosure_replace;
 
     protected function resetProperties(): void
     {
@@ -56,18 +48,6 @@ class Writer extends AbstractCsv implements TabularDataWriter
             [$this->enclosure, $this->escape.$this->enclosure.$this->enclosure],
             [$this->enclosure.$this->enclosure, $this->escape.$this->enclosure],
         ];
-
-        $this->insertRecord = fn (array $record): int|false => match ($this->enclose_all) {
-            self::ENCLOSE_ALL => $this->document->fwrite(implode(
-                $this->delimiter,
-                array_map(
-                    fn ($content) => $this->enclosure.$content.$this->enclosure,
-                    str_replace($this->enclosure_replace[0], $this->enclosure_replace[1], $record)
-                )
-            ).$this->newline),
-            self::ENCLOSE_NONE => $this->document->fwrite(implode($this->delimiter, $record).$this->newline),
-            default => $this->document->fputcsv($record, $this->delimiter, $this->enclosure, $this->escape, $this->newline),
-        };
     }
 
     /**
@@ -91,24 +71,7 @@ class Writer extends AbstractCsv implements TabularDataWriter
      */
     public function encloseAll(): bool
     {
-        return self::ENCLOSE_ALL === $this->enclose_all;
-    }
-
-    /**
-     * Tells whether new entries will be selectively enclosed on writing
-     * if the field content requires encoding.
-     */
-    public function encloseNecessary(): bool
-    {
-        return self::ENCLOSE_NECESSARY === $this->enclose_all;
-    }
-
-    /**
-     * Tells whether new entries will never be enclosed on writing.
-     */
-    public function encloseNone(): bool
-    {
-        return self::ENCLOSE_NONE === $this->enclose_all;
+        return $this->enclose_all;
     }
 
     /**
@@ -142,10 +105,21 @@ class Writer extends AbstractCsv implements TabularDataWriter
      */
     public function insertOne(array $record): int
     {
+        $insert = fn (array $record): int|false => match (true) {
+            $this->enclose_all => $this->document->fwrite(implode(
+                $this->delimiter,
+                array_map(
+                    fn ($content) => $this->enclosure.$content.$this->enclosure,
+                    str_replace($this->enclosure_replace[0], $this->enclosure_replace[1], $record)
+                )
+            ).$this->newline),
+            default => $this->document->fputcsv($record, $this->delimiter, $this->enclosure, $this->escape, $this->newline),
+        };
+
         $record = array_reduce($this->formatters, fn (array $record, callable $formatter): array => $formatter($record), $record);
         $this->validateRecord($record);
         set_error_handler(fn (int $errno, string $errstr, string $errfile, int $errline) => true);
-        $bytes = ($this->insertRecord)($record);
+        $bytes = $insert($record);
         restore_error_handler();
         if (false === $bytes) {
             throw CannotInsertRecord::triggerOnInsertion($record);
@@ -172,7 +146,9 @@ class Writer extends AbstractCsv implements TabularDataWriter
     protected function validateRecord(array $record): void
     {
         foreach ($this->validators as $name => $validator) {
-            true === $validator($record) || throw CannotInsertRecord::triggerOnValidation($name, $record);
+            if (true !== $validator($record)) {
+                throw CannotInsertRecord::triggerOnValidation($name, $record);
+            }
         }
     }
 
@@ -209,7 +185,7 @@ class Writer extends AbstractCsv implements TabularDataWriter
     /**
      * Sets the flush threshold.
      *
-     * @throws InvalidArgument if the threshold is an integer less than 1
+     * @throws InvalidArgument if the threshold is a integer less than 1
      */
     public function setFlushThreshold(?int $threshold): self
     {
@@ -217,7 +193,9 @@ class Writer extends AbstractCsv implements TabularDataWriter
             return $this;
         }
 
-        null === $threshold || 1 <= $threshold || throw InvalidArgument::dueToInvalidThreshold($threshold, __METHOD__);
+        if (null !== $threshold && 1 > $threshold) {
+            throw InvalidArgument::dueToInvalidThreshold($threshold, __METHOD__);
+        }
 
         $this->flush_threshold = $threshold;
         $this->flush_counter = 0;
@@ -228,24 +206,14 @@ class Writer extends AbstractCsv implements TabularDataWriter
 
     public function relaxEnclosure(): self
     {
-        $this->enclose_all = self::ENCLOSE_NECESSARY;
-        $this->resetProperties();
+        $this->enclose_all = false;
 
         return $this;
     }
 
     public function forceEnclosure(): self
     {
-        $this->enclose_all = self::ENCLOSE_ALL;
-        $this->resetProperties();
-
-        return $this;
-    }
-
-    public function noEnclosure(): self
-    {
-        $this->enclose_all = self::ENCLOSE_NONE;
-        $this->resetProperties();
+        $this->enclose_all = true;
 
         return $this;
     }
@@ -263,7 +231,6 @@ class Writer extends AbstractCsv implements TabularDataWriter
      *   - NULL values,
      *   - or objects implementing the __toString() method.
      */
-    #[Deprecated(message:'no longer affecting the class behaviour', since:'league/csv:9.8.0')]
     protected function formatRecord(array $record, callable $formatter): array
     {
         return $formatter($record);
@@ -279,7 +246,6 @@ class Writer extends AbstractCsv implements TabularDataWriter
      *
      * @see https://php.net/manual/en/function.fputcsv.php
      */
-    #[Deprecated(message:'no longer affecting the class behaviour', since:'league/csv:9.9.0')]
     protected function addRecord(array $record): int|false
     {
         return $this->document->fputcsv($record, $this->delimiter, $this->enclosure, $this->escape, $this->newline);
@@ -293,7 +259,6 @@ class Writer extends AbstractCsv implements TabularDataWriter
      *
      * Applies post insertion actions.
      */
-    #[Deprecated(message:'no longer affecting the class behaviour', since:'league/csv:9.9.0')]
     protected function consolidate(): int
     {
         if (null === $this->flush_threshold) {
@@ -318,7 +283,6 @@ class Writer extends AbstractCsv implements TabularDataWriter
      *
      * Returns the current newline sequence characters.
      */
-    #[Deprecated(message:'use League\Csv\Writer::getEndOfLine()', since:'league/csv:9.8.0')]
     public function getNewline(): string
     {
         return $this->getEndOfLine();
@@ -333,7 +297,6 @@ class Writer extends AbstractCsv implements TabularDataWriter
      *
      * Sets the newline sequence.
      */
-    #[Deprecated(message:'use League\Csv\Writer::setEndOfLine()', since:'league/csv:9.8.0')]
     public function setNewline(string $newline): self
     {
         return $this->setEndOfLine($newline);

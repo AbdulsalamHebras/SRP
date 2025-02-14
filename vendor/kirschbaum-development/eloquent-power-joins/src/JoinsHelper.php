@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 class JoinsHelper
 {
-    public static array $instances = [];
+    static array $instances = [];
 
     protected function __construct()
     {
+
     }
 
     public static function make(): static
@@ -23,6 +24,8 @@ class JoinsHelper
 
     /**
      * Cache to not join the same relationship twice.
+     *
+     * @var array
      */
     private array $joinRelationshipCache = [];
 
@@ -35,8 +38,12 @@ class JoinsHelper
         'rightJoin' => 'rightPowerJoin',
     ];
 
+
     /**
      * Format the join callback.
+     *
+     * @param  mixed  $callback
+     * @return mixed
      */
     public function formatJoinCallback($callback)
     {
@@ -64,7 +71,7 @@ class JoinsHelper
     /**
      * Get the join alias name from all the different options.
      */
-    public function getAliasName(bool $useAlias, Relation $relation, string $relationName, string $tableName, $callback): string|array|null
+    public function getAliasName(bool $useAlias, Relation $relation, string $relationName, string $tableName, $callback): null|string|array
     {
         if ($callback) {
             if (is_callable($callback)) {
@@ -90,6 +97,7 @@ class JoinsHelper
             ? $this->generateAliasForRelationship($relation, $relationName)
             : null;
     }
+
 
     /**
      * Checks if the relationship was already joined.

@@ -22,16 +22,8 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Första',
-        ],
-
         'go_to_page' => [
             'label' => 'Gå till sida :page',
-        ],
-
-        'last' => [
-            'label' => 'Sista',
         ],
 
         'next' => [

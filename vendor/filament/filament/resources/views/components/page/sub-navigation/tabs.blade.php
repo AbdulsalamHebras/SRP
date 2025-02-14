@@ -6,7 +6,7 @@
     wire:ignore
     :attributes="
         \Filament\Support\prepare_inherited_attributes($attributes)
-            ->class(['fi-page-sub-navigation-tabs hidden md:flex'])
+            ->class(['hidden md:flex'])
     "
 >
     @foreach ($navigation as $navigationGroup)
@@ -24,25 +24,18 @@
                 <x-filament::dropdown.list>
                     @foreach ($navigationGroup->getItems() as $navigationItem)
                         @php
-                            $navigationItemIcon = $navigationItem->getIcon();
-                            $navigationItemIcon = $navigationItem->isActive() ? ($navigationItem->getActiveIcon() ?? $navigationItemIcon) : $navigationItemIcon;
+                            $icon = $navigationItem->getIcon();
                         @endphp
 
                         <x-filament::dropdown.list.item
                             :badge="$navigationItem->getBadge()"
                             :badge-color="$navigationItem->getBadgeColor()"
                             :href="$navigationItem->getUrl()"
-                            :icon="$navigationItemIcon"
+                            :icon="$navigationItem->isActive() ? ($navigationItem->getActiveIcon() ?? $icon) : $icon"
                             tag="a"
                             :target="$navigationItem->shouldOpenUrlInNewTab() ? '_blank' : null"
                         >
                             {{ $navigationItem->getLabel() }}
-
-                            @if ($navigationItemIcon instanceof \Illuminate\Contracts\Support\Htmlable)
-                                <x-slot name="icon">
-                                    {{ $navigationItemIcon }}
-                                </x-slot>
-                            @endif
                         </x-filament::dropdown.list.item>
                     @endforeach
                 </x-filament::dropdown.list>
@@ -50,8 +43,7 @@
         @else
             @foreach ($navigationGroup->getItems() as $navigationItem)
                 @php
-                    $navigationItemIcon = $navigationItem->getIcon();
-                    $navigationItemIcon = $navigationItem->isActive() ? ($navigationItem->getActiveIcon() ?? $navigationItemIcon) : $navigationItemIcon;
+                    $icon = $navigationItem->getIcon();
                 @endphp
 
                 <x-filament::tabs.item
@@ -59,17 +51,11 @@
                     :badge="$navigationItem->getBadge()"
                     :badge-color="$navigationItem->getBadgeColor()"
                     :href="$navigationItem->getUrl()"
-                    :icon="$navigationItemIcon"
+                    :icon="$navigationItem->isActive() ? ($navigationItem->getActiveIcon() ?? $icon) : $icon"
                     tag="a"
                     :target="$navigationItem->shouldOpenUrlInNewTab() ? '_blank' : null"
                 >
                     {{ $navigationItem->getLabel() }}
-
-                    @if ($navigationItemIcon instanceof \Illuminate\Contracts\Support\Htmlable)
-                        <x-slot name="icon">
-                            {{ $navigationItemIcon }}
-                        </x-slot>
-                    @endif
                 </x-filament::tabs.item>
             @endforeach
         @endif

@@ -8,33 +8,30 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Illuminate\Translation\MessageSelector;
 use Illuminate\View\ComponentAttributeBag;
-use Illuminate\View\ComponentSlot;
+use NumberFormatter;
 
 if (! function_exists('Filament\Support\format_money')) {
-    /**
-     * @deprecated Use `Illuminate\Support\Number::currency()` instead.
-     */
     function format_money(float | int $money, string $currency, int $divideBy = 0): string
     {
+        $formatter = new NumberFormatter(app()->getLocale(), NumberFormatter::CURRENCY);
+
         if ($divideBy) {
             $money /= $divideBy;
         }
 
-        return Number::currency($money, $currency);
+        return $formatter->formatCurrency($money, $currency);
     }
 }
 
 if (! function_exists('Filament\Support\format_number')) {
-    /**
-     * @deprecated Use `Illuminate\Support\Number::format()` instead.
-     */
     function format_number(float | int $number): string
     {
-        return Number::format($number);
+        $formatter = new NumberFormatter(app()->getLocale(), NumberFormatter::DECIMAL);
+
+        return $formatter->format($number);
     }
 }
 
@@ -50,7 +47,7 @@ if (! function_exists('Filament\Support\get_model_label')) {
 if (! function_exists('Filament\Support\locale_has_pluralization')) {
     function locale_has_pluralization(): bool
     {
-        return (new MessageSelector)->getPluralIndex(app()->getLocale(), 10) > 0;
+        return (new MessageSelector())->getPluralIndex(app()->getLocale(), 10) > 0;
     }
 }
 
@@ -121,11 +118,18 @@ if (! function_exists('Filament\Support\is_slot_empty')) {
             return true;
         }
 
-        if (! $slot instanceof ComponentSlot) {
-            $slot = new ComponentSlot($slot->toHtml());
-        }
-
-        return ! $slot->hasActualContent();
+        return trim(
+            str_replace(
+                [
+                    '<!-- __BLOCK__ -->',
+                    '<!-- __ENDBLOCK__ -->',
+                    '<!--[if BLOCK]><![endif]-->',
+                    '<!--[if ENDBLOCK]><![endif]-->',
+                ],
+                '',
+                $slot->toHtml()
+            ),
+        ) === '';
     }
 }
 
@@ -137,7 +141,7 @@ if (! function_exists('Filament\Support\is_app_url')) {
 }
 
 if (! function_exists('Filament\Support\generate_href_html')) {
-    function generate_href_html(?string $url, bool $shouldOpenInNewTab = false, ?bool $shouldOpenInSpaMode = null): Htmlable
+    function generate_href_html(?string $url, bool $shouldOpenInNewTab = false): Htmlable
     {
         if (blank($url)) {
             return new HtmlString('');
@@ -147,7 +151,7 @@ if (! function_exists('Filament\Support\generate_href_html')) {
 
         if ($shouldOpenInNewTab) {
             $html .= ' target="_blank"';
-        } elseif ($shouldOpenInSpaMode ?? (FilamentView::hasSpaMode($url))) {
+        } elseif (FilamentView::hasSpaMode() && is_app_url($url)) {
             $html .= ' wire:navigate';
         }
 
@@ -163,13 +167,6 @@ if (! function_exists('Filament\Support\generate_search_column_expression')) {
     {
         $driverName = $databaseConnection->getDriverName();
 
-        if (Str::lower($column) !== $column) {
-            $column = match ($driverName) {
-                'pgsql' => (string) str($column)->wrap('"'),
-                default => $column,
-            };
-        }
-
         $column = match ($driverName) {
             'pgsql' => "{$column}::text",
             default => $column,
@@ -177,15 +174,10 @@ if (! function_exists('Filament\Support\generate_search_column_expression')) {
 
         $isSearchForcedCaseInsensitive ??= match ($driverName) {
             'pgsql' => true,
-            default => str($column)->contains('json_extract('),
+            default => false,
         };
 
         if ($isSearchForcedCaseInsensitive) {
-            if (in_array($driverName, ['mysql', 'mariadb'], true) && str($column)->contains('->') && ! str($column)->startsWith('json_extract(')) {
-                [$field, $path] = invade($databaseConnection->getQueryGrammar())->wrapJsonFieldAndPath($column); /** @phpstan-ignore-line */
-                $column = "json_extract({$field}{$path})";
-            }
-
             $column = "lower({$column})";
         }
 
@@ -196,7 +188,8 @@ if (! function_exists('Filament\Support\generate_search_column_expression')) {
         }
 
         if (
-            str($column)->contains('(') || // This checks if the column name probably contains a raw expression like `lower()` or `json_extract()`.
+            str($column)->contains('(') || // This checks if the column name probably contains a raw expression like `json_extract()`.
+            $isSearchForcedCaseInsensitive ||
             filled($collation)
         ) {
             return new Expression($column);

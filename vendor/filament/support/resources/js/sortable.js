@@ -11,7 +11,6 @@ export default (Alpine) => {
         }
 
         el.sortable = Sortable.create(el, {
-            group: el.getAttribute('x-sortable-group'),
             draggable: '[x-sortable-item]',
             handle: '[x-sortable-handle]',
             dataIdAttr: 'x-sortable-item',

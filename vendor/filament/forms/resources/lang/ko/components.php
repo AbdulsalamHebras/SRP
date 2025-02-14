@@ -185,15 +185,6 @@ return [
 
             ],
 
-            'svg' => [
-
-                'messages' => [
-                    'confirmation' => 'SVG 파일을 편집하는 것은 크기 조정 시 품질 손실이 발생할 수 있으므로 권장되지 않습니다.\n 계속하시겠습니까?',
-                    'disabled' => 'SVG 파일 편집은 크기 조정 시 품질 손실이 발생할 수 있으므로 비활성화되었습니다.',
-                ],
-
-            ],
-
         ],
 
     ],
@@ -246,15 +237,6 @@ return [
             'strike' => '취소선',
             'table' => '테이블',
             'undo' => '실행 취소',
-        ],
-
-    ],
-
-    'radio' => [
-
-        'boolean' => [
-            'true' => '예',
-            'false' => '아니오',
         ],
 
     ],
@@ -417,31 +399,6 @@ return [
 
     'tags_input' => [
         'placeholder' => '새 태그',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => '비밀번호 숨기기',
-            ],
-
-            'show_password' => [
-                'label' => '비밀번호 표시',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => '예',
-            'false' => '아니오',
-        ],
-
     ],
 
     'wizard' => [

@@ -2,6 +2,7 @@
 
 namespace Filament\Actions\Commands\Concerns;
 
+use Doctrine\DBAL\Types;
 use Illuminate\Support\Str;
 
 trait CanGenerateImporterColumns
@@ -14,17 +15,20 @@ trait CanGenerateImporterColumns
             return '//';
         }
 
-        $schema = $this->getModelSchema($model);
         $table = $this->getModelTable($model);
+
+        if (blank($table)) {
+            return '//';
+        }
 
         $columns = [];
 
-        foreach ($schema->getColumns($table) as $column) {
-            if ($column['auto_increment']) {
+        foreach ($table->getColumns() as $column) {
+            if ($column->getAutoincrement()) {
                 continue;
             }
 
-            $columnName = $column['name'];
+            $columnName = $column->getName();
 
             if (str($columnName)->is([
                 app($model)->getKeyName(),
@@ -46,7 +50,7 @@ trait CanGenerateImporterColumns
                 $columnData['label'] = [Str::upper($columnName)];
             }
 
-            if (! $column['nullable']) {
+            if ($column->getNotnull()) {
                 $columnData['rules'][0][] = 'required';
                 $columnData['requiredMapping'] = [];
             }
@@ -55,39 +59,44 @@ trait CanGenerateImporterColumns
                 $columnData['rules'][0][] = 'email';
             }
 
-            $type = $this->parseColumnType($column);
-
             if (
                 str($columnName)->endsWith('_id') &&
-                filled($guessedRelationshipName = $this->guessBelongsToRelationshipName($columnName, $model))
+                filled($guessedRelationshipName = $this->guessBelongsToRelationshipName($column, $model))
             ) {
                 $columnName = $guessedRelationshipName;
                 $columnData['relationship'] = [];
-            } elseif (in_array($type['name'], [
-                'boolean',
+            } elseif (in_array($column->getType()::class, [
+                Types\BooleanType::class,
             ])) {
                 $columnData['rules'][0][] = 'boolean';
                 $columnData['boolean'] = [];
-            } elseif (in_array($type['name'], [
-                'date',
+            } elseif (in_array($column->getType()::class, [
+                Types\DateImmutableType::class,
+                Types\DateType::class,
             ])) {
                 $columnData['rules'][0][] = 'date';
-            } elseif (in_array($type['name'], [
-                'datetime',
-                'timestamp',
+            } elseif (in_array($column->getType()::class, [
+                Types\DateTimeImmutableType::class,
+                Types\DateTimeType::class,
+                Types\DateTimeTzImmutableType::class,
+                Types\DateTimeTzType::class,
             ])) {
                 $columnData['rules'][0][] = 'datetime';
-            } elseif (in_array($type['name'], [
-                'integer',
-                'decimal',
-                'float',
-                'double',
-                'money',
+            } elseif (in_array($column->getType()::class, [
+                Types\IntegerType::class,
+                Types\SmallIntType::class,
+                Types\BigIntType::class,
             ])) {
                 $columnData['rules'][0][] = 'integer';
                 $columnData['numeric'] = [];
-            } elseif (isset($type['length'])) {
-                $columnData['rules'][0][] = "max:{$type['length']}";
+            } elseif (in_array($column->getType()::class, [
+                Types\DecimalType::class,
+                Types\FloatType::class,
+            ])) {
+                $columnData['rules'][0][] = 'integer';
+                $columnData['numeric'] = [];
+            } elseif ($length = $column->getLength()) {
+                $columnData['rules'][0][] = "max:{$length}";
             }
 
             // Move rules to the end of the column definition.

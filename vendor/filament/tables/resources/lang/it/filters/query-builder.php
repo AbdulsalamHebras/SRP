@@ -45,13 +45,13 @@ return [
         'is_filled' => [
 
             'label' => [
-                'direct' => 'Compilato',
-                'inverse' => 'Non compilato',
+                'direct' => 'È pieno',
+                'inverse' => 'È vuoto',
             ],
 
             'summary' => [
-                'direct' => ':attribute è compilato',
-                'inverse' => ':attribute non è compilato',
+                'direct' => ':attribute è pieno',
+                'inverse' => ':attribute è vuoto',
             ],
 
         ],
@@ -61,8 +61,8 @@ return [
             'is_true' => [
 
                 'label' => [
-                    'direct' => 'Vero',
-                    'inverse' => 'Falso',
+                    'direct' => 'È vero',
+                    'inverse' => 'È falso',
                 ],
 
                 'summary' => [
@@ -79,13 +79,13 @@ return [
             'is_after' => [
 
                 'label' => [
-                    'direct' => 'Dopo il',
-                    'inverse' => 'Fino al',
+                    'direct' => 'È dopo',
+                    'inverse' => 'Non è dopo',
                 ],
 
                 'summary' => [
-                    'direct' => ':attribute dopo il :date',
-                    'inverse' => ':attribute fino al :date',
+                    'direct' => ':attribute è dopo :date',
+                    'inverse' => ':attribute non è dopo :date',
                 ],
 
             ],
@@ -93,13 +93,13 @@ return [
             'is_before' => [
 
                 'label' => [
-                    'direct' => 'Prima del',
-                    'inverse' => 'Non prima del',
+                    'direct' => 'È prima',
+                    'inverse' => 'Non è prima',
                 ],
 
                 'summary' => [
-                    'direct' => ':attribute è prima del :date',
-                    'inverse' => ':attribute non è prima del :date',
+                    'direct' => ':attribute è prima :date',
+                    'inverse' => ':attribute non è prima :date',
                 ],
 
             ],
@@ -107,13 +107,13 @@ return [
             'is_date' => [
 
                 'label' => [
-                    'direct' => 'Data uguale a',
-                    'inverse' => 'Data diversa da',
+                    'direct' => 'È data',
+                    'inverse' => 'Non è data',
                 ],
 
                 'summary' => [
-                    'direct' => ':attribute è uguale a :date',
-                    'inverse' => ':attribute è diversa da :date',
+                    'direct' => ':attribute è :date',
+                    'inverse' => ':attribute non è :date',
                 ],
 
             ],
@@ -121,13 +121,13 @@ return [
             'is_month' => [
 
                 'label' => [
-                    'direct' => 'Mese uguale a',
-                    'inverse' => 'Mese diverso da',
+                    'direct' => 'È mese',
+                    'inverse' => 'Non è mese',
                 ],
 
                 'summary' => [
-                    'direct' => ':attribute è uguale a :month',
-                    'inverse' => ':attribute è diverso da :month',
+                    'direct' => ':attribute è :month',
+                    'inverse' => ':attribute non è :month',
                 ],
 
             ],
@@ -135,13 +135,13 @@ return [
             'is_year' => [
 
                 'label' => [
-                    'direct' => 'Anno uguale a ',
-                    'inverse' => 'Anno diverso da',
+                    'direct' => 'È anno',
+                    'inverse' => 'Non è anno',
                 ],
 
                 'summary' => [
-                    'direct' => ':attribute è uguale a :year',
-                    'inverse' => ':attribute è diverso da :year',
+                    'direct' => ':attribute è :year',
+                    'inverse' => ':attribute non è :year',
                 ],
 
             ],
@@ -169,13 +169,13 @@ return [
             'equals' => [
 
                 'label' => [
-                    'direct' => 'Uguale a ',
-                    'inverse' => 'Diverso da',
+                    'direct' => 'Equivale',
+                    'inverse' => 'Non equivale',
                 ],
 
                 'summary' => [
-                    'direct' => ':attribute uguale a :number',
-                    'inverse' => ':attribute diverso da :number',
+                    'direct' => ':attribute equivale a :number',
+                    'inverse' => ':attribute non equivale a :number',
                 ],
 
             ],
@@ -183,8 +183,8 @@ return [
             'is_max' => [
 
                 'label' => [
-                    'direct' => 'Massimo',
-                    'inverse' => 'Più grande di',
+                    'direct' => 'È massimo',
+                    'inverse' => 'È più grandi di',
                 ],
 
                 'summary' => [
@@ -197,8 +197,8 @@ return [
             'is_min' => [
 
                 'label' => [
-                    'direct' => 'Minimo',
-                    'inverse' => 'Meno di',
+                    'direct' => 'È minimo',
+                    'inverse' => 'È meno di',
                 ],
 
                 'summary' => [
@@ -265,12 +265,12 @@ return [
             'has_max' => [
 
                 'label' => [
-                    'direct' => 'Ha al massimo',
+                    'direct' => 'Ha massimo',
                     'inverse' => 'Ha più di',
                 ],
 
                 'summary' => [
-                    'direct' => 'Ha al massimo :count :relationship',
+                    'direct' => 'Ha minimo :count :relationship',
                     'inverse' => 'Ha più di :count :relationship',
                 ],
 
@@ -309,8 +309,8 @@ return [
                 'label' => [
 
                     'single' => [
-                        'direct' => 'È uguale a',
-                        'inverse' => 'È diverso da',
+                        'direct' => 'È',
+                        'inverse' => 'Non è',
                     ],
 
                     'multiple' => [
@@ -329,7 +329,7 @@ return [
 
                     'multiple' => [
                         'direct' => ':relationship contiene :values',
-                        'inverse' => ':relationship non contiene :values',
+                        'inverse' => ':relationship non conviene :values',
                     ],
 
                     'values_glue' => [
@@ -368,13 +368,13 @@ return [
             'is' => [
 
                 'label' => [
-                    'direct' => 'È uguale a',
-                    'inverse' => 'È diverso da',
+                    'direct' => 'È',
+                    'inverse' => 'Non è',
                 ],
 
                 'summary' => [
-                    'direct' => ':attribute è uguale a :values',
-                    'inverse' => ':attribute diverso da :values',
+                    'direct' => ':attribute è :values',
+                    'inverse' => ':attribute non è :values',
                     'values_glue' => [
                         ', ',
                         'final' => ' oppure ',
@@ -430,13 +430,13 @@ return [
             'equals' => [
 
                 'label' => [
-                    'direct' => 'Uguale a',
-                    'inverse' => 'Diverso da',
+                    'direct' => 'Uguale',
+                    'inverse' => 'Non è uguale',
                 ],
 
                 'summary' => [
                     'direct' => ':attribute uguale a :text',
-                    'inverse' => ':attribute diversa da :text',
+                    'inverse' => ':attribute non è uguale a :text',
                 ],
 
             ],

@@ -1,6 +1,5 @@
 @php
     use Filament\Forms\Components\Actions\Action;
-    use Filament\Support\Enums\Alignment;
 
     $containers = $getChildComponentContainers();
 
@@ -22,9 +21,6 @@
     $isReorderableWithButtons = $isReorderableWithButtons();
     $isReorderableWithDragAndDrop = $isReorderableWithDragAndDrop();
 
-    $collapseAllActionIsVisible = $isCollapsible && $collapseAllAction->isVisible();
-    $expandAllActionIsVisible = $isCollapsible && $expandAllAction->isVisible();
-
     $statePath = $getStatePath();
 @endphp
 
@@ -37,14 +33,14 @@
                 ->class(['fi-fo-repeater grid gap-y-4'])
         }}
     >
-        @if ($collapseAllActionIsVisible || $expandAllActionIsVisible)
+        @if ($isCollapsible && ($collapseAllAction->isVisible() || $expandAllAction->isVisible()))
             <div
                 @class([
                     'flex gap-x-3',
                     'hidden' => count($containers) < 2,
                 ])
             >
-                @if ($collapseAllActionIsVisible)
+                @if ($collapseAllAction->isVisible())
                     <span
                         x-on:click="$dispatch('repeater-collapse', '{{ $statePath }}')"
                     >
@@ -52,7 +48,7 @@
                     </span>
                 @endif
 
-                @if ($expandAllActionIsVisible)
+                @if ($expandAllAction->isVisible())
                     <span
                         x-on:click="$dispatch('repeater-expand', '{{ $statePath }}')"
                     >
@@ -74,7 +70,7 @@
                     :wire:end.stop="'mountFormComponentAction(\'' . $statePath . '\', \'reorder\', { items: $event.target.sortable.toArray() })'"
                     x-sortable
                     :data-sortable-animation-duration="$getReorderAnimationDuration()"
-                    class="items-start gap-4"
+                    class="gap-4"
                 >
                     @foreach ($containers as $uuid => $item)
                         @php
@@ -83,15 +79,6 @@
                                 $extraItemActions,
                                 fn (Action $action): bool => $action(['item' => $uuid])->isVisible(),
                             );
-                            $cloneAction = $cloneAction(['item' => $uuid]);
-                            $cloneActionIsVisible = $isCloneable && $cloneAction->isVisible();
-                            $deleteAction = $deleteAction(['item' => $uuid]);
-                            $deleteActionIsVisible = $isDeletable && $deleteAction->isVisible();
-                            $moveDownAction = $moveDownAction(['item' => $uuid])->disabled($loop->last);
-                            $moveDownActionIsVisible = $isReorderableWithButtons && $moveDownAction->isVisible();
-                            $moveUpAction = $moveUpAction(['item' => $uuid])->disabled($loop->first);
-                            $moveUpActionIsVisible = $isReorderableWithButtons && $moveUpAction->isVisible();
-                            $reorderActionIsVisible = $isReorderableWithDragAndDrop && $reorderAction->isVisible();
                         @endphp
 
                         <li
@@ -103,43 +90,32 @@
                             x-on:repeater-expand.window="$event.detail === '{{ $statePath }}' && (isCollapsed = false)"
                             x-on:repeater-collapse.window="$event.detail === '{{ $statePath }}' && (isCollapsed = true)"
                             x-sortable-item="{{ $uuid }}"
-                            class="fi-fo-repeater-item divide-y divide-gray-100 rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:divide-white/10 dark:bg-white/5 dark:ring-white/10"
+                            class="fi-fo-repeater-item rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-white/5 dark:ring-white/10"
                             x-bind:class="{ 'fi-collapsed overflow-hidden': isCollapsed }"
                         >
-                            @if ($reorderActionIsVisible || $moveUpActionIsVisible || $moveDownActionIsVisible || filled($itemLabel) || $cloneActionIsVisible || $deleteActionIsVisible || $isCollapsible || $visibleExtraItemActions)
+                            @if ($isReorderableWithDragAndDrop || $isReorderableWithButtons || filled($itemLabel) || $isCloneable || $isDeletable || $isCollapsible || count($visibleExtraItemActions))
                                 <div
-                                    @if ($isCollapsible)
-                                        x-on:click.stop="isCollapsed = !isCollapsed"
-                                    @endif
-                                    @class([
-                                        'fi-fo-repeater-item-header flex items-center gap-x-3 overflow-hidden px-4 py-3',
-                                        'cursor-pointer select-none' => $isCollapsible,
-                                    ])
+                                    class="fi-fo-repeater-item-header flex items-center gap-x-3 overflow-hidden px-4 py-3"
                                 >
-                                    @if ($reorderActionIsVisible || $moveUpActionIsVisible || $moveDownActionIsVisible)
+                                    @if ($isReorderableWithDragAndDrop || $isReorderableWithButtons)
                                         <ul class="flex items-center gap-x-3">
-                                            @if ($reorderActionIsVisible)
-                                                <li
-                                                    x-sortable-handle
-                                                    x-on:click.stop
-                                                >
+                                            @if ($isReorderableWithDragAndDrop)
+                                                <li x-sortable-handle>
                                                     {{ $reorderAction }}
                                                 </li>
                                             @endif
 
-                                            @if ($moveUpActionIsVisible || $moveDownActionIsVisible)
+                                            @if ($isReorderableWithButtons)
                                                 <li
-                                                    x-on:click.stop
                                                     class="flex items-center justify-center"
                                                 >
-                                                    {{ $moveUpAction }}
+                                                    {{ $moveUpAction(['item' => $uuid])->disabled($loop->first) }}
                                                 </li>
 
                                                 <li
-                                                    x-on:click.stop
                                                     class="flex items-center justify-center"
                                                 >
-                                                    {{ $moveDownAction }}
+                                                    {{ $moveDownAction(['item' => $uuid])->disabled($loop->last) }}
                                                 </li>
                                             @endif
                                         </ul>
@@ -147,34 +123,38 @@
 
                                     @if (filled($itemLabel))
                                         <h4
+                                            @if ($isCollapsible)
+                                                x-on:click.stop="isCollapsed = !isCollapsed"
+                                            @endif
                                             @class([
                                                 'text-sm font-medium text-gray-950 dark:text-white',
                                                 'truncate' => $isItemLabelTruncated(),
+                                                'cursor-pointer select-none' => $isCollapsible,
                                             ])
                                         >
                                             {{ $itemLabel }}
                                         </h4>
                                     @endif
 
-                                    @if ($cloneActionIsVisible || $deleteActionIsVisible || $isCollapsible || $visibleExtraItemActions)
+                                    @if ($isCloneable || $isDeletable || $isCollapsible || count($visibleExtraItemActions))
                                         <ul
                                             class="ms-auto flex items-center gap-x-3"
                                         >
                                             @foreach ($visibleExtraItemActions as $extraItemAction)
-                                                <li x-on:click.stop>
+                                                <li>
                                                     {{ $extraItemAction(['item' => $uuid]) }}
                                                 </li>
                                             @endforeach
 
-                                            @if ($cloneActionIsVisible)
-                                                <li x-on:click.stop>
-                                                    {{ $cloneAction }}
+                                            @if ($isCloneable)
+                                                <li>
+                                                    {{ $cloneAction(['item' => $uuid]) }}
                                                 </li>
                                             @endif
 
-                                            @if ($deleteActionIsVisible)
-                                                <li x-on:click.stop>
-                                                    {{ $deleteAction }}
+                                            @if ($isDeletable)
+                                                <li>
+                                                    {{ $deleteAction(['item' => $uuid]) }}
                                                 </li>
                                             @endif
 
@@ -206,14 +186,14 @@
 
                             <div
                                 x-show="! isCollapsed"
-                                class="fi-fo-repeater-item-content p-4"
+                                class="fi-fo-repeater-item-content border-t border-gray-100 p-4 dark:border-white/10"
                             >
                                 {{ $item }}
                             </div>
                         </li>
 
                         @if (! $loop->last)
-                            @if ($isAddable && $addBetweenAction(['afterItem' => $uuid])->isVisible())
+                            @if ($isAddable && $addBetweenAction->isVisible())
                                 <li class="flex w-full justify-center">
                                     <div
                                         class="fi-fo-repeater-add-between-action-ctn rounded-lg bg-white dark:bg-gray-900"
@@ -238,18 +218,8 @@
             </ul>
         @endif
 
-        @if ($isAddable && $addAction->isVisible())
-            <div
-                @class([
-                    'flex',
-                    match ($getAddActionAlignment()) {
-                        Alignment::Start, Alignment::Left => 'justify-start',
-                        Alignment::Center, null => 'justify-center',
-                        Alignment::End, Alignment::Right => 'justify-end',
-                        default => $alignment,
-                    },
-                ])
-            >
+        @if ($isAddable)
+            <div class="flex justify-center">
                 {{ $addAction }}
             </div>
         @endif

@@ -17,7 +17,8 @@ class BroadcastNotification extends BaseNotification implements ShouldQueue
      */
     public function __construct(
         public array $data,
-    ) {}
+    ) {
+    }
 
     /**
      * @param  Model  $notifiable

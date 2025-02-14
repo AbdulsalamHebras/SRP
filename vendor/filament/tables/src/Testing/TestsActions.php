@@ -3,7 +3,6 @@
 namespace Filament\Tables\Testing;
 
 use Closure;
-use Filament\Actions\Contracts\HasRecord;
 use Filament\Actions\Testing\TestsActions as BaseTestsActions;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Contracts\HasTable;
@@ -83,18 +82,9 @@ class TestsActions
 
     public function assertTableActionDataSet(): Closure
     {
-        return function (array | Closure $state): static {
-            $mountedTableActionsData = $this->instance()->mountedTableActionsData;
-            $mountedTableActionIndex = array_key_last($mountedTableActionsData);
-
-            if ($state instanceof Closure) {
-                $state = $state($mountedTableActionsData[$mountedTableActionIndex] ?? []);
-            }
-
-            if (is_array($state)) {
-                foreach (Arr::dot($state, prepend: "mountedTableActionsData.{$mountedTableActionIndex}.") as $key => $value) {
-                    $this->assertSet($key, $value);
-                }
+        return function (array $data): static {
+            foreach (Arr::dot($data, prepend: 'mountedTableActionsData.' . array_key_last($this->instance()->mountedTableActionsData) . '.') as $key => $value) {
+                $this->assertSet($key, $value);
             }
 
             return $this;
@@ -149,7 +139,7 @@ class TestsActions
 
     public function assertTableActionExists(): Closure
     {
-        return function (string | array $name, ?Closure $checkActionUsing = null, $record = null): static {
+        return function (string | array $name): static {
             $name = $this->parseNestedActionName($name);
 
             $action = $this->instance()->getTable()->getAction($name);
@@ -163,28 +153,13 @@ class TestsActions
                 message: "Failed asserting that a table action with name [{$prettyName}] exists on the [{$livewireClass}] component.",
             );
 
-            if ($record) {
-                if (! ($record instanceof Model)) {
-                    $record = $this->instance()->getTableRecord($record);
-                }
-
-                $action->record($record);
-            }
-
-            if ($checkActionUsing) {
-                Assert::assertTrue(
-                    $checkActionUsing($action),
-                    message: "Failed asserting that a table action with name [{$prettyName}] and provided configuration exists on the [{$livewireClass}] component"
-                );
-            }
-
             return $this;
         };
     }
 
     public function assertTableActionDoesNotExist(): Closure
     {
-        return function (string | array $name, ?Closure $checkActionUsing = null, $record = null): static {
+        return function (string | array $name): static {
             $name = $this->parseNestedActionName($name);
 
             $action = $this->instance()->getTable()->getAction($name);
@@ -192,26 +167,10 @@ class TestsActions
             $livewireClass = $this->instance()::class;
             $prettyName = implode(' > ', $name);
 
-            if (! $action) {
-                Assert::assertNull($action);
-
-                return $this;
-            }
-
-            if ($record) {
-                if (! ($record instanceof Model)) {
-                    $record = $this->instance()->getTableRecord($record);
-                }
-
-                $action->record($record);
-            }
-
-            if ($checkActionUsing) {
-                Assert::assertFalse(
-                    $checkActionUsing($action),
-                    "Failed asserting that a table action with name [{$prettyName}] and provided configuration does not exist on the [{$livewireClass}] component.",
-                );
-            }
+            Assert::assertNull(
+                $action,
+                message: "Failed asserting that a table action with name [{$prettyName}] does not exist on the [{$livewireClass}] component.",
+            );
 
             return $this;
         };
@@ -287,10 +246,6 @@ class TestsActions
             $action = $this->instance()->getTable()->getAction($name);
             $action->record($record);
 
-            if (($actionGroup = $action->getRootGroup()) instanceof HasRecord) {
-                $actionGroup->record($record);
-            }
-
             Assert::assertFalse(
                 $action->isHidden(),
                 message: filled($record) ?
@@ -322,10 +277,6 @@ class TestsActions
 
             $action = $this->instance()->getTable()->getAction($name);
             $action->record($record);
-
-            if (($actionGroup = $action->getRootGroup()) instanceof HasRecord) {
-                $actionGroup->record($record);
-            }
 
             $livewireClass = $this->instance()::class;
             $prettyName = implode(' > ', $name);
@@ -366,10 +317,6 @@ class TestsActions
             $action = $this->instance()->getTable()->getAction($name);
             $action->record($record);
 
-            if (($actionGroup = $action->getRootGroup()) instanceof HasRecord) {
-                $actionGroup->record($record);
-            }
-
             Assert::assertFalse(
                 $action->isDisabled(),
                 message: filled($record) ?
@@ -401,10 +348,6 @@ class TestsActions
 
             $action = $this->instance()->getTable()->getAction($name);
             $action->record($record);
-
-            if (($actionGroup = $action->getRootGroup()) instanceof HasRecord) {
-                $actionGroup->record($record);
-            }
 
             $livewireClass = $this->instance()::class;
             $prettyName = implode(' > ', $name);

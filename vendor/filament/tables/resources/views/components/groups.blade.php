@@ -1,5 +1,4 @@
 @props([
-    'directionSetting' => false,
     'dropdownOnDesktop' => false,
     'groups',
     'triggerAction',
@@ -72,25 +71,23 @@
                 </x-filament::input.wrapper>
             </label>
 
-            @if (! $directionSetting)
-                <label x-cloak x-show="group" class="grid gap-y-2">
-                    <span class="{{ $labelClasses }}">
-                        {{ __('filament-tables::table.grouping.fields.direction.label') }}
-                    </span>
+            <label x-cloak x-show="group" class="grid gap-y-2">
+                <span class="{{ $labelClasses }}">
+                    {{ __('filament-tables::table.grouping.fields.direction.label') }}
+                </span>
 
-                    <x-filament::input.wrapper>
-                        <x-filament::input.select x-model="direction">
-                            <option value="asc">
-                                {{ __('filament-tables::table.grouping.fields.direction.options.asc') }}
-                            </option>
+                <x-filament::input.wrapper>
+                    <x-filament::input.select x-model="direction">
+                        <option value="asc">
+                            {{ __('filament-tables::table.grouping.fields.direction.options.asc') }}
+                        </option>
 
-                            <option value="desc">
-                                {{ __('filament-tables::table.grouping.fields.direction.options.desc') }}
-                            </option>
-                        </x-filament::input.select>
-                    </x-filament::input.wrapper>
-                </label>
-            @endif
+                        <option value="desc">
+                            {{ __('filament-tables::table.grouping.fields.direction.options.desc') }}
+                        </option>
+                    </x-filament::input.select>
+                </x-filament::input.wrapper>
+            </label>
         </div>
     </x-filament::dropdown>
 
@@ -119,25 +116,23 @@
                 </x-filament::input.wrapper>
             </label>
 
-            @if (! $directionSetting)
-                <label x-cloak x-show="group">
-                    <span class="sr-only">
-                        {{ __('filament-tables::table.grouping.fields.direction.label') }}
-                    </span>
+            <label x-cloak x-show="group">
+                <span class="sr-only">
+                    {{ __('filament-tables::table.grouping.fields.direction.label') }}
+                </span>
 
-                    <x-filament::input.wrapper>
-                        <x-filament::input.select x-model="direction">
-                            <option value="asc">
-                                {{ __('filament-tables::table.grouping.fields.direction.options.asc') }}
-                            </option>
+                <x-filament::input.wrapper>
+                    <x-filament::input.select x-model="direction">
+                        <option value="asc">
+                            {{ __('filament-tables::table.grouping.fields.direction.options.asc') }}
+                        </option>
 
-                            <option value="desc">
-                                {{ __('filament-tables::table.grouping.fields.direction.options.desc') }}
-                            </option>
-                        </x-filament::input.select>
-                    </x-filament::input.wrapper>
-                </label>
-            @endif
+                        <option value="desc">
+                            {{ __('filament-tables::table.grouping.fields.direction.options.desc') }}
+                        </option>
+                    </x-filament::input.select>
+                </x-filament::input.wrapper>
+            </label>
         </div>
     @endif
 </div>

@@ -36,7 +36,7 @@ return [
 
         'modal' => [
 
-            'heading' => 'Անջատել ընտրված :labelը',
+            'heading' => 'Անջատել ընտրված :label',
 
             'actions' => [
 

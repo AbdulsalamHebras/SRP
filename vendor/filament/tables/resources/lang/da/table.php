@@ -11,12 +11,6 @@ return [
     'columns' => [
 
         'text' => [
-
-            'actions' => [
-                'collapse_list' => 'Vis :count mindre',
-                'expand_list' => 'Vis :count flere',
-            ],
-
             'more_list_items' => 'og :count flere',
         ],
 
@@ -29,10 +23,6 @@ return [
 
         'bulk_select_record' => [
             'label' => 'Vælg/fravælg :key for masse handlinger.',
-        ],
-
-        'bulk_select_group' => [
-            'label' => 'Vælg/fravælg gruppe :title til massehandlinger.',
         ],
 
         'search' => [
@@ -105,10 +95,6 @@ return [
     'filters' => [
 
         'actions' => [
-
-            'apply' => [
-                'label' => 'Anvend filtre',
-            ],
 
             'remove' => [
                 'label' => 'Fjern filter',

@@ -2,19 +2,13 @@
     @script
         <script>
             window.addEventListener('beforeunload', (event) => {
-                if (typeof @this === 'undefined') {
-                    return
-                }
-
                 if (
                     [
-                        ...(@js($this instanceof \Filament\Actions\Contracts\HasActions) ? ($wire.mountedActions ?? []) : []),
+                        ...(@js($this instanceof \Filament\Actions\Contracts\HasActions) ? $wire.mountedActions ?? [] : []),
                         ...(@js($this instanceof \Filament\Forms\Contracts\HasForms)
-                            ? ($wire.mountedFormComponentActions ?? [])
+                            ? $wire.mountedFormComponentActions ?? []
                             : []),
-                        ...(@js($this instanceof \Filament\Infolists\Contracts\HasInfolists)
-                            ? ($wire.mountedInfolistActions ?? [])
-                            : []),
+                        ...(@js($this instanceof \Filament\Infolists\Contracts\HasInfolists) ? $wire.mountedInfolistActions ?? [] : []),
                         ...(@js($this instanceof \Filament\Tables\Contracts\HasTable)
                             ? [
                                   ...($wire.mountedTableActions ?? []),
@@ -23,8 +17,7 @@
                                       : []),
                               ]
                             : []),
-                    ].length &&
-                    !$wire?.__instance?.effects?.redirect
+                    ].length
                 ) {
                     event.preventDefault()
                     event.returnValue = true

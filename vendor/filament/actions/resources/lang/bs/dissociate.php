@@ -12,7 +12,7 @@ return [
 
             'actions' => [
 
-                'dissociate' => [
+                'detach' => [
                     'label' => 'Odvojite',
                 ],
 
@@ -22,7 +22,7 @@ return [
 
         'notifications' => [
 
-            'dissociated' => [
+            'detached' => [
                 'title' => 'Odvojeno',
             ],
 
@@ -40,7 +40,7 @@ return [
 
             'actions' => [
 
-                'dissociate' => [
+                'detach' => [
                     'label' => 'Odvojite izabrani',
                 ],
 
@@ -50,7 +50,7 @@ return [
 
         'notifications' => [
 
-            'dissociated' => [
+            'detached' => [
                 'title' => 'Odvojeno',
             ],
 

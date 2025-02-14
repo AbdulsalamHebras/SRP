@@ -36,8 +36,6 @@ class FileUpload extends BaseFileUpload
 
     protected bool | Closure $isAvatar = false;
 
-    protected int | float | Closure | null $itemPanelAspectRatio = null;
-
     protected string | Closure $loadingIndicatorPosition = 'right';
 
     protected string | Closure | null $panelAspectRatio = null;
@@ -162,13 +160,6 @@ class FileUpload extends BaseFileUpload
         return $this;
     }
 
-    public function itemPanelAspectRatio(int | float | Closure | null $ratio): static
-    {
-        $this->itemPanelAspectRatio = $ratio;
-
-        return $this;
-    }
-
     public function loadingIndicatorPosition(string | Closure | null $position): static
     {
         $this->loadingIndicatorPosition = $position;
@@ -256,20 +247,6 @@ class FileUpload extends BaseFileUpload
     public function getImageResizeUpscale(): bool
     {
         return (bool) $this->evaluate($this->imageResizeUpscale);
-    }
-
-    public function getItemPanelAspectRatio(): int | float | null
-    {
-        $itemPanelAspectRatio = $this->evaluate($this->itemPanelAspectRatio);
-
-        if (
-            ($this->getPanelLayout() === 'grid') &&
-            (! $itemPanelAspectRatio)
-        ) {
-            return 1;
-        }
-
-        return $itemPanelAspectRatio;
     }
 
     public function getLoadingIndicatorPosition(): string
@@ -417,15 +394,9 @@ class FileUpload extends BaseFileUpload
         return $this->evaluate($this->imageEditorViewportWidth);
     }
 
-    protected function getParentTargetSizes(int $widthOrHeight): int | float
+    protected function getParentTargetSizes(int $withOrHeight): float
     {
-        $targetWidth = (int) $this->getImageResizeTargetWidth();
-
-        if ($targetWidth === 0) {
-            return 1;
-        }
-
-        return $widthOrHeight > 1 ? 360 / $targetWidth : 1;
+        return $withOrHeight > 1 ? 360 / (int) $this->getImageResizeTargetWidth() : 1;
     }
 
     public function getImageEditorMode(): int
@@ -475,7 +446,7 @@ class FileUpload extends BaseFileUpload
             ->filter(fn (float | string | false $ratio): bool => $ratio !== false)
             ->when(
                 fn (Collection $ratios): bool => $ratios->count() < 2,
-                fn (Collection $ratios) => $ratios->take(0),
+                fn (Collection $ratios): Collection => $ratios->take(0),
             )
             ->all();
     }

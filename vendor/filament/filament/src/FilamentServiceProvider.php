@@ -18,7 +18,6 @@ use Filament\Http\Responses\Auth\LoginResponse;
 use Filament\Http\Responses\Auth\LogoutResponse;
 use Filament\Http\Responses\Auth\PasswordResetResponse;
 use Filament\Http\Responses\Auth\RegistrationResponse;
-use Filament\Navigation\NavigationManager;
 use Filament\Support\Assets\Js;
 use Filament\Support\Assets\Theme;
 use Filament\Support\Facades\FilamentAsset;
@@ -45,15 +44,7 @@ class FilamentServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->scoped('filament', function (): FilamentManager {
-            return new FilamentManager;
-        });
-
-        $this->app->singleton(PanelRegistry::class, function (): PanelRegistry {
-            return new PanelRegistry;
-        });
-
-        $this->app->scoped(NavigationManager::class, function (): NavigationManager {
-            return new NavigationManager;
+            return new FilamentManager();
         });
 
         $this->app->bind(EmailVerificationResponseContract::class, EmailVerificationResponse::class);
@@ -105,8 +96,6 @@ class FilamentServiceProvider extends PackageServiceProvider
     protected function getCommands(): array
     {
         $commands = [
-            Commands\CacheComponentsCommand::class,
-            Commands\ClearCachedComponentsCommand::class,
             Commands\MakeClusterCommand::class,
             Commands\MakePageCommand::class,
             Commands\MakePanelCommand::class,

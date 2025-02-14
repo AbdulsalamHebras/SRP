@@ -1,7 +1,5 @@
-<x-dynamic-component
-    :component="static::isSimple() ? 'filament-panels::page.simple' : 'filament-panels::page'"
->
-    <x-filament-panels::form id="form" wire:submit="save">
+<x-filament-panels::page.simple>
+    <x-filament-panels::form wire:submit="save">
         {{ $this->form }}
 
         <x-filament-panels::form.actions
@@ -9,4 +7,4 @@
             :full-width="$this->hasFullWidthFormActions()"
         />
     </x-filament-panels::form>
-</x-dynamic-component>
+</x-filament-panels::page.simple>

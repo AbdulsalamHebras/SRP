@@ -48,10 +48,8 @@ trait CanReplicateRecords
         });
 
         $this->action(function () {
-            $result = $this->process(function (array $data, Model $record) {
+            $result = $this->process(function (Model $record) {
                 $this->replica = $record->replicate($this->getExcludedAttributes());
-
-                $this->replica->fill($data);
 
                 $this->callBeforeReplicaSaved();
 
@@ -66,7 +64,7 @@ trait CanReplicateRecords
         });
     }
 
-    public function beforeReplicaSaved(?Closure $callback): static
+    public function beforeReplicaSaved(Closure $callback): static
     {
         $this->beforeReplicaSaved = $callback;
 
@@ -83,7 +81,7 @@ trait CanReplicateRecords
     /**
      * @deprecated Use `after()` instead.
      */
-    public function afterReplicaSaved(?Closure $callback): static
+    public function afterReplicaSaved(Closure $callback): static
     {
         $this->after($callback);
 

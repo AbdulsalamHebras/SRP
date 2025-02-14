@@ -14,7 +14,6 @@ class ToggleButtons extends Field implements Contracts\CanDisableOptions
     use Concerns\HasExtraInputAttributes;
     use Concerns\HasGridDirection;
     use Concerns\HasIcons;
-    use Concerns\HasNestedRecursiveValidationRules;
     use Concerns\HasOptions;
 
     public const GROUPED_VIEW = 'filament-forms::components.toggle-buttons.grouped';
@@ -33,18 +32,6 @@ class ToggleButtons extends Field implements Contracts\CanDisableOptions
         parent::setUp();
 
         $this->default(fn (ToggleButtons $component): mixed => $component->isMultiple() ? [] : null);
-
-        $this->afterStateHydrated(static function (ToggleButtons $component, $state): void {
-            if (! $component->isMultiple()) {
-                return;
-            }
-
-            if (is_array($state)) {
-                return;
-            }
-
-            $component->state([]);
-        });
     }
 
     public function grouped(): static

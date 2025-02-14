@@ -22,20 +22,12 @@ return [
 
     'actions' => [
 
-        'first' => [
-            'label' => 'Primeira',
-        ],
-
         'go_to_page' => [
             'label' => 'Ir para página :page',
         ],
 
-        'last' => [
-            'label' => 'Última',
-        ],
-
         'next' => [
-            'label' => 'Próxima',
+            'label' => 'Próximo',
         ],
 
         'previous' => [

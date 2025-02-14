@@ -2,7 +2,7 @@
 
 return [
 
-    'title' => ':labelni tahrirlash',
+    'title' => ':label - Tahrirlash',
 
     'breadcrumb' => 'Tahrirlash',
 

@@ -11,15 +11,8 @@ return [
         'form' => [
 
             'file' => [
-
                 'label' => 'Bestand',
-
                 'placeholder' => 'Upload een CSV-bestand',
-
-                'rules' => [
-                    'duplicate_columns' => '{0} Het bestand mag niet meer dan één lege kolomkop bevatten.|{1,*} Het bestand mag geen dubbele kolomkoppen bevatten: :columns.',
-                ],
-
             ],
 
             'columns' => [
@@ -79,7 +72,6 @@ return [
         'file_name' => 'import-:import_id-:csv_name-mislukte-rijen',
         'error_header' => 'fout',
         'system_error' => 'Systeemfout, neem contact op met ondersteuning.',
-        'column_mapping_required_for_new_record' => 'De :attribute kolom is niet toegewezen aan een kolom in het bestand, maar is vereist voor het aanmaken van nieuwe records.',
     ],
 
 ];

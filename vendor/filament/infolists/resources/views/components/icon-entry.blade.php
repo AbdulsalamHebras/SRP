@@ -3,16 +3,6 @@
 @endphp
 
 <x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
-    @php
-        $arrayState = $getState();
-
-        if ($arrayState instanceof \Illuminate\Support\Collection) {
-            $arrayState = $arrayState->all();
-        }
-
-        $arrayState = \Illuminate\Support\Arr::wrap($arrayState);
-    @endphp
-
     <div
         {{
             $attributes
@@ -22,7 +12,7 @@
                 ])
         }}
     >
-        @if (count($arrayState))
+        @if (count($arrayState = \Illuminate\Support\Arr::wrap($getState())))
             @foreach ($arrayState as $state)
                 @if ($icon = $getIcon($state))
                     @php
@@ -44,10 +34,9 @@
                                 default => $size,
                             },
                             match ($color) {
-                                'gray' => 'text-gray-400 dark:text-gray-500',
+                                'gray' => 'fi-color-gray text-gray-400 dark:text-gray-500',
                                 default => 'fi-color-custom text-custom-500 dark:text-custom-400',
                             },
-                            is_string($color) ? 'fi-color-' . $color : null,
                         ])
                         @style([
                             \Filament\Support\get_color_css_variables(

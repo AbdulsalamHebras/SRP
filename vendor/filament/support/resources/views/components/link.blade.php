@@ -1,6 +1,5 @@
 @php
     use Filament\Support\Enums\ActionSize;
-    use Filament\Support\Enums\FontWeight;
     use Filament\Support\Enums\IconPosition;
     use Filament\Support\Enums\IconSize;
 @endphp
@@ -8,26 +7,21 @@
 @props([
     'badge' => null,
     'badgeColor' => 'primary',
-    'badgeSize' => 'xs',
     'color' => 'primary',
     'disabled' => false,
     'form' => null,
-    'formId' => null,
     'href' => null,
     'icon' => null,
     'iconAlias' => null,
     'iconPosition' => IconPosition::Before,
     'iconSize' => null,
     'keyBindings' => null,
-    'labelSrOnly' => false,
     'loadingIndicator' => true,
     'size' => ActionSize::Medium,
-    'spaMode' => null,
     'tag' => 'a',
     'target' => null,
     'tooltip' => null,
     'type' => 'button',
-    'weight' => FontWeight::SemiBold,
 ])
 
 @php
@@ -50,10 +44,11 @@
 
     $linkClasses = \Illuminate\Support\Arr::toCssClasses([
         'fi-link group/link relative inline-flex items-center justify-center outline-none',
+        'pe-4' => $badge,
         'pointer-events-none opacity-70' => $disabled,
-        ($size instanceof ActionSize) ? "fi-size-{$size->value}" : null,
+        "fi-size-{$size->value}" => $size instanceof ActionSize,
         // @deprecated `fi-link-size-*` has been replaced by `fi-size-*`.
-        ($size instanceof ActionSize) ? "fi-link-size-{$size->value}" : null,
+        "fi-link-size-{$size->value}" => $size instanceof ActionSize,
         match ($size) {
             ActionSize::ExtraSmall => 'gap-1',
             ActionSize::Small => 'gap-1',
@@ -63,43 +58,26 @@
             default => $size,
         },
         match ($color) {
-            'gray' => null,
+            'gray' => 'fi-color-gray',
             default => 'fi-color-custom',
         },
-        is_string($color) ? "fi-color-{$color}" : null,
     ]);
 
-    if (! $labelSrOnly) {
-        $labelClasses = \Illuminate\Support\Arr::toCssClasses([
-            match ($weight) {
-                FontWeight::Thin, 'thin' => 'font-thin',
-                FontWeight::ExtraLight, 'extralight' => 'font-extralight',
-                FontWeight::Light, 'light' => 'font-light',
-                FontWeight::Medium, 'medium' => 'font-medium',
-                FontWeight::Normal, 'normal' => 'font-normal',
-                FontWeight::SemiBold, 'semibold' => 'font-semibold',
-                FontWeight::Bold, 'bold' => 'font-bold',
-                FontWeight::ExtraBold, 'extrabold' => 'font-extrabold',
-                FontWeight::Black, 'black' => 'font-black',
-                default => $weight,
-            },
-            match ($size) {
-                ActionSize::ExtraSmall => 'text-xs',
-                ActionSize::Small => 'text-sm',
-                ActionSize::Medium => 'text-sm',
-                ActionSize::Large => 'text-sm',
-                ActionSize::ExtraLarge => 'text-sm',
-                default => null,
-            },
-            match ($color) {
-                'gray' => 'text-gray-700 dark:text-gray-200',
-                default => 'text-custom-600 dark:text-custom-400',
-            },
-            'group-hover/link:underline group-focus-visible/link:underline',
-        ]);
-    } else {
-        $labelClasses = 'sr-only';
-    }
+    $labelClasses = \Illuminate\Support\Arr::toCssClasses([
+        'font-semibold group-hover/link:underline group-focus-visible/link:underline',
+        match ($size) {
+            ActionSize::ExtraSmall => 'text-xs',
+            ActionSize::Small => 'text-sm',
+            ActionSize::Medium => 'text-sm',
+            ActionSize::Large => 'text-sm',
+            ActionSize::ExtraLarge => 'text-sm',
+            default => null,
+        },
+        match ($color) {
+            'gray' => 'text-gray-700 dark:text-gray-200',
+            default => 'text-custom-600 dark:text-custom-400',
+        },
+    ]);
 
     $labelStyles = \Illuminate\Support\Arr::toCssStyles([
         \Filament\Support\get_color_css_variables(
@@ -131,7 +109,7 @@
         ) => $color !== 'gray',
     ]);
 
-    $badgeContainerClasses = 'fi-link-badge-ctn absolute start-full top-0 z-[1] w-max -translate-x-1/4 -translate-y-3/4 rounded-md bg-white dark:bg-gray-900 rtl:translate-x-1/4';
+    $badgeContainerClasses = 'fi-link-badge-ctn absolute -top-1 start-full z-[1] -ms-1 w-max -translate-x-1/2 rounded-md bg-white rtl:translate-x-1/2 dark:bg-gray-900';
 
     $wireTarget = $loadingIndicator ? $attributes->whereStartsWith(['wire:target', 'wire:click'])->filter(fn ($value): bool => filled($value))->first() : null;
 
@@ -146,13 +124,12 @@
 
 @if ($tag === 'a')
     <a
-        {{ \Filament\Support\generate_href_html($href, $target === '_blank', $spaMode) }}
+        {{ \Filament\Support\generate_href_html($href, $target === '_blank') }}
         @if ($keyBindings || $hasTooltip)
             x-data="{}"
         @endif
         @if ($keyBindings)
-            x-bind:id="$id('key-bindings')"
-            x-mousetrap.global.{{ collect($keyBindings)->map(fn (string $keyBinding): string => str_replace('+', '-', $keyBinding))->implode('.') }}="document.getElementById($el.id).click()"
+            x-mousetrap.global.{{ collect($keyBindings)->map(fn (string $keyBinding): string => str_replace('+', '-', $keyBinding))->implode('.') }}
         @endif
         @if ($hasTooltip)
             x-tooltip="{
@@ -186,7 +163,7 @@
 
         @if (filled($badge))
             <div class="{{ $badgeContainerClasses }}">
-                <x-filament::badge :color="$badgeColor" :size="$badgeSize">
+                <x-filament::badge :color="$badgeColor" size="xs">
                     {{ $badge }}
                 </x-filament::badge>
             </div>
@@ -199,8 +176,7 @@
             x-data="{}"
         @endif
         @if ($keyBindings)
-            x-bind:id="$id('key-bindings')"
-            x-mousetrap.global.{{ collect($keyBindings)->map(fn (string $keyBinding): string => str_replace('+', '-', $keyBinding))->implode('.') }}="document.getElementById($el.id).click()"
+            x-mousetrap.global.{{ collect($keyBindings)->map(fn (string $keyBinding): string => str_replace('+', '-', $keyBinding))->implode('.') }}
         @endif
         @if ($hasTooltip)
             x-tooltip="{
@@ -212,7 +188,6 @@
             $attributes
                 ->merge([
                     'disabled' => $disabled,
-                    'form' => $formId,
                     'type' => $type,
                     'wire:loading.attr' => 'disabled',
                     'wire:target' => ($hasLoadingIndicator && $loadingIndicatorTarget) ? $loadingIndicatorTarget : null,
@@ -294,7 +269,7 @@
 
         @if (filled($badge))
             <div class="{{ $badgeContainerClasses }}">
-                <x-filament::badge :color="$badgeColor" :size="$badgeSize">
+                <x-filament::badge :color="$badgeColor" size="xs">
                     {{ $badge }}
                 </x-filament::badge>
             </div>

@@ -25,15 +25,7 @@ export default (Alpine) => {
                 notification.duration &&
                 notification.duration !== 'persistent'
             ) {
-                setTimeout(() => {
-                    if (!this.$el.matches(':hover')) {
-                        this.close()
-
-                        return
-                    }
-
-                    this.$el.addEventListener('mouseleave', () => this.close())
-                }, notification.duration)
+                setTimeout(() => this.close(), notification.duration)
             }
 
             this.isShown = true
@@ -86,43 +78,38 @@ export default (Alpine) => {
                         return
                     }
 
-                    // Calling `el.getBoundingClientRect()` from outside `requestAnimationFrame()` can
-                    // occasionally cause the page to scroll to the top.
-                    requestAnimationFrame(() => {
-                        const getTop = () =>
-                            this.$el.getBoundingClientRect().top
-                        const oldTop = getTop()
+                    const getTop = () => this.$el.getBoundingClientRect().top
+                    const oldTop = getTop()
 
-                        respond(() => {
-                            animation = () => {
-                                if (!this.isShown) {
-                                    return
-                                }
-
-                                this.$el.animate(
-                                    [
-                                        {
-                                            transform: `translateY(${
-                                                oldTop - getTop()
-                                            }px)`,
-                                        },
-                                        { transform: 'translateY(0px)' },
-                                    ],
-                                    {
-                                        duration: this.transitionDuration,
-                                        easing: this.transitionEasing,
-                                    },
-                                )
+                    respond(() => {
+                        animation = () => {
+                            if (!this.isShown) {
+                                return
                             }
 
-                            this.$el
-                                .getAnimations()
-                                .forEach((animation) => animation.finish())
-                        })
+                            this.$el.animate(
+                                [
+                                    {
+                                        transform: `translateY(${
+                                            oldTop - getTop()
+                                        }px)`,
+                                    },
+                                    { transform: 'translateY(0px)' },
+                                ],
+                                {
+                                    duration: this.transitionDuration,
+                                    easing: this.transitionEasing,
+                                },
+                            )
+                        }
 
-                        succeed(({ snapshot, effect }) => {
-                            animation()
-                        })
+                        this.$el
+                            .getAnimations()
+                            .forEach((animation) => animation.finish())
+                    })
+
+                    succeed(({ snapshot, effect }) => {
+                        animation()
                     })
                 },
             )

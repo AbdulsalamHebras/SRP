@@ -7,11 +7,11 @@ use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasExtraAttributes;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 
 class Summarizer extends ViewComponent
 {
     use Concerns\BelongsToColumn;
-    use Concerns\CanBeHidden;
     use Concerns\CanFormatState;
     use Concerns\HasLabel;
     use Concerns\InteractsWithTableQuery;
@@ -82,7 +82,7 @@ class Summarizer extends ViewComponent
         $attribute = $column->getName();
         $query = $this->getQuery()->clone();
 
-        if ($column->hasRelationship($query->getModel())) {
+        if ($column->queriesRelationships($query->getModel())) {
             $relationship = $column->getRelationship($query->getModel());
             $attribute = $column->getRelationshipAttribute();
 
@@ -103,31 +103,9 @@ class Summarizer extends ViewComponent
                         return $relatedQuery;
                     },
                 );
-        } elseif (str($attribute)->startsWith('pivot.')) {
-            // https://github.com/filamentphp/filament/issues/12501
-
-            $pivotAttribute = (string) str($attribute)
-                ->after('pivot.')
-                ->prepend('pivot_');
-
-            $isPivotAttributeSelected = collect($query->getQuery()->getColumns())
-                ->contains(fn (string $column): bool => str($column)->endsWith(" as {$pivotAttribute}"));
-
-            $attribute = $isPivotAttributeSelected ? $pivotAttribute : $attribute;
-
-            // Avoid duplicate columns in the subquery by selecting pivot columns individually.
-            if ($isPivotAttributeSelected) {
-                $query->getQuery()->columns = array_filter(
-                    $query->getQuery()->columns,
-                    fn (mixed $column): bool => $column !== "{$query->getQuery()->joins[0]->table}.*",
-                );
-            }
         }
 
-        $asName = (string) str($query->getModel()->getTable())->afterLast('.');
-
-        $query = $query->getModel()->resolveConnection($query->getModel()->getConnectionName())
-            ->table($query->toBase(), $asName);
+        $query = DB::table($query->toBase(), $query->getModel()->getTable());
 
         if ($this->hasQueryModification()) {
             $query = $this->evaluate($this->modifyQueryUsing, [
@@ -177,7 +155,6 @@ class Summarizer extends ViewComponent
         return match ($parameterName) {
             'livewire' => [$this->getLivewire()],
             'table' => [$this->getTable()],
-            'query' => [$this->getQuery()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }

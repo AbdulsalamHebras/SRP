@@ -11,64 +11,15 @@ return [
             ],
 
             'add' => [
-                'label' => 'Zu :label hinzufügen',
-
-                'modal' => [
-
-                    'heading' => 'Hinzufügen zu :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Hinzufügen',
-                        ],
-
-                    ],
-
-                ],
-
+                'label' => 'Hinzufügen',
             ],
 
             'add_between' => [
-                'label' => 'Dazwischen einfügen',
-
-                'modal' => [
-
-                    'heading' => 'Hinzufügen zu :label',
-
-                    'actions' => [
-
-                        'add' => [
-                            'label' => 'Hinzufügen',
-                        ],
-
-                    ],
-
-                ],
+                'label' => 'Einfügen',
             ],
 
             'delete' => [
                 'label' => 'Löschen',
-            ],
-
-            'edit' => [
-
-                'label' => 'Bearbeiten',
-
-                'modal' => [
-
-                    'heading' => 'Block bearbeiten',
-
-                    'actions' => [
-
-                        'save' => [
-                            'label' => 'Änderungen speichern',
-                        ],
-
-                    ],
-
-                ],
-
             ],
 
             'reorder' => [
@@ -108,139 +59,11 @@ return [
         'actions' => [
 
             'deselect_all' => [
-                'label' => 'Alle abwählen',
+                'label' => 'Alle deselektieren',
             ],
 
             'select_all' => [
-                'label' => 'Alle auswählen',
-            ],
-
-        ],
-
-    ],
-
-    'file_upload' => [
-
-        'editor' => [
-
-            'actions' => [
-
-                'cancel' => [
-                    'label' => 'Abbrechen',
-                ],
-
-                'drag_crop' => [
-                    'label' => 'Drag Modus "zuschneiden"',
-                ],
-
-                'drag_move' => [
-                    'label' => 'Drag Modus "verschieben"',
-                ],
-
-                'flip_horizontal' => [
-                    'label' => 'Bild horizontal spiegeln',
-                ],
-
-                'flip_vertical' => [
-                    'label' => 'Bild vertikal spiegeln',
-                ],
-
-                'move_down' => [
-                    'label' => 'Bild nach unten',
-                ],
-
-                'move_left' => [
-                    'label' => 'Bild nach links',
-                ],
-
-                'move_right' => [
-                    'label' => 'Bild nach rechts',
-                ],
-
-                'move_up' => [
-                    'label' => 'Bild nach oben',
-                ],
-
-                'reset' => [
-                    'label' => 'Zurücksetzen',
-                ],
-
-                'rotate_left' => [
-                    'label' => 'Bild nach links drehen',
-                ],
-
-                'rotate_right' => [
-                    'label' => 'Bild nach rechts drehen',
-                ],
-
-                'set_aspect_ratio' => [
-                    'label' => 'Seitenverhältnis auf :ratio setzen',
-                ],
-
-                'save' => [
-                    'label' => 'Speichern',
-                ],
-
-                'zoom_100' => [
-                    'label' => 'Bild Zoom 100%',
-                ],
-
-                'zoom_in' => [
-                    'label' => 'Hereinzoomen',
-                ],
-
-                'zoom_out' => [
-                    'label' => 'Herauszoomen',
-                ],
-
-            ],
-
-            'fields' => [
-
-                'height' => [
-                    'label' => 'Höhe',
-                    'unit' => 'px',
-                ],
-
-                'rotation' => [
-                    'label' => 'Drehung',
-                    'unit' => 'deg',
-                ],
-
-                'width' => [
-                    'label' => 'Breite',
-                    'unit' => 'px',
-                ],
-
-                'x_position' => [
-                    'label' => 'X',
-                    'unit' => 'px',
-                ],
-
-                'y_position' => [
-                    'label' => 'Y',
-                    'unit' => 'px',
-                ],
-
-            ],
-
-            'aspect_ratios' => [
-
-                'label' => 'Seitenverhältnisse',
-
-                'no_fixed' => [
-                    'label' => 'Frei',
-                ],
-
-            ],
-
-            'svg' => [
-
-                'messages' => [
-                    'confirmation' => 'Das Bearbeiten von SVG Dateien ist nicht empfohlen, da es Qualitätsverluste beim Verändern der Größe geben kann.\n Wirklich fortfahren?',
-                    'disabled' => 'Das Bearbeiten von SVG Dateien ist deaktiviert, da es Qualitätsverluste beim Verändern der Größe geben kann.',
-                ],
-
+                'label' => 'Alle selektieren',
             ],
 
         ],
@@ -260,7 +83,7 @@ return [
             ],
 
             'reorder' => [
-                'label' => 'Zeile neu ordnen',
+                'label' => 'Zeile neu sortieren',
             ],
 
         ],
@@ -282,28 +105,16 @@ return [
     'markdown_editor' => [
 
         'toolbar_buttons' => [
-            'attach_files' => 'Dateien beifügen',
-            'blockquote' => 'Zitat',
+            'attach_files' => 'Dateien hinzufügen',
             'bold' => 'Fett',
-            'bullet_list' => 'Aufzählungsliste',
+            'bullet_list' => 'Liste',
             'code_block' => 'Code Block',
-            'heading' => 'Überschrift',
+            'edit' => 'Bearbeiten',
             'italic' => 'Kursiv',
             'link' => 'Link',
             'ordered_list' => 'Nummerierte Liste',
-            'redo' => 'Wiederherstellen',
+            'preview' => 'Vorschau',
             'strike' => 'Durchgestrichen',
-            'table' => 'Tabelle',
-            'undo' => 'Rückgängig',
-        ],
-
-    ],
-
-    'radio' => [
-
-        'boolean' => [
-            'true' => 'Ja',
-            'false' => 'Nein',
         ],
 
     ],
@@ -313,11 +124,7 @@ return [
         'actions' => [
 
             'add' => [
-                'label' => 'Zu :label hinzufügen',
-            ],
-
-            'add_between' => [
-                'label' => 'Dazwischen einfügen',
+                'label' => 'Hinzufügen',
             ],
 
             'delete' => [
@@ -325,7 +132,7 @@ return [
             ],
 
             'clone' => [
-                'label' => 'Duplizieren',
+                'label' => 'Kopieren',
             ],
 
             'reorder' => [
@@ -383,7 +190,7 @@ return [
             'attach_files' => 'Dateien anhängen',
             'blockquote' => 'Zitat',
             'bold' => 'Fett',
-            'bullet_list' => 'Aufzählungsliste',
+            'bullet_list' => 'Aufzählung',
             'code_block' => 'Code Block',
             'h1' => 'Titel',
             'h2' => 'Überschrift',
@@ -391,9 +198,8 @@ return [
             'italic' => 'Kursiv',
             'link' => 'Link',
             'ordered_list' => 'Nummerierte Aufzählung',
-            'redo' => 'Wiederherstellen',
+            'redo' => 'Wiederholen',
             'strike' => 'Durchgestrichen',
-            'underline' => 'Unterstreichen',
             'undo' => 'Rückgängig',
         ],
 
@@ -415,31 +221,8 @@ return [
                             'label' => 'Erstellen',
                         ],
 
-                        'create_another' => [
-                            'label' => 'Erstellen & weiteres erstellen',
-                        ],
-
                     ],
 
-                ],
-
-            ],
-
-            'edit_option' => [
-
-                'modal' => [
-
-                    'heading' => 'Bearbeiten',
-
-                    'actions' => [
-
-                        'save' => [
-
-                            'label' => 'Speichern',
-
-                        ],
-
-                    ],
                 ],
 
             ],
@@ -466,32 +249,7 @@ return [
     ],
 
     'tags_input' => [
-        'placeholder' => 'Neue Kennzeichnung',
-    ],
-
-    'text_input' => [
-
-        'actions' => [
-
-            'hide_password' => [
-                'label' => 'Passwort verbergen',
-            ],
-
-            'show_password' => [
-                'label' => 'Passwort anzeigen',
-            ],
-
-        ],
-
-    ],
-
-    'toggle_buttons' => [
-
-        'boolean' => [
-            'true' => 'Ja',
-            'false' => 'Nein',
-        ],
-
+        'placeholder' => 'Neues Etikett',
     ],
 
     'wizard' => [

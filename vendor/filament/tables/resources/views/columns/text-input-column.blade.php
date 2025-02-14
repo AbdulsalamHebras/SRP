@@ -3,18 +3,12 @@
 
     $isDisabled = $isDisabled();
     $state = $getState();
-    $mask = $getMask();
+    $type = $getType();
 
     $alignment = $getAlignment() ?? Alignment::Start;
 
     if (! $alignment instanceof Alignment) {
         $alignment = filled($alignment) ? (Alignment::tryFrom($alignment) ?? $alignment) : null;
-    }
-
-    if (filled($mask)) {
-        $type = 'text';
-    } else {
-        $type = $getType();
     }
 @endphp
 
@@ -49,7 +43,7 @@
                             return
                         }
 
-                        let newState = $refs.newState.value.replaceAll('\\'+String.fromCharCode(34), String.fromCharCode(34))
+                        let newState = $refs.newState.value
 
                         if (state === newState) {
                             return
@@ -65,7 +59,7 @@
         $attributes
             ->merge($getExtraAttributes(), escape: false)
             ->class([
-                'fi-ta-text-input w-full min-w-48',
+                'fi-ta-text-input',
                 'px-3 py-4' => ! $isInline(),
             ])
     }}
@@ -87,7 +81,7 @@
                     theme: $store.theme,
                 }
         "
-        x-on:click.stop.prevent=""
+        x-on:click.stop=""
     >
         {{-- format-ignore-start --}}
         <x-filament::input
@@ -121,7 +115,6 @@
 
                                 isLoading = false
                             ',
-                            'x-mask' . ($mask instanceof \Filament\Support\RawJs ? ':dynamic' : '') => filled($mask) ? $mask : null,
                         ])
                         ->class([
                             match ($alignment) {
