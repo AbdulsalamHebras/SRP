@@ -110,18 +110,15 @@ body {
     border: 1px solid #007bff;
     border-radius: 5px;
     width: 90%;
+    cursor: pointer;
 }
 
-/* ✅ Media Queries */
-
-/* للأجهزة اللوحية الكبيرة (حتى 1024px) -> 3 كروت في الصف */
 @media (max-width: 1024px) {
     .companies {
         grid-template-columns: repeat(3, 1fr); /* 3 كروت */
     }
 }
 
-/* للأجهزة اللوحية الصغيرة (حتى 768px) -> 2 كارد في الصف */
 @media (max-width: 768px) {
     .container {
         width: 90%;
@@ -132,7 +129,6 @@ body {
     }
 }
 
-/* للهواتف (حتى 480px) -> 1 كارد في الصف */
 @media (max-width: 480px) {
     .companies {
         grid-template-columns: repeat(1, 1fr); /* كارد واحد */

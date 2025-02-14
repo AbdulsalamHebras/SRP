@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyRequest;
+use App\Models\Company_follower;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -56,8 +58,24 @@ class CompanyController extends Controller
 
         return redirect()->route('companies.new-company')->with('success', 'Company registered successfully!');
     }
+    public function follow(Request $request, $id)
+    {
+        $user = auth()->user();
 
+        if (!$user) {
+            return redirect()->back()->with('status', 'error')->with('message', 'يجب عليك تسجيل الدخول أولاً.');
+        }
 
+        $company = Company::findOrFail($id);
+
+        if ($user->followedCompanies()->where('company_id', $id)->exists()) {
+            $user->followedCompanies()->detach($id);
+            return redirect()->back()->with('status', 'unfollowed')->with('message', 'تم إلغاء متابعة الشركة بنجاح.');
+        } else {
+            $user->followedCompanies()->attach($id);
+            return redirect()->back()->with('status', 'followed')->with('message', 'تمت متابعة الشركة بنجاح.');
+        }
+    }
 
     public function destroy(Request $request){
         Auth::guard('company')->logout();
@@ -68,5 +86,6 @@ class CompanyController extends Controller
 
         return redirect('/');
     }
+
 
 }

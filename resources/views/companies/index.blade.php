@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{asset('CSS/companies/index.css')}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Companies</title>
+    <title>الشركات</title>
 </head>
 <body>
     @include('includes.header')
@@ -24,7 +25,14 @@
                             <h3 class="company-name"><a href="{{route('companies.details',$company->id)}}">{{$company->name}}</a></h3>
                             <p class="company-field">{{$company->jobField}} </p>
                             <p class="company-location"> {{$company->location}} </p>
-                            <a href="#" class="follow-btn">متابعة</a>
+                            <form action="{{ route('companies.follow', $company->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="follow-btn">
+                                    {{ auth()->check() && $company->isFollowedBy(auth()->user()) ? 'إلغاء المتابعة' : 'متابعة' }}
+                                </button>
+                            </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -32,7 +40,35 @@
 
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.follow-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    let companyId = this.getAttribute('data-company-id');
 
+                    fetch(`/companies.follow/${companyId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Server Response:', data); // Debugging
+                        if (data.status === 'followed') {
+                            this.innerText = "إلغاء المتابعة";
+                        } else {
+                            this.innerText = "متابعة";
+                        }
+                    })
+                    .catch(error => console.error('Fetch Error:', error)); // Debugging
+                });
+            });
+        });
+
+    </script>
     @include('includes.footer')
 
 </body>

@@ -19,8 +19,9 @@ class JobController extends Controller
         } elseif ($sort == 'salary') {
             $query->orderBy('maxSalary', 'desc');
         }
+        $jobsNumber=Job::count();
         $jobs = Job::with('company')->get();
-        return view("Jobs.index", compact('jobs'));
+        return view("Jobs.index", compact('jobs','jobsNumber'));
     }
     public function details(string $id){
         $job = Job::with('company')->where('id', $id)->first();

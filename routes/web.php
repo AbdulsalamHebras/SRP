@@ -50,5 +50,6 @@ Route::name('companies.')->prefix('companies')->group(function () {
     Route::get('/new-company', function () {
         return view('companies.new-company');
     })->name('new-company');
+    Route::post('/follow/{companyid}',[CompanyController::class, 'follow'])->name('follow');
 });
 require __DIR__.'/auth.php';

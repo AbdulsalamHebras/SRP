@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Job;
-
+use App\Models\User;
 
 class Company extends Authenticatable
 {
@@ -54,4 +54,13 @@ class Company extends Authenticatable
     public function jobs(){
         return $this->hasMany(Job::class);
     }
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'company_followers', 'company_id', 'user_id');
+    }
+    public function isFollowedBy(User $user)
+{
+    return $this->followers()->where('user_id', $user->id)->exists();
+}
+
 }

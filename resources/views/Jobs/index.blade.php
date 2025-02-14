@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{asset('CSS/jobs/index.css')}}">
-    <title>Jobs</title>
+    <title>الوظائف</title>
 </head>
 <body>
     @include('includes.header')
     @include('search')
     <div class="container">
             <h1>وظائف في اليمن</h1>
-            <p>تم العثور على <span></span> وظيفة</p>
+            <p>تم العثور على <span>{{$jobsNumber}} </span> وظيفة</p>
 
         <div class="filters">
             <form method="GET" action="{{ route('jobs.index') }}">
