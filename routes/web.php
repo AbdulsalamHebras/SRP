@@ -5,7 +5,8 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
-use Illuminate\Support\Facades\Route;   
+use Illuminate\Support\Facades\Route;
+use App\Models\Job;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('index');
+    $jobs = Job::with('company')->latest()->take(6)->get();
+    return view('index',compact('jobs'));
 })->name('home');
 
 Route::get('/dashboard', function () {

@@ -203,7 +203,8 @@
 
 .show-more-container {
     text-align: center;
-    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 .show-more-btn {
@@ -214,11 +215,14 @@
     border: none;
     border-radius: 5px;
     margin: 10px 0;
-    margin-top: -20px;
+    margin-top: -10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-decoration: none;
 }
-
+.show-more-btn + * {
+    margin-top: 10px; /* Adjust this value as needed */
+}
 .show-more-btn:hover {
     background-color: #0056b3;
 }

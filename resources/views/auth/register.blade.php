@@ -28,7 +28,7 @@
             @enderror
 
             <input type="text" name="email" placeholder="البريد الإلكتروني" id="email"
-                class="form-control @error('email') is-invalid @enderror" name="email"
+                class="form-control @error('email') is-invalid @enderror"
                 value="{{ old('email') }}" required autocomplete="email">
             @error('email')
                 <span class="invalid-feedback" role="alert">
@@ -47,7 +47,7 @@
                 </span>
             @enderror
             <input type="password" name="password" placeholder="كلمة المرور" id="password"
-                class="form-control @error('password') is-invalid @enderror" name="password"
+                class="form-control @error('password') is-invalid @enderror" 
                 required autocomplete="new-password">
             @error('password')
                 <span class="invalid-feedback" role="alert">

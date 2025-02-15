@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ابحث عن وظيفة أحلامك</title>
     <link rel="stylesheet" href="{{asset('CSS/index.css')}}">
+    <link rel="stylesheet" href="{{asset('CSS/jobs/index.css')}}">
+
     <!-- Add Font Awesome for Icons -->
-
-
 </head>
 <body>
     @include('includes/header')
@@ -26,93 +26,81 @@
                 <a href="#" class="search-link">IT</a>
                 <a href="#" class="search-link">manager</a>
                 <a href="#" class="search-link">director</a>
-                <a href="#" class="search-link">عرض المزيد></a>
+                <a href="{{route('jobs.index')}}" class="search-link">عرض المزيد></a>
             </div>
         </div>
     </div>
-    <div class="section-title">من هي الشركات التي توظف على طموح؟</div>
-    <div class="companies-container">
-        <div class="company-logo"><img src="{{asset('images/ICRC.png')}}" alt="شركة 1"></div>
-        <div class="company-logo"><img src="{{asset('images/ICRC.png')}}" alt="شركة 2"></div>
-        <div class="company-logo"><img src="{{asset('images/ICRC.png')}}" alt="شركة 3"></div>
-        <div class="company-logo"><img src="{{asset('images/ICRC.png')}}" alt="شركة 4"></div>
-        <div class="company-logo"><img src="{{asset('images/ICRC.png')}}" alt="شركة 5"></div>
-        <div class="company-logo"><img src="{{asset('images/ICRC.png')}}" alt="شركة 6"></div>
-    </div>
-    <div class="section-title">ابحث عن الوظائف حسب المدينة</div>
-    <div class="cities-container">
-        <div class="city-card" style="background-image: url('https://via.placeholder.com/200x150');">
-            <div class="city-overlay">
-                <div class="city-name">صنعاء</div>
-                <div class="job-count">2,058 وظيفة</div>
+
+    <div class="section-title">أحدث الوظائف</div>
+    <div class="job-listing">
+        @foreach ($jobs as $job)
+            <div class="job-card">
+                <div class="favorite" onclick="event.stopPropagation();">
+                    <i class="heart-icon">&#9829;</i>
+                </div>
+                <a href="{{route('jobs.details',$job->id)}}" class="job-card-link">
+                    <div class="job-info">
+                        <h2 class="job-title">{{$job->jobName}}</h2>
+                        <div class="company">
+                                <img src="{{ asset('storage/logos/' . $job->company->logo) }}" alt="Logo" class="logo">
+                                <span>{{ $job->company->name }}</span>
+                        </div>
+                        <span class="location">{{$job->location}}</span>
+                        <p>{{$job->description}}</p>
+                        <span class="salary">{{$job->currency}}{{$job->maxSalary}} - {{$job->currency}}{{$job->minSalary}}</span>
+                        <span class="time-posted">
+                            @if($job->updated_at > $job->created_at)
+                                {{ $job->updated_at->locale('ar')->diffForHumans() }}
+                            @else
+                                {{ $job->created_at->locale('ar')->diffForHumans() }}
+                            @endif
+                        </span>
+                    </div>
+                </a>
+                <div class="apply-btn" onclick="event.stopPropagation();">
+                        <button onclick="window.location.href={{route('jobs.apply')}}";>التقديم السريع</button>
+                </div>
             </div>
-        </div>
-        <div class="city-card" style="background-image: url('https://via.placeholder.com/200x150');">
-            <div class="city-overlay">
-                <div class="city-name">عدن</div>
-                <div class="job-count">6,361 وظيفة</div>
-            </div>
-        </div>
-        <div class="city-card" style="background-image: url('https://via.placeholder.com/200x150');">
-            <div class="city-overlay">
-                <div class="city-name">تعز</div>
-                <div class="job-count">8,525 وظيفة</div>
-            </div>
-        </div>
-        <div class="city-card" style="background-image: url('https://via.placeholder.com/200x150');">
-            <div class="city-overlay">
-                <div class="city-name">مأرب</div>
-                <div class="job-count">17 وظيفة</div>
-            </div>
-        </div>
-        <div class="city-card" style="background-image: url('https://via.placeholder.com/200x150');">
-            <div class="city-overlay">
-                <div class="city-name">الضالع</div>
-                <div class="job-count">377 وظيفة</div>
-            </div>
-        </div>
-        <div class="city-card" style="background-image: url('https://via.placeholder.com/200x150');">
-            <div class="city-overlay">
-                <div class="city-name">الحديدة</div>
-                <div class="job-count">935 وظيفة</div>
-            </div>
-        </div>
+        @endforeach
     </div>
     <div class="show-more-container">
-        <button class="show-more-btn" id="show-more-btn">عرض المزيد</button>
+        <a href="{{route('jobs.index')}}" class="show-more-btn" id="show-more-btn">عرض المزيد</a>
     </div>
 
     @include('includes.footer')
 
-<script>
-    const navLinks = document.querySelectorAll('header div a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            // Remove the active class from all links
-            navLinks.forEach(nav => nav.classList.remove('active'));
+    <script>
 
-            // Add the active class to the clicked link
-            link.classList.add('active');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll(".heart-icon").forEach(icon => {
+            icon.addEventListener("click", function() {
+                this.style.color = this.style.color === "red" ? "#ccc" : "red";
+                    });
+                });
+            const navLinks = document.querySelectorAll('header div a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+
+                    link.classList.add('active');
+                });
+            });
+            const messageIcon = document.querySelector('.message-icon');
+            const dropdownContent = document.querySelector('.message-dropdown-content');
+
+            messageIcon.addEventListener('click', function (event) {
+                event.stopPropagation();
+                dropdownContent.style.display =
+                    dropdownContent.style.display === 'block' ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', function () {
+                dropdownContent.style.display = 'none';
+            });
         });
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-        const messageIcon = document.querySelector('.message-icon');
-        const dropdownContent = document.querySelector('.message-dropdown-content');
 
-        // فتح القائمة عند النقر على الأيقونة
-        messageIcon.addEventListener('click', function (event) {
-            event.stopPropagation(); // لمنع إغلاق القائمة عند النقر على الأيقونة
-            dropdownContent.style.display =
-                dropdownContent.style.display === 'block' ? 'none' : 'block';
-        });
-
-        // إغلاق القائمة عند النقر خارجها
-        document.addEventListener('click', function () {
-            dropdownContent.style.display = 'none';
-        });
-    });
-</script>
-
+    </script>
 </body>
 </html>
 

@@ -67,6 +67,9 @@ header span {
     align-items: flex-start;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
+    margin-bottom: 10px;
+    margin-left: 60px;
+    margin-right: 60px;
 }
 
 .favorite {

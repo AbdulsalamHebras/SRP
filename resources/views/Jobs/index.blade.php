@@ -55,18 +55,15 @@
                     </div>
                 </div>
             @endforeach
-
-
         </div>
 
- 
+
     </div>
     @include('includes.footer')
     <script>
         function toggleFavorite(icon) {
             icon.style.color = icon.style.color === 'red' ? '#ccc' : 'red';
         }
-
     </script>
 </body>
 </html>
