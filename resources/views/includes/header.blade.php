@@ -70,6 +70,8 @@
         const navLinks = document.getElementById('nav-links');
         const closeBtn = document.getElementById('close-btn');
         const navLinksItems = document.querySelectorAll('.nav-link');
+        closeBtn.style.display = 'none';
+
 
         navLinksItems.forEach(item => {
             item.addEventListener('click', () => {

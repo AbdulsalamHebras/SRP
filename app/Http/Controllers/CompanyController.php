@@ -60,6 +60,7 @@ class CompanyController extends Controller
     }
     public function follow(Request $request, $id)
     {
+        
         $user = auth()->user();
 
         if (!$user) {
