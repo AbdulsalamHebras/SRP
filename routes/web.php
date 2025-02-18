@@ -46,12 +46,12 @@ Route::name('jobs.')->group(function () {
 
 Route::name('companies.')->prefix('companies')->group(function () {
     Route::get('/', [CompanyController::class, 'index'])->name('index');
-    Route::get('/company-details/{companyid}', [CompanyController::class, 'details'])->name('details');
+    Route::get('/details/{companyid}', [CompanyController::class, 'details'])->name('details');
     Route::post('/register', [CompanyController::class, 'register'])->name('register');
     Route::post('/logout', [CompanyController::class, 'destroy'])->name('logout');
     Route::get('/new-company', function () {
         return view('companies.new-company');
     })->name('new-company');
-    Route::post('/follow/{companyid}',[CompanyController::class, 'follow'])->name('follow');
+    Route::middleware('auth')->post('/follow/{companyid}',[CompanyController::class, 'follow'])->name('follow');
 });
 require __DIR__.'/auth.php';

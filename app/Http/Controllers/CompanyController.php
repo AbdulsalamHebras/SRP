@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers; 
+namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company_follower;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     public function index(){
-        $companies=Company::all();
+        $companies = Company::where('isAccepted', true)->get();
         return view("companies.index", compact('companies'));
     }
     public function details($id){

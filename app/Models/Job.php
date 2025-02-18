@@ -23,6 +23,19 @@ class Job extends Model
         'reqGrade'
 
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($job) {
+ 
+           $job->company->increment('jobsNumber');
+        });
+
+        static::deleted(function ($job) {
+            $job->company->decrement('jobsNumber');
+        });
+    }
     public function company()
     {
         return $this->belongsTo(Company::class);
