@@ -46,7 +46,7 @@
     </div>
     @if (Auth::guard('company')->check())
         <div class="edit-btn-container">
-            <form action="get" method="{{route('company.edit',$company->id)}}" >
+            <form action="{{route('company.edit',$company->id)}}" method="GET" >
                 @csrf
                 <button class="edit-btn">تعديل</button>
             </form>

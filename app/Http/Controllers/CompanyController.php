@@ -18,7 +18,7 @@ class CompanyController extends Controller
         return view("companies.index", compact('companies'));
     }
     public function edit($id){
-        $company=Company::where('id',$id)->frist();
+        $company=Company::where('id',$id)->first();
         return view('companies.edit',compact('company'));
     }
     public function details($id){
