@@ -58,8 +58,7 @@ Route::name('companies.')->prefix('companies')->group(function () {
 Route::middleware('auth:company')->name('company.')->prefix('company')->group(function () {
     Route::get('/dashboard', function () {
         $company = Auth::guard('company')->user();
-        $jobs = $company->jobs;
-        return view('companies.details', compact('company', 'jobs'));
+        return view('companies.details', compact('company'));
     })->name('dashboard');
     Route::get('/edit/{companyid}',[CompanyController::class,'edit'])->name('edit');
 
