@@ -17,14 +17,20 @@
                     <h1>ط<span>موح</span></h1>
                 </a>
             </div>
-
             <div class="nav-links" id="nav-links">
-                <a href="{{route('main')}}" class="nav-link {{ request()->routeIs('main') ? 'active' : '' }}">الرئيسية</a>
-                <a href="{{route('jobs.index')}}" class="nav-link {{ request()->routeIs('jobs.index') ? 'active' : '' }}">البحث عن وظائف</a>
-                <a href="{{route('companies.index')}}" class="nav-link {{ request()->routeIs('companies.index') ? 'active' : '' }}">الشركات</a>
-                <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">طلبات التوظيف</a>
-                <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">من شاهد سيرتي؟</a>
+                @if (Auth::guard('company')->check())
+                    <a href="{{route('company.dashboard')}}" class="nav-link {{ request()->routeIs('company.dashboard') ? 'active' : '' }}">معلومات الشركة</a>
+                    {{-- <a href="{{route()}}" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">الأعمال</a> --}}
+                    <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">طلبات التوظيف</a>
+                @else
+                    <a href="{{route('main')}}" class="nav-link {{ request()->routeIs('main') ? 'active' : '' }}">الرئيسية</a>
+                    <a href="{{route('jobs.index')}}" class="nav-link {{ request()->routeIs('jobs.index') ? 'active' : '' }}">البحث عن وظائف</a>
+                    <a href="{{route('companies.index')}}" class="nav-link {{ request()->routeIs('companies.index') ? 'active' : '' }}">الشركات</a>
+                    <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">طلبات التوظيف</a>
+                    <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">من شاهد سيرتي؟</a>
+                @endif
             </div>
+
 
             <div class="hamburger-menu" id="hamburger-menu">
                 <div></div>
@@ -45,20 +51,21 @@
                     <a href="#">عرض الكل</a>
                 </div>
             </div>
+
             <div class="auth-links">
                 @if(Auth::guard('web')->check())
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="nav-link">تسجيل الخروج (مستخدم)</button>
+                        <button type="submit" class="nav-link"><img src="{{asset('images/Icons/logout.png')}}" alt="" height="30px" width="30px"></button>
                     </form>
-                @elseif(Auth::guard('company')->check())
-                    <form action="{{ route(name: 'companies.logout') }}" method="POST">
+                @elseif (Auth::guard('company')->check())
+                    <form action="{{ route('companies.logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="nav-link">تسجيل الخروج (شركة)</button>
+                        <button type="submit" class="nav-link"><img src="{{asset('images/Icons/logout.png')}}" alt="" height="30px" width="30px"></button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="nav-link">تسجيل الدخول</a>
-                    <a href="{{ route('register') }}" class="nav-link">إنشاء حساب</a>
+                    <a href="{{ route('login') }}" class="nav-link"> <img src="{{asset('images/Icons/login.png')}}" alt=""  height="30px" width="30px"> </a>
+                    <a href="{{ route('register') }}" class="nav-link"> <img src="{{asset('images/Icons/register.png')}}" alt=""  height="30px" width="30px">  </a>
                 @endif
 
             </div>

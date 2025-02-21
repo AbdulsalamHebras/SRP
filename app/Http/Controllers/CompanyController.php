@@ -14,8 +14,12 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     public function index(){
-        $companies=Company::all();
+        $companies = Company::where('isAccepted', true)->get();
         return view("companies.index", compact('companies'));
+    }
+    public function edit($id){
+        $company=Company::where('id',$id)->frist();
+        return view('companies.edit',compact('company'));
     }
     public function details($id){
         $company = Company::with('jobs')->where('id', $id)->first();
@@ -60,7 +64,7 @@ class CompanyController extends Controller
     }
     public function follow(Request $request, $id)
     {
-        
+
         $user = auth()->user();
 
         if (!$user) {

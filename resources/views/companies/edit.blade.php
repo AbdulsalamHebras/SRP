@@ -1,27 +1,18 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="{{asset('CSS/auth/login.css')}}">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="{{asset('tinymce/js/tinymce/tinymce.min.js')}}"></script>
+    <title> تعديل بيانات {{$company->name}}</title>
 </head>
 <body>
-    <div class="login-container">
-        <!-- Logo -->
-        <div class="logo">
-            <a href="{{route('home')}}">
-                <h1>ط<span>موح</span></h1>
-            </a>
-        </div>
-        <!-- Form Fields -->
-        <form method="POST"  enctype="multipart/form-data" id="registrationForm"
-            data-default-action="{{ route('register') }}"
-            data-company-action="{{ route('companies.register') }}">
+    @include('includes.header')
+    <form method="POST"  enctype="multipart/form-data">
             @csrf
             <input type="text" name="name" placeholder="اسم المستخدم" id="name"
-                class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}"
+                class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $company->name }}"
                 required autocomplete="name" autofocus>
             @error('name')
                 <span class="invalid-feedback" role="alert">
@@ -177,63 +168,7 @@
 
             <button type="submit" class="btn">إنشاء</button>
         </form>
-        <div class="footer-text">
-            <a href="{{route('login')}}"> لدي حساب</a>
-        </div>
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-        tinymce.init({
-            selector: '#mission, #vision, #aboutus',
-            menubar: false,
-            plugins: 'lists link',
-            toolbar: 'bold italic underline strikethrough | bullist numlist blockquote | link',
-            setup: function (editor) {
-                editor.on('change', function () {
-                    tinymce.triggerSave();
-                });
-            }
-        });
-
-            const userType = document.getElementById('userType');
-            const companyContainer = document.getElementById('company-container');
-            const form = document.getElementById('registrationForm');
-
-
-            const defaultAction = form.getAttribute('data-default-action');
-            const companyAction = form.getAttribute('data-company-action');
-
-            userType.addEventListener('change', function() {
-                if (userType.value === 'company') {
-                    companyContainer.style.display = 'block';
-
-                    ["jobField", "location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"]
-                    .forEach(function(id) {
-                        let field = document.getElementById(id);
-                        if (field) {
-                            field.setAttribute('required', true);
-                        }
-                    });
-
-                    form.setAttribute('action', companyAction);
-                } else {
-                    companyContainer.style.display = 'none';
-
-                    ["jobField", "location", "mission", "vision", "dateOfCreation", "aboutus", "logo", "phoneNumber", "website", "record"]
-                    .forEach(function(id) {
-                        let field = document.getElementById(id);
-                        if (field) {
-                            field.removeAttribute('required');
-                        }
-                    });
-
-                    form.setAttribute('action', defaultAction);
-                }
-            });
-        });
-
-    </script>
-
+    @include('includes.footer')
 
 </body>
 </html>
