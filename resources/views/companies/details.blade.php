@@ -46,12 +46,11 @@
     </div>
     @if (Auth::guard('company')->check())
         <div class="edit-btn-container">
-            <form action="{{route('company.edit',$company->id)}}" method="GET" >
+            <form action="{{route('company.edit',$company->id)}}" enctype="multipart/form-data" method="GET" >
                 @csrf
                 <button class="edit-btn">تعديل</button>
             </form>
         </div>
-
     @endif
     @if (!Auth::guard('company')->check())
         <div class="job-listing">
