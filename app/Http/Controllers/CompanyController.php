@@ -17,6 +17,10 @@ class CompanyController extends Controller
         $companies = Company::where('isAccepted', true)->get();
         return view("companies.index", compact('companies'));
     }
+    public function edit($id){
+        $company=Company::where('id',$id)->frist();
+        return view('companies.edit',compact('company'));
+    }
     public function details($id){
         $company = Company::with('jobs')->where('id', $id)->first();
         return view('companies.details',compact('company'));

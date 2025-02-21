@@ -25,7 +25,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         // Validate and get the input
         $validated = $request->validated();
@@ -37,12 +37,9 @@ class AuthenticatedSessionController extends Controller
             $company = Company::where('email', $email)->first();
 
             if (!$company) {
-                return back()->withErrors(['email' => 'البريد الإلكتروني غير موجود'])->withInput();
+                return back()->withErrors(['email' => 'البريد الإلكتروني او الباسورد غير صحيحه'])->withInput();
             }
 
-            if (!Hash::check($password, $company->password)) {
-                return back()->withErrors(['password' => 'كلمة المرور غير صحيحة'])->withInput();
-            }
 
             if (!$company->isAccepted) {
                 return back()->withErrors(['accountType' => 'الحساب غير مقبول بعد'])->withInput();
@@ -51,15 +48,15 @@ class AuthenticatedSessionController extends Controller
             Auth::guard('company')->login($company);
 
             $request->session()->regenerate();
+            return redirect()->route('company.dashboard');
 
-            return redirect()->intended(RouteServiceProvider::HOME);
         }
 
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME)->with('user',auth()->user());
     }
 
     /**

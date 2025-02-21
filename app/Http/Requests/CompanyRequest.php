@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class CompanyRequest extends FormRequest
 {
@@ -25,7 +26,12 @@ class CompanyRequest extends FormRequest
         return [
         'name' => ['required', 'string', 'max:255', 'unique:companies,name'],
         'email' => ['required', 'email', 'unique:companies,email'],
-        'password' => ['required', 'confirmed', 'min:8'],
+        'password' => [
+                'required',
+                'confirmed',
+                Password::defaults(),
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+            ],
         'commercialRegister' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:10240'],
         'jobField' => ['required', 'string', 'max:255'],
         'location' => ['required', 'string', 'max:255'],
@@ -45,5 +51,6 @@ class CompanyRequest extends FormRequest
 
 
             ];
-    }
+
+   }
 }

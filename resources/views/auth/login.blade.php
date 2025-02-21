@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="{{asset('CSS/includes/header.css')}}">
     <link rel="stylesheet" href="{{asset('CSS/auth/login.css')}}">
 </head>
 <body>
     <div class="login-container">
         <!-- Logo -->
         <div class="logo">
-            <img src="https://via.placeholder.com/100" alt="Logo">
+            <a href="{{route('home')}}">
+                <h1>ط<span>موح</span></h1>
+            </a>
         </div>
 
         <!-- Form Fields -->

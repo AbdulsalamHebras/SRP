@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Job;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,15 @@ Route::name('companies.')->prefix('companies')->group(function () {
     Route::get('/new-company', function () {
         return view('companies.new-company');
     })->name('new-company');
-    Route::middleware('auth')->post('/follow/{companyid}',[CompanyController::class, 'follow'])->name('follow');
+    Route::middleware('auth')->post('/follow/{companyid}', [CompanyController::class, 'follow'])->name('follow');
+});
+Route::middleware('auth:company')->name('company.')->prefix('company')->group(function () {
+    Route::get('/dashboard', function () {
+        $company = Auth::guard('company')->user();
+        $jobs = $company->jobs;
+        return view('companies.details', compact('company', 'jobs'));
+    })->name('dashboard');
+    Route::get('/edit/{companyid}',[CompanyController::class,'edit'])->name('edit');
+
 });
 require __DIR__.'/auth.php';
