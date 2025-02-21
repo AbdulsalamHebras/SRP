@@ -31,7 +31,7 @@
     </div>
 
     <div class="content">
-        <div class="notification">
+        <div class="notification"> 
             <label class="switch">
                 <input type="checkbox">
                 <span class="slider round"></span>
