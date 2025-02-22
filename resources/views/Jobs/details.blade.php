@@ -31,12 +31,11 @@
     </div>
 
     <div class="content">
-        <div class="notification"> 
+        <div class="notification">
             <label class="switch">
                 <input type="checkbox">
                 <span class="slider round"></span>
             </label>
-            <span>أنشئ تنبيهاً وظيفياً للوظائف المشابهة</span>
         </div>
         <h3 class="section-title">الوصف الوظيفي</h3>
         <p class="job-description">

@@ -61,6 +61,7 @@ Route::middleware('auth:company')->name('company.')->prefix('company')->group(fu
         return view('companies.details', compact('company'));
     })->name('dashboard');
     Route::get('/edit/{companyid}',[CompanyController::class,'edit'])->name('edit');
+    Route::put('/edit/{companyid}',[CompanyController::class,'update'])->name('update');
 
 });
 require __DIR__.'/auth.php';
