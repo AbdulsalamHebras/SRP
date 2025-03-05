@@ -11,7 +11,7 @@
 <body>
     @include('includes.header')
     <div class="form-container">
-        <form method="POST" enctype="multipart/form-data" action>
+        <form method="POST" enctype="multipart/form-data" action="{{route('company.update',$company->id)}}">
             @csrf
             @method('PUT')
             <label for="name">أسم الشركة</label>
