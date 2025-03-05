@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-
     public function index(Request $request) {
         $sort = $request->input('sort', 'date');
 
@@ -22,7 +21,7 @@ class JobController extends Controller
             $query->orderBy('maxSalary', 'desc');
         }
 
-        $jobs = $query->get(); // Execute the query AFTER sorting
+        $jobs = $query->get();
         $jobsNumber = $jobs->count();
 
         return view("Jobs.index", compact('jobs', 'jobsNumber', 'sort'));
