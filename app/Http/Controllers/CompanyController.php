@@ -10,6 +10,7 @@ use App\Models\Job;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 class CompanyController extends Controller
 {
@@ -20,6 +21,78 @@ class CompanyController extends Controller
     public function edit($id){
         $company=Company::where('id',$id)->first();
         return view('companies.edit',compact('company'));
+    }
+    public function update(Request $request, $id){
+        $company = Company::findOrFail($id);
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:companies,name,'.$id],
+        'email' => ['required', 'email', 'unique:companies,email,'.$id],
+        'password' => [
+                'nullable',
+                'confirmed',
+                Password::defaults(),
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+            ],
+        'commercialRegister' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:10240'],
+        'jobField' => ['required', 'string', 'max:255'],
+        'location' => ['required', 'string', 'max:255'],
+        'mission' => ['required', 'string'],
+        'vision' => ['required', 'string'],
+        'dateOfCreation' => ['required', 'date', 'before:today'], // Ensures the date is before today
+        'aboutus' => ['required', 'string'],
+        'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],
+        'phoneNumber' => [
+            'required',
+            'numeric',
+            'digits:9',
+            'regex:/^(77|78|71|73|70)\d{7}$/',
+            'unique:companies,phoneNumber,'.$id
+        ],
+        'website' => ['required', 'url','unique:companies,website,'.$id],
+        ]);
+        $logoName = $company->logo; 
+        $recordName = $company->commercialRegister;
+        if ($request->hasFile('logo')) {
+            if ($company->logo) {
+                \Storage::disk('public')->delete('logos/' . $company->logo);
+            }
+
+            $logo = $request->file('logo');
+            $logoName = $logo->getClientOriginalExtension();
+            $logo->storeAs('logos', $logoName, 'public');
+
+        }
+        if ($request->hasFile('commercialRegister')) {
+            if ($company->commercialRegister) {
+                \Storage::disk('public')->delete('records/' . $company->commercialRegister);
+            }
+
+            $record = $request->file('commercialRegister');
+            $recordName = $record->getClientOriginalExtension();
+            $record->storeAs('records', $recordName, 'public');
+        }
+        $company->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phoneNumber' => $validated['phoneNumber'],
+            'website' => $validated['website'],
+            'jobField' => $validated['jobField'],
+            'location' => $validated['location'],
+            'mission' => $validated['mission'],
+            'vision' => $validated['vision'],
+            'logo'=>$logoName,
+            'commercialRegister'=>$recordName,
+            'dateOfCreation' => $validated['dateOfCreation'],
+            'aboutus' => $validated['aboutus'],
+        ]);
+
+        if ($request->filled('password')) {
+            $company->update([
+                'password' => Hash::make($validated['password']),
+            ]);
+        }
+        return redirect()->route('company.dashboard')->with('success', 'تم تحديث بيانات الشركة بنجاح!');
+
     }
     public function details($id){
         $company = Company::with('jobs')->where('id', $id)->first();
