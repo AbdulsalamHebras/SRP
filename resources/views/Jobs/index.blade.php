@@ -18,7 +18,7 @@
             <form method="GET" action="{{ route('jobs.index') }}">
                 <label for="sort">الترتيب حسب:</label>
                 <select id="sort" name="sort" onchange="this.form.submit()">
-                    <option value="date" {{ request('sort') == 'date' ? 'selected' : '' }}>التاريخ</option>
+                    <option value="date" {{ request('sort', 'date') == 'date' ? 'selected' : '' }}>التاريخ</option>
                     <option value="type" {{ request('sort') == 'type' ? 'selected' : '' }}>نوع الوظيفة</option>
                     <option value="salary" {{ request('sort') == 'salary' ? 'selected' : '' }}>الراتب</option>
                 </select>

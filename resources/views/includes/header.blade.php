@@ -20,7 +20,7 @@
             <div class="nav-links" id="nav-links">
                 @if (Auth::guard('company')->check())
                     <a href="{{route('company.dashboard')}}" class="nav-link {{ request()->routeIs('company.dashboard') ? 'active' : '' }}">معلومات الشركة</a>
-                    {{-- <a href="{{route()}}" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">الأعمال</a> --}}
+                    <a href="{{route('company.jobs',auth()->guard('company')->user()->id)}}" class="nav-link {{ request()->routeIs('company.jobs') ? 'active' : '' }}">الأعمال</a>
                     <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">طلبات التوظيف</a>
                 @else
                     <a href="{{route('main')}}" class="nav-link {{ request()->routeIs('main') ? 'active' : '' }}">الرئيسية</a>

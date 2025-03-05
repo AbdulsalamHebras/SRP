@@ -6,7 +6,7 @@ use App\Http\Requests\CompanyRequest;
 use App\Models\Company_follower;
 use Illuminate\Http\Request;
 use App\Models\Company;
-use App\Models\User;
+use App\Models\Job;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +25,32 @@ class CompanyController extends Controller
         $company = Company::with('jobs')->where('id', $id)->first();
         return view('companies.details',compact('company'));
     }
+    public function jobs(Request $request, $id) {
+        $sort = $request->input('sort', 'date');
+
+        $company = Company::find($id);
+
+        if (!$company) {
+            abort(404, 'الشركة غير موجودة');
+        }
+
+        $companyjobs = Job::where('company_id', $id);
+
+        if ($sort === 'date') {
+            $companyjobs->orderBy('created_at', 'desc');
+        } elseif ($sort === 'type') {
+            $companyjobs->orderBy('jobType', 'asc');
+        } elseif ($sort === 'maxsalary') {
+            $companyjobs->orderBy('maxSalary', 'desc');
+        }
+
+        $companyjobs = $companyjobs->get();
+        $jobsNumber = $companyjobs->count();
+
+        return view('companies.jobs', compact('companyjobs', 'jobsNumber', 'sort'));
+    }
+
+
     public function register(CompanyRequest $request)
     {
         $validated = $request->validated();
