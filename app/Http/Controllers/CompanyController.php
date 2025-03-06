@@ -50,7 +50,7 @@ class CompanyController extends Controller
         ],
         'website' => ['required', 'url','unique:companies,website,'.$id],
         ]);
-        $logoName = $company->logo; 
+        $logoName = $company->logo;
         $recordName = $company->commercialRegister;
         if ($request->hasFile('logo')) {
             if ($company->logo) {
@@ -98,29 +98,29 @@ class CompanyController extends Controller
         $company = Company::with('jobs')->where('id', $id)->first();
         return view('companies.details',compact('company'));
     }
-    public function jobs(Request $request, $id) {
+    public function jobs(Request $request) {
         $sort = $request->input('sort', 'date');
 
-        $company = Company::find($id);
+        $company = Company::find(auth()->guard('company')->user()->id);
 
         if (!$company) {
             abort(404, 'الشركة غير موجودة');
         }
 
-        $companyjobs = Job::where('company_id', $id);
+        $jobs = Job::where('company_id', auth()->guard('company')->user()->id);
 
         if ($sort === 'date') {
-            $companyjobs->orderBy('created_at', 'desc');
+            $jobs->orderBy('created_at', 'desc');
         } elseif ($sort === 'type') {
-            $companyjobs->orderBy('jobType', 'asc');
+            $jobs->orderBy('jobType', 'asc');
         } elseif ($sort === 'maxsalary') {
-            $companyjobs->orderBy('maxSalary', 'desc');
+            $jobs->orderBy('maxSalary', 'desc');
         }
 
-        $companyjobs = $companyjobs->get();
-        $jobsNumber = $companyjobs->count();
+        $jobs = $jobs->get();
+        $jobsNumber = $jobs->count();
 
-        return view('companies.jobs', compact('companyjobs', 'jobsNumber', 'sort'));
+        return view('companies.jobs', compact('jobs', 'jobsNumber', 'sort'));
     }
 
 

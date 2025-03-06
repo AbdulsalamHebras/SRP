@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('minSalary');
             $table->integer('maxSalary');
             $table->string('currency');
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
             $table->text('requirements');
             $table->date('expirationDate');

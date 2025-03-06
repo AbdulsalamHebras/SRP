@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Job;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -25,6 +26,10 @@ class JobController extends Controller
         $jobsNumber = $jobs->count();
 
         return view("Jobs.index", compact('jobs', 'jobsNumber', 'sort'));
+    }
+    public function create() {
+
+        return view('jobs.add');
     }
 
     public function details(string $id){

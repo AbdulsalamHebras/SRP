@@ -19,13 +19,8 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $faker = \Faker\Factory::create();
-        for ($i = 0; $i < 100; $i++) {
 
-        DB::table('categories')->insert([
-            'name'=>$faker->company,
-        ]);
-    }
+    
 
     }
 }

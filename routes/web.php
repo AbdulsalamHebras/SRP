@@ -41,6 +41,7 @@ Route::get('/main', [MainPageController::class,'main'])->name('main');
 
 Route::name('jobs.')->group(function () {
     Route::get('/jobs', [JobController::class, 'index'])->name('index');
+    Route::get('/jobs/add', [JobController::class, 'create'])->name('add');
     Route::get('/job-details/{jobid}', [JobController::class, 'details'])->name('details');
     Route::get('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
 });
@@ -53,7 +54,7 @@ Route::name('companies.')->prefix('companies')->group(function () {
     Route::get('/new-company', function () {
         return view('companies.new-company');
     })->name('new-company');
-    Route::middleware('auth')->post('/follow/{companyid}', [CompanyController::class, 'follow'])->name('follow');
+    Route::middleware('auth::user')->post('/follow/{companyid}', [CompanyController::class, 'follow'])->name('follow');
 });
 Route::middleware('auth:company')->name('company.')->prefix('company')->group(function () {
     Route::get('/dashboard', function () {
@@ -61,7 +62,7 @@ Route::middleware('auth:company')->name('company.')->prefix('company')->group(fu
         return view('companies.details', compact('company'));
     })->name('dashboard');
     Route::get('/edit/{companyid}',[CompanyController::class,'edit'])->name('edit');
-    Route::get('/{companyid}/jobs',[CompanyController::class,'jobs'])->name('jobs');
+    Route::get('/jobs',[CompanyController::class,'jobs'])->name('jobs');
 
 });
 require __DIR__.'/auth.php';

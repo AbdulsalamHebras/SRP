@@ -17,12 +17,12 @@ class CompanySeeder extends Seeder
 
         $faker = \Faker\Factory::create();
         $yemeniCities = ['صنعاء', 'عدن', 'تعز', 'حضرموت', 'الحديدة', 'إب', 'ذمار', 'المكلا', 'سيئون', 'صعدة'];
-        $websites = []; 
+        $websites = [];
 
         for ($i = 0; $i < 100; $i++) {
             do {
-                $website = $faker->unique()->domainName; // توليد موقع فريد
-            } while (in_array($website, $websites)); // التحقق من عدم تكراره
+                $website = $faker->unique()->domainName;
+            } while (in_array($website, $websites));
 
             $websites[] = $website;
             DB::table('companies')->insert([

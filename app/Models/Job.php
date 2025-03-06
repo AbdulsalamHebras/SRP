@@ -28,7 +28,7 @@ class Job extends Model
         parent::boot();
 
         static::created(function ($job) {
- 
+
            $job->company->increment('jobsNumber');
         });
 

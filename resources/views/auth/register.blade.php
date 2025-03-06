@@ -65,48 +65,49 @@
             @enderror
             <div id="company-container">
                 <select name="jobField" id="jobField" class="form-control @error('jobField') is-invalid @enderror">
-                    <option value="" disabled selected>اختر مجال العمل</option>
-                    <option value="Agriculture & Farming">الزراعة والثروة الحيوانية</option>
-                    <option value="Fishing & Aquaculture">الصيد وتربية الأحياء المائية</option>
-                    <option value="Forestry & Logging">الغابات وقطع الأشجار</option>
-                    <option value="Mining & Quarrying">التعدين واستخراج المعادن</option>
-                    <option value="Oil & Gas Extraction">استخراج النفط والغاز</option>
-                    <option value="Automotive Manufacturing">صناعة السيارات</option>
-                    <option value="Aerospace & Defense">الطيران والدفاع</option>
-                    <option value="Construction & Civil Engineering">البناء والهندسة المدنية</option>
-                    <option value="Electronics & Semiconductors">الإلكترونيات وأشباه الموصلات</option>
-                    <option value="Energy Production">إنتاج الطاقة</option>
-                    <option value="Food & Beverage Processing">تصنيع الأغذية والمشروبات</option>
-                    <option value="Machinery & Equipment Manufacturing">تصنيع الآلات والمعدات</option>
-                    <option value="Metal & Steel Industry">صناعة المعادن والصلب</option>
-                    <option value="Textile & Apparel Manufacturing">صناعة النسيج والملابس</option>
-                    <option value="Chemical Industry">الصناعات الكيميائية</option>
-                    <option value="Pharmaceuticals & Biotechnology">الصيدلة والتكنولوجيا الحيوية</option>
-                    <option value="Banking & Finance">البنوك والتمويل</option>
-                    <option value="Insurance">التأمين</option>
-                    <option value="Real Estate & Property Development">العقارات والتطوير العقاري</option>
-                    <option value="Retail & E-commerce">التجارة الإلكترونية والتجزئة</option>
-                    <option value="Wholesale Trade">التجارة بالجملة</option>
-                    <option value="Hospitality & Tourism">الضيافة والسياحة</option>
-                    <option value="Healthcare & Medical Services">الرعاية الصحية والخدمات الطبية</option>
-                    <option value="Transportation & Logistics">النقل والخدمات اللوجستية</option>
-                    <option value="Education & Training">التعليم والتدريب</option>
-                    <option value="Media & Entertainment">الإعلام والترفيه</option>
-                    <option value="Telecommunications">الاتصالات</option>
-                    <option value="Consulting & Professional Services">الاستشارات والخدمات المهنية</option>
-                    <option value="Law & Legal Services">القانون والخدمات القانونية</option>
-                    <option value="Information Technology & Software Development">تكنولوجيا المعلومات وتطوير البرمجيات</option>
-                    <option value="Cybersecurity">الأمن السيبراني</option>
-                    <option value="Artificial Intelligence & Machine Learning">الذكاء الاصطناعي وتعلم الآلة</option>
-                    <option value="Research & Development (R&D)">البحث والتطوير</option>
-                    <option value="Data Science & Analytics">علم البيانات والتحليلات</option>
-                    <option value="Digital Marketing & Advertising">التسويق الرقمي والإعلانات</option>
-                    <option value="Cloud Computing & Hosting Services">الحوسبة السحابية وخدمات الاستضافة</option>
-                    <option value="Government & Public Administration">الحكومة والإدارة العامة</option>
-                    <option value="Nonprofit Organizations & NGOs">المنظمات غير الربحية والمنظمات غير الحكومية</option>
-                    <option value="International Organizations">المنظمات الدولية</option>
-                    <option value="Think Tanks & Policy Research">مراكز الأبحاث والسياسات</option>
+                    <option value="" disabled {{ old('jobField') == '' ? 'selected' : '' }}>اختر مجال العمل</option>
+                    <option value="Agriculture & Farming" {{ old('jobField') == 'Agriculture & Farming' ? 'selected' : '' }}>الزراعة والثروة الحيوانية</option>
+                    <option value="Fishing & Aquaculture" {{ old('jobField') == 'Fishing & Aquaculture' ? 'selected' : '' }}>الصيد وتربية الأحياء المائية</option>
+                    <option value="Forestry & Logging" {{ old('jobField') == 'Forestry & Logging' ? 'selected' : '' }}>الغابات وقطع الأشجار</option>
+                    <option value="Mining & Quarrying" {{ old('jobField') == 'Mining & Quarrying' ? 'selected' : '' }}>التعدين واستخراج المعادن</option>
+                    <option value="Oil & Gas Extraction" {{ old('jobField') == 'Oil & Gas Extraction' ? 'selected' : '' }}>استخراج النفط والغاز</option>
+                    <option value="Automotive Manufacturing" {{ old('jobField') == 'Automotive Manufacturing' ? 'selected' : '' }}>صناعة السيارات</option>
+                    <option value="Aerospace & Defense" {{ old('jobField') == 'Aerospace & Defense' ? 'selected' : '' }}>الطيران والدفاع</option>
+                    <option value="Construction & Civil Engineering" {{ old('jobField') == 'Construction & Civil Engineering' ? 'selected' : '' }}>البناء والهندسة المدنية</option>
+                    <option value="Electronics & Semiconductors" {{ old('jobField') == 'Electronics & Semiconductors' ? 'selected' : '' }}>الإلكترونيات وأشباه الموصلات</option>
+                    <option value="Energy Production" {{ old('jobField') == 'Energy Production' ? 'selected' : '' }}>إنتاج الطاقة</option>
+                    <option value="Food & Beverage Processing" {{ old('jobField') == 'Food & Beverage Processing' ? 'selected' : '' }}>تصنيع الأغذية والمشروبات</option>
+                    <option value="Machinery & Equipment Manufacturing" {{ old('jobField') == 'Machinery & Equipment Manufacturing' ? 'selected' : '' }}>تصنيع الآلات والمعدات</option>
+                    <option value="Metal & Steel Industry" {{ old('jobField') == 'Metal & Steel Industry' ? 'selected' : '' }}>صناعة المعادن والصلب</option>
+                    <option value="Textile & Apparel Manufacturing" {{ old('jobField') == 'Textile & Apparel Manufacturing' ? 'selected' : '' }}>صناعة النسيج والملابس</option>
+                    <option value="Chemical Industry" {{ old('jobField') == 'Chemical Industry' ? 'selected' : '' }}>الصناعات الكيميائية</option>
+                    <option value="Pharmaceuticals & Biotechnology" {{ old('jobField') == 'Pharmaceuticals & Biotechnology' ? 'selected' : '' }}>الصيدلة والتكنولوجيا الحيوية</option>
+                    <option value="Banking & Finance" {{ old('jobField') == 'Banking & Finance' ? 'selected' : '' }}>البنوك والتمويل</option>
+                    <option value="Insurance" {{ old('jobField') == 'Insurance' ? 'selected' : '' }}>التأمين</option>
+                    <option value="Real Estate & Property Development" {{ old('jobField') == 'Real Estate & Property Development' ? 'selected' : '' }}>العقارات والتطوير العقاري</option>
+                    <option value="Retail & E-commerce" {{ old('jobField') == 'Retail & E-commerce' ? 'selected' : '' }}>التجارة الإلكترونية والتجزئة</option>
+                    <option value="Wholesale Trade" {{ old('jobField') == 'Wholesale Trade' ? 'selected' : '' }}>التجارة بالجملة</option>
+                    <option value="Hospitality & Tourism" {{ old('jobField') == 'Hospitality & Tourism' ? 'selected' : '' }}>الضيافة والسياحة</option>
+                    <option value="Healthcare & Medical Services" {{ old('jobField') == 'Healthcare & Medical Services' ? 'selected' : '' }}>الرعاية الصحية والخدمات الطبية</option>
+                    <option value="Transportation & Logistics" {{ old('jobField') == 'Transportation & Logistics' ? 'selected' : '' }}>النقل والخدمات اللوجستية</option>
+                    <option value="Education & Training" {{ old('jobField') == 'Education & Training' ? 'selected' : '' }}>التعليم والتدريب</option>
+                    <option value="Media & Entertainment" {{ old('jobField') == 'Media & Entertainment' ? 'selected' : '' }}>الإعلام والترفيه</option>
+                    <option value="Telecommunications" {{ old('jobField') == 'Telecommunications' ? 'selected' : '' }}>الاتصالات</option>
+                    <option value="Consulting & Professional Services" {{ old('jobField') == 'Consulting & Professional Services' ? 'selected' : '' }}>الاستشارات والخدمات المهنية</option>
+                    <option value="Law & Legal Services" {{ old('jobField') == 'Law & Legal Services' ? 'selected' : '' }}>القانون والخدمات القانونية</option>
+                    <option value="Information Technology & Software Development" {{ old('jobField') == 'Information Technology & Software Development' ? 'selected' : '' }}>تكنولوجيا المعلومات وتطوير البرمجيات</option>
+                    <option value="Cybersecurity" {{ old('jobField') == 'Cybersecurity' ? 'selected' : '' }}>الأمن السيبراني</option>
+                    <option value="Artificial Intelligence & Machine Learning" {{ old('jobField') == 'Artificial Intelligence & Machine Learning' ? 'selected' : '' }}>الذكاء الاصطناعي وتعلم الآلة</option>
+                    <option value="Research & Development (R&D)" {{ old('jobField') == 'Research & Development (R&D)' ? 'selected' : '' }}>البحث والتطوير</option>
+                    <option value="Data Science & Analytics" {{ old('jobField') == 'Data Science & Analytics' ? 'selected' : '' }}>علم البيانات والتحليلات</option>
+                    <option value="Digital Marketing & Advertising" {{ old('jobField') == 'Digital Marketing & Advertising' ? 'selected' : '' }}>التسويق الرقمي والإعلانات</option>
+                    <option value="Cloud Computing & Hosting Services" {{ old('jobField') == 'Cloud Computing & Hosting Services' ? 'selected' : '' }}>الحوسبة السحابية وخدمات الاستضافة</option>
+                    <option value="Government & Public Administration" {{ old('jobField') == 'Government & Public Administration' ? 'selected' : '' }}>الحكومة والإدارة العامة</option>
+                    <option value="Nonprofit Organizations & NGOs" {{ old('jobField') == 'Nonprofit Organizations & NGOs' ? 'selected' : '' }}>المنظمات غير الربحية والمنظمات غير الحكومية</option>
+                    <option value="International Organizations" {{ old('jobField') == 'International Organizations' ? 'selected' : '' }}>المنظمات الدولية</option>
+                    <option value="Think Tanks & Policy Research" {{ old('jobField') == 'Think Tanks & Policy Research' ? 'selected' : '' }}>مراكز الأبحاث والسياسات</option>
                 </select>
+
                 @error('jobField')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror

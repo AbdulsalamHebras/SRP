@@ -6,7 +6,36 @@ body {
     background-color: #f8f9fa;
     color: #333;
 }
+.add-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.add-btn {
+    background-color: #007bff;
+    text-decoration: none;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    display: inline-block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
 
+.add-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.add-btn:active {
+    transform: scale(0.95);
+}
 .container {
     max-width: 1200px;
     margin: 0 auto;
