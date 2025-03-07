@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{asset('CSS/jobs/add.css')}}">
+    <script src="{{asset('tinymce/js/tinymce/tinymce.min.js')}}"></script>
     <title>إضافة عمل</title>
+    <style>
+        .invalid-feedback {
+            color: red;
+        }
+    </style>
+
     <script>
         function toggleLocation() {
             var jobType = document.getElementById("jobType").value;
@@ -15,71 +23,139 @@
                 locationField.style.display = "none";
                 locationInput.value = "عن بعد";
             } else {
-                locationField.style.display = "block"; 
+                locationField.style.display = "block";
             }
         }
     </script>
 </head>
 <body>
+
     @include('includes.header')
 
-    <form action="" method="POST">
-        @csrf
+    <div class="container">
+        <h2>إضافة وظيفة جديدة</h2>
 
-        <label for="jobName">اسم الوظيفة:</label>
-        <input type="text" id="jobName" name="jobName" required>
+        <form action="{{route('jobs.add')}}" method="POST">
+            @csrf
 
-        <label for="description">الوصف:</label>
-        <textarea id="description" name="description" required></textarea>
+            <div class="form-group">
+                <div>
+                    <label for="jobName">اسم الوظيفة:</label>
+                    <input type="text" id="jobName" name="jobName" class="form-control @error('jobName') is-invalid @enderror" value="{{ old('jobName') }}" required>
+                    @error('jobName')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                <div>
+                    <label for="jobType">نوع الوظيفة:</label>
+                    <select id="jobType" name="jobType" class="form-control @error('jobType') is-invalid @enderror" required onchange="toggleLocation()">
+                        <option value="دوام كامل" {{ old('jobType') == 'دوام كامل' ? 'selected' : '' }}>دوام كامل</option>
+                        <option value="دوام جزئي" {{ old('jobType') == 'دوام جزئي' ? 'selected' : '' }}>دوام جزئي</option>
+                        <option value="عن بعد" {{ old('jobType') == 'عن بعد' ? 'selected' : '' }}>عن بعد</option>
+                    </select>
+                    @error('jobType')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+            </div>
 
-        <label for="jobType">نوع الوظيفة:</label>
-        <select id="jobType" name="jobType" required onchange="toggleLocation()">
-            <option value="دوام كامل" selected>دوام كامل</option>
-            <option value="دوام جزئي">دوام جزئي</option>
-            <option value="عن بعد">عن بعد</option>
-        </select>
+            <div class="form-group">
+                <label for="description" class="full-width">الوصف:</label>
+                <textarea id="description" name="description" class="form-control @error('description') is-invalid @enderror" required>{{ old('description') }}</textarea>
+                @error('description')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
 
-        <label for="minSalary">الحد الأدنى للراتب:</label>
-        <input type="number" id="minSalary" name="minSalary" required>
+            <div class="form-group">
+                <div>
+                    <label for="minSalary">الحد الأدنى للراتب:</label>
+                    <input type="number" id="minSalary" name="minSalary" class="form-control @error('minSalary') is-invalid @enderror" value="{{ old('minSalary') }}" required>
+                    @error('minSalary')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                <div>
+                    <label for="maxSalary">الحد الأقصى للراتب:</label>
+                    <input type="number" id="maxSalary" name="maxSalary" class="form-control @error('maxSalary') is-invalid @enderror" value="{{ old('maxSalary') }}" required>
+                    @error('maxSalary')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+            </div>
 
-        <label for="maxSalary">الحد الأقصى للراتب:</label>
-        <input type="number" id="maxSalary" name="maxSalary" required>
+            <div class="form-group">
+                <div>
+                    <label for="currency">العملة:</label>
+                    <select id="currency" name="currency" class="form-control @error('currency') is-invalid @enderror" required>
+                        <option value="YEM" {{ old('currency') == 'YEM' ? 'selected' : '' }}>ريال يمني</option>
+                        <option value="SAR" {{ old('currency') == 'SAR' ? 'selected' : '' }}>ريال سعودي</option>
+                        <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>دولار امريكي</option>
+                    </select>
+                    @error('currency')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                <div>
+                    <label for="expirationDate">تاريخ انتهاء الإعلان:</label>
+                    <input type="date" id="expirationDate" name="expirationDate" class="form-control @error('expirationDate') is-invalid @enderror" value="{{ old('expirationDate') }}" required>
+                    @error('expirationDate')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+            </div>
 
-        <label for="currency">العملة:</label>
-        <select id="currency" name="currency" required>
-            <option value="YEM" selected>ريال يمني</option>
-            <option value="SAR">ريال سعودي</option>
-            <option value="USD">دولار امريكي</option>
-        </select>
+            <div class="form-group">
+                <label for="requirements" class="full-width">المتطلبات:</label>
+                <textarea id="requirements" name="requirements" class="form-control @error('requirements') is-invalid @enderror" required>{{ old('requirements') }}</textarea>
+                @error('requirements')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
 
-        <label for="requirements">المتطلبات:</label>
-        <textarea id="requirements" name="requirements" required></textarea>
+            <div class="form-group" id="locationField">
+                <div>
+                    <label for="location">الموقع:</label>
+                    <select name="location" id="location" class="form-control @error('location') is-invalid @enderror">
+                        <option value="صنعاء" {{ old('location') == 'صنعاء' ? 'selected' : '' }}>صنعاء</option>
+                        <option value="عدن" {{ old('location') == 'عدن' ? 'selected' : '' }}>عدن</option>
+                        <option value="تعز" {{ old('location') == 'تعز' ? 'selected' : '' }}>تعز</option>
+                        <option value="الحديدة" {{ old('location') == 'الحديدة' ? 'selected' : '' }}>الحديدة</option>
+                        <option value="المكلا" {{ old('location') == 'المكلا' ? 'selected' : '' }}>المكلا</option>
+                        <option value="إب" {{ old('location') == 'إب' ? 'selected' : '' }}>إب</option>
+                        <option value="سيئون" {{ old('location') == 'سيئون' ? 'selected' : '' }}>سيئون</option>
+                        <option value="الغيضة" {{ old('location') == 'الغيضة' ? 'selected' : '' }}>الغيضة</option>
+                        <option value="ذمار" {{ old('location') == 'ذمار' ? 'selected' : '' }}>ذمار</option>
+                        <option value="حجة" {{ old('location') == 'حجة' ? 'selected' : '' }}>حجة</option>
+                    </select>
+                    @error('location')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+            </div>
 
-        <label for="expirationDate">تاريخ انتهاء الإعلان:</label>
-        <input type="date" id="expirationDate" name="expirationDate" required>
+            <button type="submit">إضافة الوظيفة</button>
+        </form>
 
-        <div id="locationField">
-            <label for="location">الموقع:</label>
-            <select name="location" id="location" class="form-control @error('location') is-invalid @enderror">
-                <option value="صنعاء" {{ old('location', auth()->guard('company')->user()->location) == 'صنعاء' ? 'selected' : '' }}>صنعاء</option>
-                <option value="عدن" {{ old('location', auth()->guard('company')->user()->location) == 'عدن' ? 'selected' : '' }}>عدن</option>
-                <option value="تعز" {{ old('location', auth()->guard('company')->user()->location) == 'تعز' ? 'selected' : '' }}>تعز</option>
-                <option value="الحديدة" {{ old('location', auth()->guard('company')->user()->location) == 'الحديدة' ? 'selected' : '' }}>الحديدة</option>
-                <option value="المكلا" {{ old('location', auth()->guard('company')->user()->location) == 'المكلا' ? 'selected' : '' }}>المكلا</option>
-                <option value="إب" {{ old('location', auth()->guard('company')->user()->location) == 'إب' ? 'selected' : '' }}>إب</option>
-                <option value="سيئون" {{ old('location', auth()->guard('company')->user()->location) == 'سيئون' ? 'selected' : '' }}>سيئون</option>
-                <option value="الغيضة" {{ old('location', auth()->guard('company')->user()->location) == 'الغيضة' ? 'selected' : '' }}>الغيضة</option>
-                <option value="ذمار" {{ old('location', auth()->guard('company')->user()->location) == 'ذمار' ? 'selected' : '' }}>ذمار</option>
-                <option value="حجة" {{ old('location', auth()->guard('company')->user()->location) == 'حجة' ? 'selected' : '' }}>حجة</option>
-            </select>
-        </div>
+    </div>
 
-        <button type="submit">إضافة الوظيفة</button>
-    </form>
 
     @include('includes.footer')
 
     <script>
+         document.addEventListener("DOMContentLoaded", function() {
+        tinymce.init({
+            selector: '#requirements,#description',
+            menubar: false,
+            plugins: 'lists link',
+            toolbar: 'bold italic underline strikethrough | bullist numlist blockquote | link',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    tinymce.triggerSave();
+                });
+            }
+        });
+    });
         window.onload = toggleLocation;
     </script>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\JobRequest;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\Category;
@@ -30,6 +31,26 @@ class JobController extends Controller
     public function create() {
 
         return view('jobs.add');
+    }
+    public function store(JobRequest $request) {
+        $validated = $request->validated();
+        $job = Job::create([
+            'jobName'        => $request->input('jobName'),
+            'jobType'        => $request->input('jobType'),
+            'description'    => $request->input('description'),
+            'minSalary'      => $request->input('minSalary'),
+            'maxSalary'      => $request->input('maxSalary'),
+            'currency'       => $request->input('currency'),
+            'expirationDate' => $request->input('expirationDate'),
+            'requirements'   => $request->input('requirements'),
+            'location'       => $request->input('location'),
+            'company_id'     => auth()->guard('company')->user()->id,
+        ]);
+        $company = auth()->guard('company')->user();
+        $company->increment('jobsNumber');
+
+        return redirect()->route('company.jobs')->with('success','the job added succesfully');
+
     }
 
     public function details(string $id){

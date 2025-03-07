@@ -27,7 +27,9 @@
             <p class="salary">الحد الأدنى للراتب: {{ $job->minSalary }} {{$job->currency}} | الحد الأقصى للراتب: {{$job->currency}} {{ $job->maxSalary }} </p>
         </div>
         <p>اخر موعد للتقديم: {{$job->expirationDate}} </p>
-        <a href="#" class="apply-btn">التقديم على موقع الشركة</a>
+        @if (!auth()->guard('company')->user())
+            <a href="#" class="apply-btn">التقديم على موقع الشركة</a>
+        @endif
     </div>
 
     <div class="content">

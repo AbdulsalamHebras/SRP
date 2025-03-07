@@ -4,9 +4,11 @@
     @else
         @foreach ($jobs as $job)
             <div class="job-card">
-                <div class="favorite" onclick="event.stopPropagation();">
-                    <i class="heart-icon" onclick="toggleFavorite(this)">&#9829;</i>
-                </div>
+                @if (!auth()->guard('company')->user())
+                    <div class="favorite" onclick="event.stopPropagation();">
+                        <i class="heart-icon" onclick="toggleFavorite(this)">&#9829;</i>
+                    </div>
+                @endif
                 <a href="{{route('jobs.details',$job->id)}}" class="job-card-link">
                     <div class="job-info">
                         <h2 class="job-title">{{$job->jobName}}</h2>
@@ -15,7 +17,7 @@
                                 <span>{{ $job->company->name }}</span>
                         </div>
                         <span class="location">{{$job->location}}</span>
-                        <p>{{$job->description}}</p>
+                        <p>{!!$job->description !!}</p>
                         <span class="salary">{{$job->currency}}{{$job->maxSalary}} - {{$job->currency}}{{$job->minSalary}}</span>
                         <span class="time-posted">
                             @if($job->updated_at > $job->created_at)
@@ -26,9 +28,19 @@
                         </span>
                     </div>
                 </a>
-                <div class="apply-btn" onclick="event.stopPropagation();">
+                @if (!auth()->guard('company')->user())
+                    <div class="apply-btn" onclick="event.stopPropagation();">
                         <button onclick="window.location.href={{route('jobs.apply')}}";>التقديم السريع</button>
-                </div>
+                    </div>
+                {{-- @else --}}
+                    {{-- <div  class="apply-btn">
+                        <button>حذف</button>
+                    </div>
+                    <div >
+                        <button>تعديل</button>
+                    </div> --}}
+                @endif
+
             </div>
         @endforeach
     @endif
