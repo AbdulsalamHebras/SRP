@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{asset('CSS/jobs/add.css')}}">
-    <script src="{{asset('tinymce/js/tinymce/tinymce.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ asset('CSS/jobs/add.css') }}">
+    <script src="{{ asset('tinymce/js/tinymce/tinymce.min.js') }}"></script>
     <title>إضافة عمل</title>
     <style>
         .invalid-feedback {
@@ -14,16 +14,45 @@
     </style>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleLocation(); // تشغيل الوظيفة عند تحميل الصفحة
+
+            tinymce.init({
+                selector: '#requirements,#description',
+                menubar: false,
+                plugins: 'lists link',
+                toolbar: 'bold italic underline strikethrough | bullist numlist blockquote | link',
+                setup: function (editor) {
+                    editor.on('change', function () {
+                        tinymce.triggerSave();
+                    });
+                }
+            });
+        });
+
         function toggleLocation() {
             var jobType = document.getElementById("jobType").value;
-            var locationField = document.getElementById("locationField");
-            var locationInput = document.getElementById("location");
+            var locationSelect = document.getElementById("location");
 
             if (jobType === "عن بعد") {
-                locationField.style.display = "none";
-                locationInput.value = "عن بعد";
+                locationSelect.innerHTML = '<option value="عن بعد">عن بعد</option>';
+                locationSelect.setAttribute("disabled", "true");
+                locationSelect.removeAttribute("required");
             } else {
-                locationField.style.display = "block";
+                locationSelect.innerHTML = `
+                    <option value="صنعاء">صنعاء</option>
+                    <option value="عدن">عدن</option>
+                    <option value="تعز">تعز</option>
+                    <option value="الحديدة">الحديدة</option>
+                    <option value="المكلا">المكلا</option>
+                    <option value="إب">إب</option>
+                    <option value="سيئون">سيئون</option>
+                    <option value="الغيضة">الغيضة</option>
+                    <option value="ذمار">ذمار</option>
+                    <option value="حجة">حجة</option>
+                `;
+                locationSelect.removeAttribute("disabled");
+                locationSelect.setAttribute("required", "true"); 
             }
         }
     </script>
@@ -35,7 +64,7 @@
     <div class="container">
         <h2>إضافة وظيفة جديدة</h2>
 
-        <form action="{{route('jobs.add')}}" method="POST">
+        <form action="{{ route('jobs.add') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -139,25 +168,7 @@
 
     </div>
 
-
     @include('includes.footer')
-
-    <script>
-         document.addEventListener("DOMContentLoaded", function() {
-        tinymce.init({
-            selector: '#requirements,#description',
-            menubar: false,
-            plugins: 'lists link',
-            toolbar: 'bold italic underline strikethrough | bullist numlist blockquote | link',
-            setup: function (editor) {
-                editor.on('change', function () {
-                    tinymce.triggerSave();
-                });
-            }
-        });
-    });
-        window.onload = toggleLocation;
-    </script>
 
 </body>
 </html>

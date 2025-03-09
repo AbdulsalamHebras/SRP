@@ -26,7 +26,7 @@
                     <a href="{{route('main')}}" class="nav-link {{ request()->routeIs('main') ? 'active' : '' }}">الرئيسية</a>
                     <a href="{{route('jobs.index')}}" class="nav-link {{ request()->routeIs('jobs.index') ? 'active' : '' }}">البحث عن وظائف</a>
                     <a href="{{route('companies.index')}}" class="nav-link {{ request()->routeIs('companies.index') ? 'active' : '' }}">الشركات</a>
-                    <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">طلبات التوظيف</a>
+                    <a href="{{route('user.appliments')}}" class="nav-link {{ request()->routeIs('user.appliments') ? 'active' : '' }}">طلبات التوظيف</a>
                     <a href="" class="nav-link {{ request()->routeIs('') ? 'active' : '' }}">من شاهد سيرتي؟</a>
                 @endif
             </div>

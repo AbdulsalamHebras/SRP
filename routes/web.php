@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\MainPageController;
@@ -36,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/main', [MainPageController::class,'main'])->name('main');
+Route::middleware('auth:web')->get('/main', [MainPageController::class,'main'])->name('main');
 
 
 Route::name('jobs.')->group(function () {
@@ -55,7 +56,7 @@ Route::name('companies.')->prefix('companies')->group(function () {
     Route::get('/new-company', function () {
         return view('companies.new-company');
     })->name('new-company');
-    Route::middleware('auth::user')->post('/follow/{companyid}', [CompanyController::class, 'follow'])->name('follow');
+    Route::middleware('auth:web')->post('/follow/{companyid}', [CompanyController::class, 'follow'])->name('follow');
 });
 Route::middleware('auth:company')->name('company.')->prefix('company')->group(function () {
     Route::get('/dashboard', function () {
@@ -64,6 +65,14 @@ Route::middleware('auth:company')->name('company.')->prefix('company')->group(fu
     })->name('dashboard');
     Route::get('/edit/{companyid}',[CompanyController::class,'edit'])->name('edit');
     Route::get('/jobs',[CompanyController::class,'jobs'])->name('jobs');
+
+});
+
+Route::middleware('auth')->group(function () {
+    //Route for users
+    Route::middleware('auth:web')->name('user.')->group(function () {
+        Route::get('/appliments', [ApplierController::class,'userAppliments'])->name('appliments');
+    });
 
 });
 require __DIR__.'/auth.php';

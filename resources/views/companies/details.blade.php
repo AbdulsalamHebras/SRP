@@ -13,7 +13,7 @@
     @include('includes.header')
     <div class="company-details">
         <div class="logo">
-            <img src="{{ asset($company->logo) }}" alt="شعار الشركة">
+            <img src="{{asset('storage/logos/'.$company->logo)}}" alt="شعار الشركة">
         </div>
 
         <h2 class="company-name">{{ $company->name }}</h2>

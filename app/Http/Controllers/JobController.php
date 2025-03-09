@@ -32,26 +32,32 @@ class JobController extends Controller
 
         return view('jobs.add');
     }
-    public function store(JobRequest $request) {
-        $validated = $request->validated();
-        $job = Job::create([
-            'jobName'        => $request->input('jobName'),
-            'jobType'        => $request->input('jobType'),
-            'description'    => $request->input('description'),
-            'minSalary'      => $request->input('minSalary'),
-            'maxSalary'      => $request->input('maxSalary'),
-            'currency'       => $request->input('currency'),
-            'expirationDate' => $request->input('expirationDate'),
-            'requirements'   => $request->input('requirements'),
-            'location'       => $request->input('location'),
-            'company_id'     => auth()->guard('company')->user()->id,
-        ]);
-        $company = auth()->guard('company')->user();
-        $company->increment('jobsNumber');
+    public function store(JobRequest $request)
+    {
+    $validated = $request->validated();
 
-        return redirect()->route('company.jobs')->with('success','the job added succesfully');
+    $location = $request->jobType === 'عن بعد' ? 'عن بعد' : $request->location;
 
+    $job = Job::create([
+        'jobName'        => $request->jobName,
+        'jobType'        => $request->jobType,
+        'description'    => $request->description,
+        'minSalary'      => $request->minSalary,
+        'maxSalary'      => $request->maxSalary,
+        'currency'       => $request->currency,
+        'expirationDate' => $request->expirationDate,
+        'requirements'   => $request->requirements,
+        'location'       => $location, 
+        'company_id'     => auth()->guard('company')->user()->id,
+    ]);
+
+    // Increment the jobsNumber for the company
+    $company = auth()->guard('company')->user();
+        $company->update(['jobsNumber' => $company->jobsNumber + 1]);
+
+        return redirect()->route('company.jobs')->with('success', 'The job added successfully');
     }
+
 
     public function details(string $id){
         $job = Job::with('company')->where('id', $id)->first();

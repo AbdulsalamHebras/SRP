@@ -13,6 +13,8 @@
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
+            margin-top: 20px
+
         }
 
         .search-box input, .search-box button {
@@ -44,34 +46,32 @@
     <main>
         <div class="container">
             <div class="header">
-                <h1>وسام دريب</h1>
-                <button class="button">عرض السيرة الذاتية</button>
+                <h1>{{$applier->name}}</h1>
+                <button class="button">عرض الملف الشخصي</button>
             </div>
             <div class="section">
                 <h2>تحديثات الوظائف</h2>
                 <div class="box">
                     <div class="flex">
-                        <p>ابحث عن وظائف الآن أو حدث ملفك الشخصي لبدء تلقي اقتراحات بالوظائف المناسبة.</p>
+                        <p> حدث ملفك الشخصي او قم اكمال لبدء تلقي اقتراحات بالوظائف المناسبة.</p>
                         <button class="button">حدث ملفك الشخصي</button>
                     </div>
                 </div>
             </div>
+
             <div class="section">
                 <h2>طلباتي الوظيفية</h2>
                 <div class="box">
-                    <p>لم تتقدم إلى أي وظائف حتى الآن. ابحث عن الوظيفة وتقدم إليها في ثوانٍ!</p>
-                    <button class="button">تصفح الوظائف</button>
+                    <p>.</p>
+                    <a href="{{ route('user.appliments') }}">
+                        <button class="button">تصفح الوظائف</button>
+                    </a>
+
+
                 </div>
             </div>
 
-            <div class="section">
-                <h2>احصل على انتباه أصحاب العمل</h2>
-                <div class="box">
-                    <p>قم بتحديث أو تجديد سيرتك الذاتية بانتظام لتبقى في مقدمة نتائج بحث أصحاب العمل.</p>
-                    <p class="email">آخر تحديث: Dec 19, 2024</p>
-                    <button class="button">حدث السيرة الذاتية</button>
-                </div>
-            </div>
+
         </div>
     </main>
     @include('includes.footer')

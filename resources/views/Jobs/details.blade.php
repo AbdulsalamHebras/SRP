@@ -28,24 +28,19 @@
         </div>
         <p>اخر موعد للتقديم: {{$job->expirationDate}} </p>
         @if (!auth()->guard('company')->user())
-            <a href="#" class="apply-btn">التقديم على موقع الشركة</a>
+            <a href="#" class="apply-btn">تقديم</a>
         @endif
     </div>
 
     <div class="content">
-        <div class="notification">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-        </div>
+
         <h3 class="section-title">الوصف الوظيفي</h3>
         <p class="job-description">
-            {{$job->description}}
+            {!!$job->description!!}
         </p>
         <h3 class="section-title"> مطلبات الوظيفة</h3>
         <p class="job-description">
-            {{$job->requirements}}
+            {!!$job->requirements!!}
         </p>
     </div>
     @include('includes.footer')
