@@ -9,8 +9,13 @@ class Applier extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'name',    
+        'name',
         'email',
         'password',
     ];
+    public function Jobs()
+    {
+        return $this->belongsToMany(Job::class, 'jobs_appliers', 'applier_id', 'job_id');
+    }
+
 }

@@ -12,8 +12,9 @@ class MainPageController extends Controller
         $user = auth()->guard('web')->user();
 
         $applier = Applier::where('email', $user->email)->first();
+        $appliedJobs = $applier ? $applier->Jobs()->count() : 0;
 
-        return view("main", compact( "applier"));
+        return view("main", compact( "applier",'appliedJobs'));
     }
 
 }

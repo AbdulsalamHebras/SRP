@@ -40,4 +40,8 @@ class Job extends Model
     {
         return $this->belongsTo(Company::class);
     }
+    public function appliers()
+    {
+        return $this->belongsToMany(Job::class, 'jobs_appliers', 'job_id', 'applier_id');
+    }
 }

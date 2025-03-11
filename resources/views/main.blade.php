@@ -21,7 +21,8 @@
             padding: 10px;
             font-size: 1em;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            bord
+            er-radius: 5px;
             margin-top: 20px
         }
 
@@ -30,7 +31,8 @@
             color: white;
             border: none;
             cursor: pointer;
-        }
+    }
+
 
         .search-box button:hover {
             background-color: #0056b3;
@@ -47,14 +49,19 @@
         <div class="container">
             <div class="header">
                 <h1>{{$applier->name}}</h1>
-                <button class="button">عرض الملف الشخصي</button>
+
+                <a href="{{route('user.seeCV')}}">
+                    <button class="button">عرض الملف الشخصي</button>
+                </a>
             </div>
             <div class="section">
                 <h2>تحديثات الوظائف</h2>
                 <div class="box">
                     <div class="flex">
-                        <p> حدث ملفك الشخصي او قم اكمال لبدء تلقي اقتراحات بالوظائف المناسبة.</p>
-                        <button class="button">حدث ملفك الشخصي</button>
+                        <p> حدث ملفك الشخصي او قم باكماله لبدء تلقي اقتراحات بالوظائف المناسبة.</p>
+                        <a href="{{route('user.updateCV')}}">
+                            <button class="button">حدث ملفك الشخصي</button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -62,12 +69,10 @@
             <div class="section">
                 <h2>طلباتي الوظيفية</h2>
                 <div class="box">
-                    <p>.</p>
+                    <p>لديك في الموقع <span>{{$appliedJobs}} </span> طلب توظيف</p>
                     <a href="{{ route('user.appliments') }}">
                         <button class="button">تصفح الوظائف</button>
                     </a>
-
-
                 </div>
             </div>
 
