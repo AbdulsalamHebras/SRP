@@ -33,7 +33,9 @@
                         لم يتم رفع السيرة الذاتية
                     @endif
                 </p>
-                <button>تحديث</button>
+                <a href="{{route('user.updateCV')}}">
+                    <button class="cv-button">تحديث</button>
+                </a>
             </div>
         </div>
     </div>
