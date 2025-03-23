@@ -59,7 +59,7 @@
                 <div class="box">
                     <div class="flex">
                         <p> حدث ملفك الشخصي او قم باكماله لبدء تلقي اقتراحات بالوظائف المناسبة.</p>
-                        <a href="{{route('user.updateCV')}}">
+                        <a href="{{route('user.editCV')}}">
                             <button class="button">حدث ملفك الشخصي</button>
                         </a>
                     </div>

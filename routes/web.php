@@ -72,7 +72,8 @@ Route::middleware('auth')->group(function () {
     //Route for users
     Route::middleware('auth:web')->name('user.')->group(function () {
         Route::get('/appliments', [ApplierController::class,'userAppliments'])->name('appliments');
-        Route::get('/cv-update', [ApplierController::class,'updateCV'])->name('updateCV');
+        Route::get('/update-cv', [ApplierController::class,'editCV'])->name('editCV');
+        Route::put('/{applier}/update-cv', [ApplierController::class,'updateCV'])->name('updateCV');
         Route::get('/cv-detail', [ApplierController::class,'seeCV'])->name('seeCV');
     });
 

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phoneNumber')->nullable();
             $table->string('city')->nullable();
             $table->string('address')->nullable();
-            $table->date('BOB')->nullable();
+            $table->date('DOB')->nullable();
             $table->string('gender')->nullable();
             $table->string('degree')->nullable();
             $table->string('languages')->nullable();

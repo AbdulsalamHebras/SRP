@@ -47,6 +47,19 @@ return [
             'url' => env('APP_URL').'/images/logos',
             'visibility' => 'public',
         ],
+        'cv_files' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/cv_files'), // حفظ السير الذاتية داخل مجلد في التخزين
+            'url' => env('APP_URL') . '/storage/cv_files',
+            'visibility' => 'public',
+        ],
+
+        'photos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/photos'), // حفظ الصور داخل مجلد في التخزين
+            'url' => env('APP_URL') . '/storage/photos',
+            'visibility' => 'public',
+        ],
 
 
 
