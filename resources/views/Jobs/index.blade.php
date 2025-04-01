@@ -26,8 +26,6 @@
         </div>
 
         @include('Jobs.getJobs')
-
-
     </div>
     @include('includes.footer')
     <script>

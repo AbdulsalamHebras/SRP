@@ -14,24 +14,34 @@
                 <h3>ابحث عن وظائف</h3>
                 <div class="job-grid">
                     <ul>
-                        <li><a href="#">وظائف في صنعاء</a></li>
-                        <li><a href="#">وظائف في عدن</a></li>
-                        <li><a href="#">وظائف في تعز</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'صنعاء']) }}">وظائف في صنعاء</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'عدن']) }}">وظائف في عدن</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'تعز']) }}">وظائف في تعز</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'مارب']) }}">وظائف في مأرب</a></li>
                     </ul>
                     <ul>
-                        <li><a href="#">وظائف في مأرب</a></li>
-                        <li><a href="#">وظائف في الحديدة</a></li>
-                        <li><a href="#">وظائف في إب</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'الحديدة']) }}">وظائف في الحديدة</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'إب']) }}">وظائف في إب</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'ذمار']) }}">وظائف في ذمار</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'الجوف']) }}">وظائف في الجوف</a></li>
                     </ul>
                     <ul>
-                        <li><a href="#">وظائف في مأرب</a></li>
-                        <li><a href="#">وظائف في الحديدة</a></li>
-                        <li><a href="#">وظائف في إب</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'صعدة']) }}">وظائف في صعدة</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'حجة']) }}">وظائف في حجة</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'المحويت']) }}">وظائف في المحويت</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'ريمة']) }}">وظائف في ريمة</a></li>
                     </ul>
                     <ul>
-                        <li><a href="#">وظائف في مأرب</a></li>
-                        <li><a href="#">وظائف في الحديدة</a></li>
-                        <li><a href="#">وظائف في إب</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'عمران']) }}">وظائف في عمران</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'شبوة']) }}">وظائف في شبوة</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'المهرة']) }}">وظائف في المهرة</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'حضرموت']) }}">وظائف في حضرموت</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="{{ route('jobs.search', ['location' => 'لحج']) }}">وظائف في لحج</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'أبين']) }}">وظائف في أبين</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'سقطرى']) }}">وظائف في سقطرى</a></li>
+                        <li><a href="{{ route('jobs.search', ['location' => 'عن بعد']) }}">وظائف عن بعد</a></li>
                     </ul>
                 </div>
             </div>
@@ -68,8 +78,5 @@
             <p>سياسة الخصوصية | شروط الاستخدام | إعدادات ملفات تعريف الارتباط</p>
         </div>
     </footer>
-
-
-
 </body>
 </html>

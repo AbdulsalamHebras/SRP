@@ -42,9 +42,13 @@ Route::middleware('auth:web')->get('/main', [MainPageController::class,'main'])-
 
 Route::name('jobs.')->group(function () {
     Route::get('/jobs', [JobController::class, 'index'])->name('index');
+    Route::get('/jobs/search', [JobController::class, 'search'])->name('search');
     Route::middleware('auth:company')->get('/jobs/add', [JobController::class, 'create'])->name('add');
     Route::middleware('auth:company')->post('/jobs/add', [JobController::class, 'store'])->name('add');
     Route::get('/job-details/{jobid}', [JobController::class, 'details'])->name('details');
+    Route::middleware('auth:company')->get('/job-edit/{jobid}', [JobController::class, 'edit'])->name('edit');
+    Route::middleware('auth:company')->post('/job-edit/{jobid}', [JobController::class, 'update'])->name('update');
+    Route::middleware('auth:company')->delete('/job-delete/{jobid}', [JobController::class, 'destroy'])->name('destroy');
     Route::get('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
 });
 

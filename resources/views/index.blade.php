@@ -14,10 +14,12 @@
     <div class="container">
         <h1>ابحث عن وظيفة أحلامك</h1>
         <p>ابحث ضمن أكثر الوظائف الفعّالة على أكبر موقع للوظائف في اليمن</p>
-        <div class="search-box">
-            <input type="text" placeholder="ابحث عن الوظائف والمهارات">
-            <button>بحث</button>
-        </div>
+        <form action="{{ route('jobs.search') }}" method="GET">
+            <div class="search-box">
+                <input type="text" name="search" placeholder="ابحث عن الوظائف والمهارات">
+                <button type="submit">بحث</button>
+            </div>
+        </form>
         <div class="popular-searches">
             <span class="search-title">عمليات البحث الشائعة:</span>
             <div class="search-links">
