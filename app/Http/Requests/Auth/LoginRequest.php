@@ -83,4 +83,19 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
+    /**
+ * Get custom error messages for validation rules.
+ */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'البريد الإلكتروني مطلوب.',
+            'email.email' => 'يرجى إدخال بريد إلكتروني صالح.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+            'password.string' => 'يجب أن تكون كلمة المرور نصًا.',
+            'accountType.required' => 'نوع الحساب مطلوب.',
+            'accountType.in' => 'نوع الحساب يجب أن يكون إما "applier" أو "company".',
+        ];
+    }
+
 }

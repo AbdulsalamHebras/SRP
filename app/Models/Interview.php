@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class jobs_appliers extends Model
+class Interview extends Model
 {
     use HasFactory;
     protected $fillable = [
         "applier_id",
         "job_id",
-    ];
+        "date",
+        "time",
+        'notes'
+    ] ;
 }

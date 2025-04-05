@@ -4,17 +4,25 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ApplierRequest;
 use Illuminate\Http\Request;
 use App\Models\Applier;
+use App\Models\Interview;
 use Illuminate\Support\Facades\Storage;
 
 class ApplierController extends Controller
 {
-    public function userAppliments(){
+    public function userAppliments() {
         $user = auth()->guard('web')->user();
         $applier = Applier::where('email', $user->email)->first();
-        $jobs = $applier->jobs;  
 
-        return view("User.jobs", compact("applier", "jobs"));
+        if (!$applier) {
+            return redirect()->back()->with('error', 'لم يتم العثور على بيانات المتقدم.');
+        }
+
+        $jobs = $applier->jobs;
+        $interviews = Interview::where('applier_id', $applier->id)->get(); // جلب المقابلات
+
+        return view("User.jobs", compact("applier", "jobs", "interviews"));
     }
+
     public function editCV(Request $request){
         $user = auth()->guard('web')->user();
         $applier = Applier::where('email', $user->email)->first();

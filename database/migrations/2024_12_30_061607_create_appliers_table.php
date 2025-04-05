@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('DOB')->nullable();
             $table->string('gender')->nullable();
             $table->string('degree')->nullable();
+            $table->string('specialization')->nullable();
             $table->string('languages')->nullable();
             $table->string('CVfile')->nullable();
             $table->date('graduationDate')->nullable();

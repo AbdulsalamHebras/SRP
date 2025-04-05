@@ -7,13 +7,17 @@ use App\Models\Company;
 use App\Models\Job;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\jobs_appliers;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Applier;
 
 class JobController extends Controller
 {
     public function index(Request $request) {
         $sort = $request->input('sort', 'date');
 
-        $query = Job::with('company');
+        $query = Job::with('company')
+            ->where('expirationDate', '>=', now());
 
         if ($sort === 'date') {
             $query->orderBy('created_at', 'desc');
@@ -28,13 +32,14 @@ class JobController extends Controller
 
         return view("Jobs.index", compact('jobs', 'jobsNumber', 'sort'));
     }
+
     public function create() {
 
         return view('jobs.add');
     }
     public function store(JobRequest $request)
     {
-        dd($request->all());
+
 
     $validated = $request->validated();
 
@@ -121,9 +126,35 @@ class JobController extends Controller
         return redirect()->route('company.jobs')->with('success', 'تم حذف الوظيفة بنجاح.');
     }
 
-    public function apply(){
-        //
+    public function apply(Request $request) {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'يجب تسجيل الدخول قبل التقديم.');
+        }
+
+        $user = Auth::user();
+        $jobId = $request->input('job_id');
+
+        $applier = Applier::where('email', $user->email)->first();
+
+        if (!$applier) {
+            return back()->with('error', 'لم يتم العثور على حساب مقدم طلب مطابق.');
+        }
+
+        if (jobs_appliers::where('applier_id', $applier->id)->where('job_id', $jobId)->exists()) {
+            return back()->with('error', 'لقد قمت بالتقديم مسبقًا على هذه الوظيفة.');
+        }
+
+        jobs_appliers::create([
+            'applier_id' => $applier->id,
+            'job_id' => $jobId,
+        ]);
+
+        Job::where('id', $jobId)->increment('reqGrade');
+
+        return back()->with('success', 'تم التقديم بنجاح!');
     }
+
+
     public function search(Request $request) {
         $query = Job::with('company');
 

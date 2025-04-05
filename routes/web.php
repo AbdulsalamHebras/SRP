@@ -4,6 +4,7 @@ use App\Http\Controllers\ApplierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\MainPageController;
+use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
@@ -49,7 +50,7 @@ Route::name('jobs.')->group(function () {
     Route::middleware('auth:company')->get('/job-edit/{jobid}', [JobController::class, 'edit'])->name('edit');
     Route::middleware('auth:company')->post('/job-edit/{jobid}', [JobController::class, 'update'])->name('update');
     Route::middleware('auth:company')->delete('/job-delete/{jobid}', [JobController::class, 'destroy'])->name('destroy');
-    Route::get('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
+    Route::post('/job-apply', [JobController::class, 'apply'])->name('apply')->middleware('auth');
 });
 
 Route::name('companies.')->prefix('companies')->group(function () {
@@ -69,6 +70,7 @@ Route::middleware('auth:company')->name('company.')->prefix('company')->group(fu
     })->name('dashboard');
     Route::get('/edit/{companyid}',[CompanyController::class,'edit'])->name('edit');
     Route::get('/jobs',[CompanyController::class,'jobs'])->name('jobs');
+    Route::get('/appliers',[CompanyController::class,'appliers'])->name('appliers');
 
 });
 
@@ -82,4 +84,8 @@ Route::middleware('auth')->group(function () {
     });
 
 });
+Route::post('/schedule-interview', [InterviewController::class, 'schedule'])->name('interviews.schedule');
+Route::put('/interviews/{id}', [InterviewController::class, 'update'])->name('interviews.update');
+Route::post('/notifications/mark-as-read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
 require __DIR__.'/auth.php';

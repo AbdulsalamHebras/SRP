@@ -1,0 +1,195 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 300px;
+    font-size: 20px;
+    color: #333;
+}
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.success {
+    background-color: #28a745; /* Green */
+}
+
+.error {
+    background-color: #dc3545; /* Red */
+}
+.close-btn {
+    margin-left: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+.close-btn:hover {
+    color: #000;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+.toggle-details {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.toggle-details:hover {
+    background-color: #0056b3;
+}
+
+.details-row {
+    background-color: #f8f9fa;
+    font-size: 14px;
+}
+
+/* تحسين تنسيق الجدول */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    table-layout: fixed; /* يجعل الأعمدة ثابتة العرض */
+    word-wrap: break-word; /* يسمح بتفصيل الكلمات الطويلة بشكل مناسب */
+    overflow-x: auto;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    word-wrap: break-word;
+    overflow: hidden; /* يمنع التمرير داخل الخلايا */
+}
+
+th {
+    background-color: #007bff;
+    color: #fff;
+    text-overflow: ellipsis;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.info {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+}
+
+/* تحسين التصميم للجوال والأجهزة اللوحية */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    td img {
+        width: 40px;
+        height: 40px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+/* تصميم الهاتف المحمول */
+@media (max-width: 480px) {
+    h2 {
+        font-size: 18px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    td img {
+        width: 35px;
+        height: 35px;
+    }
+
+    table, th, td {
+        border: 1px solid #ddd;
+        word-wrap: break-word;
+    }
+
+    td {
+        display: block;
+        width: 100%;
+        text-align: right;
+        margin-bottom: 10px;
+    }
+
+    th {
+        display: none;
+    }
+
+    td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+    }
+}

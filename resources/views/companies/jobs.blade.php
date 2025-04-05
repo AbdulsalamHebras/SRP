@@ -9,7 +9,6 @@
 </head>
 <body>
     @include('includes.header')
-    @include('search')
     <div class="container">
             <h1>وظائف في اليمن</h1>
             <p>تم العثور على <span>{{$jobsNumber}} </span> وظيفة</p>
@@ -21,7 +20,7 @@
                     <option value="date" {{ $sort == 'date' ? 'selected' : '' }}>التاريخ</option>
                     <option value="type" {{ $sort == 'type' ? 'selected' : '' }}>نوع الوظيفة</option>
                     <option value="maxsalary" {{ $sort == 'maxsalary' ? 'selected' : '' }}>الراتب</option>
-                </select> 
+                </select>
             </form>
         </div>
         <div class="add-btn-container">

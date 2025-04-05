@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,6 +9,21 @@
 </head>
 <body class="job-page">
     @include('includes.header')
+    @if (session('success'))
+    <div class="custom-alert success">
+        {{ session('success') }}
+        <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
+    </div>
+    @endif
+
+    @if (session('error'))
+        <div class="custom-alert error">
+            {{ session('error') }}
+            <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
+        </div>
+    @endif
+
+
     <div class="job-header">
         <h2 class="job-title">{{$job->jobName}}</h2>
         <div class="company">
@@ -24,11 +40,15 @@
                 @endif
             </p>
             <p class="job-type">نوع الوظيفة: {{ $job->jobType }}</p>
-            <p class="salary">الحد الأدنى للراتب: {{ $job->minSalary }} {{$job->currency}} | الحد الأقصى للراتب: {{$job->currency}} {{ $job->maxSalary }} </p>
+            <p class="salary">الحد الأدنى للراتب: {{ $job->minSalary }} {{$job->currency}} | الحد الأقصى للراتب: {{$job->currency}} {{ $job->maxSalary }} | عدد المقدمين في الوظيفة: {{$job->reqGrade}} </p>
         </div>
         <p>اخر موعد للتقديم: {{$job->expirationDate}} </p>
         @if (!auth()->guard('company')->user())
-            <a href="#" class="apply-btn">تقديم</a>
+                <form action="{{ route('jobs.apply') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="job_id" value="{{ $job->id }}">
+                    <button type="submit" class="apply-btn">تقديم</button>
+                </form>
         @endif
     </div>
 
@@ -44,5 +64,14 @@
         </p>
     </div>
     @include('includes.footer')
+    <script>
+       setTimeout(function() {
+        document.querySelectorAll('.custom-alert').forEach(alert => {
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-20px)";
+            setTimeout(() => alert.remove(), 500);
+        });
+    }, 5000);
+    </script>
 </body>
 </html>

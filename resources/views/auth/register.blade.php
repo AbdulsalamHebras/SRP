@@ -123,6 +123,17 @@
                     <option value="الغيضة" {{ old('location') == 'الغيضة' ? 'selected' : '' }}>الغيضة</option>
                     <option value="ذمار" {{ old('location') == 'ذمار' ? 'selected' : '' }}>ذمار</option>
                     <option value="حجة" {{ old('location') == 'حجة' ? 'selected' : '' }}>حجة</option>
+                    <option value="صعدة" {{ old('location') == 'صعدة' ? 'selected' : '' }}>صعدة</option>
+                    <option value="عمران" {{ old('location') == 'عمران' ? 'selected' : '' }}>عمران</option>
+                    <option value="ريمة" {{ old('location') == 'ريمة' ? 'selected' : '' }}>ريمة</option>
+                    <option value="البيضاء" {{ old('location') == 'البيضاء' ? 'selected' : '' }}>البيضاء</option>
+                    <option value="الجوف" {{ old('location') == 'الجوف' ? 'selected' : '' }}>الجوف</option>
+                    <option value="مأرب" {{ old('location') == 'مأرب' ? 'selected' : '' }}>مأرب</option>
+                    <option value="شبوة" {{ old('location') == 'شبوة' ? 'selected' : '' }}>شبوة</option>
+                    <option value="لحج" {{ old('location') == 'لحج' ? 'selected' : '' }}>لحج</option>
+                    <option value="الضالع" {{ old('location') == 'الضالع' ? 'selected' : '' }}>الضالع</option>
+                    <option value="المهرة" {{ old('location') == 'المهرة' ? 'selected' : '' }}>المهرة</option>
+                    <option value="سقطرى" {{ old('location') == 'سقطرى' ? 'selected' : '' }}>سقطرى</option>
                 </select>
                 @error('location')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

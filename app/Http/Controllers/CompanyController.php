@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
+use App\Models\jobs_appliers;
 
 class CompanyController extends Controller
 {
@@ -190,6 +191,29 @@ class CompanyController extends Controller
 
         return redirect('/');
     }
+    public function appliers(Request $request)
+    {
+        $company = auth()->guard('company')->user();
+
+        if (!$company) {
+            return redirect()->route('company.login')->with('error', 'يجب تسجيل الدخول كمؤسسة.');
+        }
+
+        $jobs = $company->jobs()->with('appliers')->get();
+
+        $appliers = \App\Models\Applier::whereHas('jobs', function ($query) use ($company) {
+            $query->whereIn('jobs.id', $company->jobs()->pluck('id'));
+        })->with(['jobs' => function ($query) use ($company) {
+            $query->whereIn('jobs.id', $company->jobs()->pluck('id'));
+        }])->get();
+
+        
+
+        return view('companies.appliers', compact('jobs', 'appliers'));
+    }
+
+
+
 
 
 }

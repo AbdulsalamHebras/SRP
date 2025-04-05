@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -10,6 +11,21 @@
 <body>
     @include('includes.header')
     @include('search')
+    @if (session('success'))
+    <div class="custom-alert success">
+        {{ session('success') }}
+        <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
+    </div>
+    @endif
+
+    @if (session('error'))
+        <div class="custom-alert error">
+            {{ session('error') }}
+            <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
+        </div>
+    @endif
+
+
     <div class="container">
             <h1>وظائف في اليمن</h1>
             <p>تم العثور على <span>{{$jobsNumber}} </span> وظيفة</p>
@@ -32,6 +48,13 @@
         function toggleFavorite(icon) {
             icon.style.color = icon.style.color === 'red' ? '#ccc' : 'red';
         }
+        setTimeout(function() {
+        document.querySelectorAll('.custom-alert').forEach(alert => {
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-20px)";
+            setTimeout(() => alert.remove(), 500);
+        });
+    }, 5000);
     </script>
 </body>
 </html>

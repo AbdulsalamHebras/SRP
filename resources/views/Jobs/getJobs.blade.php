@@ -1,3 +1,5 @@
+
+
 <div class="job-listing">
     @if($jobsNumber == 0)
         <p class="no-jobs"> لا توجد وظائف متاحة في الوقت الحالي .</p>
@@ -43,10 +45,17 @@
 
                 @else
                     <div class="apply-btn" onclick="event.stopPropagation();">
-                        <button onclick="window.location.href='{{ route('jobs.apply') }}';">التقديم السريع</button>
+                        <form action="{{ route('jobs.apply') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="job_id" value="{{ $job->id }}">
+                            <button type="submit">التقديم السريع</button>
+                        </form>
                     </div>
                 @endif
             </div>
         @endforeach
     @endif
 </div>
+
+ 
+
