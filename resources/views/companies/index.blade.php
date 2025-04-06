@@ -11,7 +11,14 @@
 </head>
 <body>
     @include('includes.header')
-    @include('search')
+    @if (session('status'))
+    <div class="custom-alert
+        {{ session('status') === 'error' ? 'error' : 'success' }}">
+        {{ session('message') }}
+        <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
+    </div>
+@endif
+
     <div class="container">
         <h2 class="title">الشركات المختارة</h2>
         <div class="companies">
@@ -67,7 +74,13 @@
                 });
             });
         });
-
+        setTimeout(function() {
+        document.querySelectorAll('.custom-alert').forEach(alert => {
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-20px)";
+            setTimeout(() => alert.remove(), 500);
+        });
+    }, 5000);
     </script>
     @include('includes.footer')
 

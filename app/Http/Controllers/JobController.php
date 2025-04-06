@@ -144,12 +144,14 @@ class JobController extends Controller
             return back()->with('error', 'لقد قمت بالتقديم مسبقًا على هذه الوظيفة.');
         }
 
-        jobs_appliers::create([
+        $jobApplier = jobs_appliers::create([
             'applier_id' => $applier->id,
             'job_id' => $jobId,
         ]);
 
-        Job::where('id', $jobId)->increment('reqGrade');
+        if ($jobApplier) {
+            Job::where('id', $jobId)->increment('reqGrade');
+        }
 
         return back()->with('success', 'تم التقديم بنجاح!');
     }
