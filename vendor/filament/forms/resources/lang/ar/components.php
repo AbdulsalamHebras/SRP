@@ -12,14 +12,62 @@ return [
 
             'add' => [
                 'label' => 'إضافة إلى :label',
+
+                'modal' => [
+
+                    'heading' => 'إضافة إلى :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'إضافة',
+                        ],
+
+                    ],
+
+                ],
             ],
 
             'add_between' => [
                 'label' => 'إدراج بين الوحدات',
+
+                'modal' => [
+
+                    'heading' => 'إضافة إلى  :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'إضافة',
+                        ],
+
+                    ],
+
+                ],
             ],
 
             'delete' => [
                 'label' => 'حذف',
+            ],
+
+            'edit' => [
+
+                'label' => 'تعديل',
+
+                'modal' => [
+
+                    'heading' => 'تعديل القسم',
+
+                    'actions' => [
+
+                        'save' => [
+                            'label' => 'حفظ التغييرات',
+                        ],
+
+                    ],
+
+                ],
+
             ],
 
             'reorder' => [
@@ -356,6 +404,8 @@ return [
 
             'create_option' => [
 
+                'label' => 'إضافة',
+
                 'modal' => [
 
                     'heading' => 'إضافة',
@@ -377,6 +427,8 @@ return [
             ],
 
             'edit_option' => [
+
+                'label' => 'تعديل',
 
                 'modal' => [
 
@@ -417,6 +469,31 @@ return [
 
     'tags_input' => [
         'placeholder' => 'كلمة مفتاحية جديدة',
+    ],
+
+    'text_input' => [
+
+        'actions' => [
+
+            'hide_password' => [
+                'label' => 'إخفاء كلمة المرور',
+            ],
+
+            'show_password' => [
+                'label' => 'عرض كلمة المرور',
+            ],
+
+        ],
+
+    ],
+
+    'toggle_buttons' => [
+
+        'boolean' => [
+            'true' => 'نعم',
+            'false' => 'لا',
+        ],
+
     ],
 
     'wizard' => [

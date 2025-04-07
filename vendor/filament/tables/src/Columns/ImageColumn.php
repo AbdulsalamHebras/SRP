@@ -239,7 +239,7 @@ class ImageColumn extends Column
      */
     public function getExtraImgAttributes(): array
     {
-        $temporaryAttributeBag = new ComponentAttributeBag();
+        $temporaryAttributeBag = new ComponentAttributeBag;
 
         foreach ($this->extraImgAttributes as $extraImgAttributes) {
             $temporaryAttributeBag = $temporaryAttributeBag->merge($this->evaluate($extraImgAttributes));
@@ -277,7 +277,7 @@ class ImageColumn extends Column
         return $this->evaluate($this->overlap);
     }
 
-    public function ring(string | Closure | null $ring): static
+    public function ring(int | Closure | null $ring): static
     {
         $this->ring = $ring;
 

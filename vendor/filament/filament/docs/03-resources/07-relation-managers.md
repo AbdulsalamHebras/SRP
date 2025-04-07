@@ -115,7 +115,7 @@ Once a table and form have been defined for the relation manager, visit the [Edi
 
 ### Read-only mode
 
-Relation managers are usually displayed on either the Edit or View page of a resource. On the View page, Filament will automatically hide all actions that modify the relationship, such as create, edit, and delete. We call this "read-only mode", and it is there by default to preserve the read-only behaviour of the View page. However, you can disable this behaviour, by overriding the `isReadOnly()` method on the relation manager class to return `false` all the time:
+Relation managers are usually displayed on either the Edit or View page of a resource. On the View page, Filament will automatically hide all actions that modify the relationship, such as create, edit, and delete. We call this "read-only mode", and it is there by default to preserve the read-only behavior of the View page. However, you can disable this behavior, by overriding the `isReadOnly()` method on the relation manager class to return `false` all the time:
 
 ```php
 public function isReadOnly(): bool
@@ -337,6 +337,17 @@ AttachAction::make()
     ->recordSelectSearchColumns(['title', 'description'])
 ```
 
+### Attaching multiple records
+
+The `multiple()` method on the `AttachAction` component allows you to select multiple values:
+
+```php
+use Filament\Tables\Actions\AttachAction;
+
+AttachAction::make()
+    ->multiple()
+```
+
 ### Customizing the select field in the attached modal
 
 You may customize the select field object that is used during attachment by passing a function to the `recordSelect()` method:
@@ -438,6 +449,17 @@ use Filament\Tables\Actions\AssociateAction;
 
 AssociateAction::make()
     ->recordSelectSearchColumns(['title', 'description'])
+```
+
+### Associating multiple records
+
+The `multiple()` method on the `AssociateAction` component allows you to select multiple values:
+
+```php
+use Filament\Tables\Actions\AssociateAction;
+
+AssociateAction::make()
+    ->multiple()
 ```
 
 ### Customizing the select field in the associate modal
@@ -641,6 +663,117 @@ public function hasCombinedRelationManagerTabsWithContent(): bool
 {
     return true;
 }
+```
+
+### Setting an icon for the form tab
+
+On the Edit or View page class, override the `getContentTabIcon()` method:
+
+```php
+public function getContentTabIcon(): ?string
+{
+    return 'heroicon-m-cog';
+}
+```
+
+### Setting the position of the form tab
+
+By default, the form tab is rendered before the relation tabs. To render it after, you can override the `getContentTabPosition()` method on the Edit or View page class:
+
+```php
+use Filament\Resources\Pages\ContentTabPosition;
+
+public function getContentTabPosition(): ?ContentTabPosition
+{
+    return ContentTabPosition::After;
+}
+```
+
+## Adding badges to relation manager tabs
+
+You can add a badge to a relation manager tab by setting the `$badge` property:
+
+```php
+protected static ?string $badge = 'new';
+```
+
+Alternatively, you can override the `getBadge()` method:
+
+```php
+use Illuminate\Database\Eloquent\Model;
+
+public static function getBadge(Model $ownerRecord, string $pageClass): ?string
+{
+    return static::$badge;
+}
+```
+
+Or, if you are using a [relation group](#grouping-relation-managers), you can use the `badge()` method:
+
+```php
+use Filament\Resources\RelationManagers\RelationGroup;
+
+RelationGroup::make('Contacts', [
+    // ...
+])->badge('new');
+```
+
+### Changing the color of relation manager tab badges
+
+If a badge value is defined, it will display using the primary color by default. To style the badge contextually, set the `$badgeColor` to either `danger`, `gray`, `info`, `primary`, `success` or `warning`:
+
+```php
+protected static ?string $badgeColor = 'danger';
+```
+
+Alternatively, you can override the `getBadgeColor()` method:
+
+```php
+use Illuminate\Database\Eloquent\Model;
+
+public static function getBadgeColor(Model $ownerRecord, string $pageClass): ?string
+{
+    return 'danger';
+}
+```
+
+Or, if you are using a [relation group](#grouping-relation-managers), you can use the `badgeColor()` method:
+
+```php
+use Filament\Resources\RelationManagers\RelationGroup;
+
+RelationGroup::make('Contacts', [
+    // ...
+])->badgeColor('danger');
+```
+
+### Adding a tooltip to relation manager tab badges
+
+If a badge value is defined, you can add a tooltip to it by setting the `$badgeTooltip` property:
+
+```php
+protected static ?string $badgeTooltip = 'There are new posts';
+```
+
+Alternatively, you can override the `getBadgeTooltip()` method:
+
+```php
+use Illuminate\Database\Eloquent\Model;
+
+public static function getBadgeTooltip(Model $ownerRecord, string $pageClass): ?string
+{
+    return 'There are new posts';
+}
+```
+
+Or, if you are using a [relation group](#grouping-relation-managers), you can use the `badgeTooltip()` method:
+
+```php
+use Filament\Resources\RelationManagers\RelationGroup;
+
+RelationGroup::make('Contacts', [
+    // ...
+])->badgeTooltip('There are new posts');
 ```
 
 ## Sharing a resource's form and table with a relation manager

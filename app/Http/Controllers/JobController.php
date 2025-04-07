@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\jobs_appliers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Applier;
+use App\Mail\NewJobPosted;
+use Illuminate\Support\Facades\Mail;
 
 class JobController extends Controller
 {
@@ -58,9 +60,15 @@ class JobController extends Controller
         'company_id'     => auth()->guard('company')->user()->id,
     ]);
 
-    // Increment the jobsNumber for the company
     $company = auth()->guard('company')->user();
-        $company->update(['jobsNumber' => $company->jobsNumber + 1]);
+    $company->update(['jobsNumber' => $company->jobsNumber + 1]);
+    if($job){
+        $followers = $company->followers;
+
+        foreach ($followers as $follower) {
+            Mail::to($follower->email)->send(new NewJobPosted($job, $company));
+        }
+    }
 
         return redirect()->route('company.jobs')->with('success', 'The job added successfully');
     }

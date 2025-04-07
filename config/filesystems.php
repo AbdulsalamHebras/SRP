@@ -43,8 +43,8 @@ return [
         ],
         'logos' => [
             'driver' => 'local',
-            'root' => public_path('images/logos'), // Defines the logos folder in public
-            'url' => env('APP_URL').'/images/logos',
+            'root' => storage_path('app/public/logos'), // Defines the logos folder in public
+            'url' => env('APP_URL').'/storage/logos',
             'visibility' => 'public',
         ],
         'cv_files' => [

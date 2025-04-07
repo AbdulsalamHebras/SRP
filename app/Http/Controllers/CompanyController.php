@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 use App\Models\jobs_appliers;
+use App\Mail\CompanyRegistered;
+use Illuminate\Support\Facades\Mail;
 
 class CompanyController extends Controller
 {
@@ -159,6 +161,9 @@ class CompanyController extends Controller
             'logo' => $logoName, // Save the logo name
             'commercialRegister' => $recordName, // Save the record name
         ]);
+        if($company){
+            Mail::to('wesamdreib2@gmail.com')->send(new CompanyRegistered($company));
+        }
 
         return redirect()->route('companies.new-company')->with('success', 'Company registered successfully!');
     }
@@ -207,7 +212,7 @@ class CompanyController extends Controller
             $query->whereIn('jobs.id', $company->jobs()->pluck('id'));
         }])->get();
 
-        
+
 
         return view('companies.appliers', compact('jobs', 'appliers'));
     }

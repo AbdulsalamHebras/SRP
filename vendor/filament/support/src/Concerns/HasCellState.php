@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Stringable;
+use Znck\Eloquent\Relations\BelongsToThrough;
 
 trait HasCellState
 {
@@ -97,13 +97,13 @@ trait HasCellState
     {
         $record = $this->getRecord();
 
-        $state = Arr::get($record, $this->getName());
+        $state = data_get($record, $this->getName());
 
         if ($state !== null) {
             return $state;
         }
 
-        if (! $this->queriesRelationships($record)) {
+        if (! $this->hasRelationship($record)) {
             return null;
         }
 
@@ -118,6 +118,7 @@ trait HasCellState
         $state = collect($this->getRelationshipResults($record))
             ->filter(fn (Model $record): bool => array_key_exists($relationshipAttribute, $record->attributesToArray()))
             ->pluck($relationshipAttribute)
+            ->filter(fn ($state): bool => filled($state))
             ->when($this->isDistinctList(), fn (Collection $state) => $state->unique())
             ->values();
 
@@ -140,9 +141,17 @@ trait HasCellState
         return $this->evaluate($this->separator);
     }
 
-    public function queriesRelationships(Model $record): bool
+    public function hasRelationship(Model $record): bool
     {
         return $this->getRelationship($record) !== null;
+    }
+
+    /**
+     * @deprecated Use `hasRelationship()` instead.
+     */
+    public function queriesRelationships(Model $record): bool
+    {
+        return $this->hasRelationship($record);
     }
 
     public function getRelationship(Model $record, ?string $name = null): ?Relation
@@ -248,7 +257,7 @@ trait HasCellState
                 ->when(
                     ($relationship instanceof BelongsTo ||
                         $relationship instanceof BelongsToMany ||
-                        $relationship instanceof \Znck\Eloquent\Relations\BelongsToThrough),
+                        $relationship instanceof BelongsToThrough),
                     fn (Stringable $name) => $name->plural(),
                 )
                 ->camel();

@@ -25,13 +25,8 @@ class HidePasswordAction extends Action
         $this->extraAttributes([
             'x-cloak' => true,
             'x-show' => 'isPasswordRevealed',
-        ]);
+        ], merge: true);
 
-        $this->livewireClickHandlerEnabled(false);
-    }
-
-    public function getAlpineClickHandler(): string
-    {
-        return 'isPasswordRevealed = false';
+        $this->alpineClickHandler('isPasswordRevealed = false');
     }
 }

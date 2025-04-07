@@ -3,10 +3,11 @@
 namespace Filament\Support\Components;
 
 use Closure;
+use Filament\Support\Components\Contracts\ScopedComponentManager;
 use ReflectionClass;
 use ReflectionMethod;
 
-class ComponentManager
+class ComponentManager implements ScopedComponentManager
 {
     /**
      * @var array<class-string, array<Closure>>
@@ -23,23 +24,30 @@ class ComponentManager
      */
     protected array $methodCache = [];
 
-    final public function __construct()
-    {
-    }
+    final public function __construct() {}
 
-    public static function register(): void
+    public static function resolve(): ScopedComponentManager
     {
-        app()->scopedIf(
-            static::class,
-            fn () => new static(),
+        if (app()->resolved(ScopedComponentManager::class)) {
+            return static::resolveScoped();
+        }
+
+        app()->singletonIf(
+            ComponentManager::class,
+            fn () => new ComponentManager,
         );
+
+        return app(ComponentManager::class);
     }
 
-    public static function resolve(): static
+    public static function resolveScoped(): ScopedComponentManager
     {
-        static::register();
+        return app(ScopedComponentManager::class);
+    }
 
-        return app(static::class);
+    public function clone(): static
+    {
+        return clone $this;
     }
 
     public function configureUsing(string $component, Closure $modifyUsing, ?Closure $during = null, bool $isImportant = false): mixed
@@ -53,7 +61,19 @@ class ComponentManager
         }
 
         if (! $during) {
-            return null;
+            $configurationKey = $isImportant ?
+                array_key_last($this->importantConfigurations[$component]) :
+                array_key_last($this->configurations[$component]);
+
+            return function () use ($component, $configurationKey, $isImportant) {
+                if ($isImportant) {
+                    unset($this->importantConfigurations[$component][$configurationKey]);
+
+                    return;
+                }
+
+                unset($this->configurations[$component][$configurationKey]);
+            };
         }
 
         try {

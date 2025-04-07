@@ -11,15 +11,67 @@ return [
             ],
 
             'add' => [
+
                 'label' => 'Adicionar a :label',
+
+                'modal' => [
+
+                    'heading' => 'Adicionar a :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'Adicionar',
+                        ],
+
+                    ],
+
+                ],
+
             ],
 
             'add_between' => [
-                'label' => 'Adicionar entre blocos',
+
+                'label' => 'Inserir entre blocos',
+
+                'modal' => [
+
+                    'heading' => 'Adicionar a :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'Adicionar',
+                        ],
+
+                    ],
+
+                ],
+
             ],
 
             'delete' => [
                 'label' => 'Eliminar',
+            ],
+
+            'edit' => [
+
+                'label' => 'Editar',
+
+                'modal' => [
+
+                    'heading' => 'Editar bloco',
+
+                    'actions' => [
+
+                        'save' => [
+                            'label' => 'Guardar alterações',
+                        ],
+
+                    ],
+
+                ],
+
             ],
 
             'reorder' => [
@@ -189,7 +241,7 @@ return [
 
                 'messages' => [
                     'confirmation' => 'Não é recomendado editar ficheiros SVG, pois pode resultar em perda de qualidade ao redimensionar.\n Tem a certeza de que deseja prosseguir?',
-                    'disabled' => 'A edição de ficheiros SVG está desativada, pois pode resultar em perda de qualidade ao redimensionar.',
+                    'disabled' => 'A edição de ficheiros SVG está desactivada, pois pode resultar em perda de qualidade ao redimensionar.',
                 ],
 
             ],
@@ -412,10 +464,36 @@ return [
         'searching_message' => 'A pesquisar...',
 
         'search_prompt' => 'Comece a escrever para pesquisar...',
+
     ],
 
     'tags_input' => [
         'placeholder' => 'Nova etiqueta',
+    ],
+
+    'text_input' => [
+
+        'actions' => [
+
+            'hide_password' => [
+                'label' => 'Esconder palavra-passe',
+            ],
+
+            'show_password' => [
+                'label' => 'Mostrar palavra-passe',
+            ],
+
+        ],
+
+    ],
+
+    'toggle_buttons' => [
+
+        'boolean' => [
+            'true' => 'Sim',
+            'false' => 'Não',
+        ],
+
     ],
 
     'wizard' => [

@@ -2,18 +2,20 @@
     $id = $getId();
     $isContained = $getContainer()->getParentComponent()->isContained();
 
-    $visibleStepClasses = \Illuminate\Support\Arr::toCssClasses([
+    $activeStepClasses = \Illuminate\Support\Arr::toCssClasses([
+        'fi-active',
         'p-6' => $isContained,
         'mt-6' => ! $isContained,
     ]);
 
-    $invisibleStepClasses = 'invisible h-0 overflow-y-hidden p-0';
+    $inactiveStepClasses = 'invisible absolute h-0 overflow-hidden p-0';
 @endphp
 
 <div
+    x-bind:tabindex="$el.querySelector('[autofocus]') ? '-1' : '0'"
     x-bind:class="{
-        @js($visibleStepClasses): step === @js($id),
-        @js($invisibleStepClasses): step !== @js($id),
+        @js($activeStepClasses): step === @js($id),
+        @js($inactiveStepClasses): step !== @js($id),
     }"
     x-on:expand="
         if (! isStepAccessible(@js($id))) {
@@ -29,7 +31,6 @@
                 'aria-labelledby' => $id,
                 'id' => $id,
                 'role' => 'tabpanel',
-                'tabindex' => '0',
             ], escape: false)
             ->merge($getExtraAttributes(), escape: false)
             ->class(['fi-fo-wizard-step outline-none'])

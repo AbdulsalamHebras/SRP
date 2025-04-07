@@ -10,6 +10,7 @@ use App\Http\Controllers\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Job;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,12 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
-    $jobs = Job::with('company')->latest()->take(6)->get();
+    $jobs = Job::with('company')
+    ->where('expirationDate', '>=', Carbon::now())
+    ->latest()
+    ->take(6)
+    ->get();
+
     return view('index',compact('jobs'));
 })->name('home');
 
@@ -59,7 +65,7 @@ Route::name('companies.')->prefix('companies')->group(function () {
     Route::post('/register', [CompanyController::class, 'register'])->name('register');
     Route::post('/logout', [CompanyController::class, 'destroy'])->name('logout');
     Route::get('/new-company', function () {
-        return view('companies.new-company');
+        return view('emails.new-company');
     })->name('new-company');
     Route::middleware('auth:web')->post('/follow/{companyid}', [CompanyController::class, 'follow'])->name('follow');
 });

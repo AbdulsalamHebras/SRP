@@ -2,8 +2,9 @@
 
 namespace Livewire\Features\SupportTesting {
 
-    use Illuminate\Support\Collection;
     use Closure;
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Support\Collection;
 
     class Testable {
         public function mountTableAction(string | array $name, $record = null): static {}
@@ -12,7 +13,7 @@ namespace Livewire\Features\SupportTesting {
 
         public function setTableActionData(array $data): static {}
 
-        public function assertTableActionDataSet(array $data): static {}
+        public function assertTableActionDataSet(array | Closure $state): static {}
 
         public function callTableAction(string | array $name, $record = null, array $data = [], array $arguments = []): static {}
 
@@ -20,9 +21,9 @@ namespace Livewire\Features\SupportTesting {
 
         public function callMountedTableAction(array $arguments = []): static {}
 
-        public function assertTableActionExists(string | array $name): static {}
+        public function assertTableActionExists(string | array $name, ?Closure $checkActionUsing = null, $record = null): static {}
 
-        public function assertTableActionDoesNotExist(string | array $name): static {}
+        public function assertTableActionDoesNotExist(string | array $name, ?Closure $checkActionUsing = null, $record = null): static {}
 
         public function assertTableActionsExistInOrder(array $names): static {}
 
@@ -52,7 +53,7 @@ namespace Livewire\Features\SupportTesting {
 
         public function setTableBulkActionData(array $data): static {}
 
-        public function assertTableBulkActionDataSet(array $data): static {}
+        public function assertTableBulkActionDataSet(array | Closure $state): static {}
 
         public function callTableBulkAction(string $name, array | Collection $records, array $data = [], array $arguments = []): static {}
 
@@ -120,6 +121,8 @@ namespace Livewire\Features\SupportTesting {
 
         public function assertTableColumnExists(string $name, ?Closure $checkColumnUsing = null, $record = null): static {}
 
+        public function assertTableColumnDoesNotExist(string $name, ?Closure $checkColumnUsing = null, $record = null): static {}
+
         public function assertTableColumnVisible(string $name): static {}
 
         public function assertTableColumnHidden(string $name): static {}
@@ -163,6 +166,12 @@ namespace Livewire\Features\SupportTesting {
         public function removeTableFilter(string $filter, ?string $field = null): static {}
 
         public function removeTableFilters(): static {}
+
+        public function assertTableFilterVisible(string $name): static {}
+
+        public function assertTableFilterHidden(string $name): static {}
+
+        public function assertTableFilterExists(string $name, ?Closure $checkFilterUsing = null): static {}
 
         public function assertCanSeeTableRecords(array | Collection $records, bool $inOrder = false): static {}
 
