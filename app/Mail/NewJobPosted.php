@@ -1,4 +1,5 @@
 <?php
+namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -19,6 +20,6 @@ class NewJobPosted extends Mailable
     public function build()
     {
         return $this->subject('وظيفة جديدة من ' . $this->company->name)
-                    ->view('Jobs.details');
+                    ->view('emails.new_job');
     }
 }
