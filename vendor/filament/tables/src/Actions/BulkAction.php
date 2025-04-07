@@ -3,19 +3,17 @@
 namespace Filament\Tables\Actions;
 
 use Closure;
-use Filament\Actions\Contracts\Groupable;
 use Filament\Actions\MountableAction;
 use Filament\Tables\Actions\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
-class BulkAction extends MountableAction implements Groupable, HasTable
+class BulkAction extends MountableAction implements HasTable
 {
     use Concerns\BelongsToTable;
     use Concerns\CanDeselectRecordsAfterCompletion;
+    use Concerns\CanFetchSelectedRecords;
     use Concerns\InteractsWithRecords;
-
-    protected bool | Closure $shouldFetchSelectedRecords = true;
 
     protected function setUp(): void
     {
@@ -26,25 +24,13 @@ class BulkAction extends MountableAction implements Groupable, HasTable
         ]);
     }
 
-    public function fetchSelectedRecords(bool | Closure $condition = true): static
-    {
-        $this->shouldFetchSelectedRecords = $condition;
-
-        return $this;
-    }
-
-    public function shouldFetchSelectedRecords(): bool
-    {
-        return (bool) $this->evaluate($this->shouldFetchSelectedRecords);
-    }
-
     /**
      * @param  array<string, mixed>  $parameters
      */
     public function call(array $parameters = []): mixed
     {
         try {
-            return $this->evaluate($this->getActionFunction(), $parameters);
+            return parent::call($parameters);
         } finally {
             if ($this->shouldDeselectRecordsAfterCompletion()) {
                 $this->getLivewire()->deselectAllTableRecords();
@@ -70,7 +56,7 @@ class BulkAction extends MountableAction implements Groupable, HasTable
 
     public function getAlpineClickHandler(): ?string
     {
-        return "mountBulkAction('{$this->getName()}')";
+        return parent::getAlpineClickHandler() ?? "mountBulkAction('{$this->getName()}')";
     }
 
     public function getLivewireTarget(): ?string

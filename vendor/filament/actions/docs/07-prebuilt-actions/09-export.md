@@ -4,13 +4,21 @@ title: Export action
 
 ## Overview
 
-Filament v3.1 introduced a prebuilt action that is able to export rows to a CSV or XLSX file. When the trigger button is clicked, a modal asks for the columns that they want to export, and what they should be labeled. This feature uses [job batches](https://laravel.com/docs/queues#job-batching) and [database notifications](../../notifications/database-notifications#overview), so you need to publish those migrations from Laravel. Also, you need to publish the migrations for tables that Filament uses to store information about exports:
+Filament v3.2 introduced a prebuilt action that is able to export rows to a CSV or XLSX file. When the trigger button is clicked, a modal asks for the columns that they want to export, and what they should be labeled. This feature uses [job batches](https://laravel.com/docs/queues#job-batching) and [database notifications](../../notifications/database-notifications#overview), so you need to publish those migrations from Laravel. Also, you need to publish the migrations for tables that Filament uses to store information about exports:
 
 ```bash
+# Laravel 11 and higher
+php artisan make:queue-batches-table
+php artisan make:notifications-table
+
+# Laravel 10
 php artisan queue:batches-table
 php artisan notifications:table
-php artisan vendor:publish --tag=filament-actions-migrations
+```
 
+```bash
+# All apps
+php artisan vendor:publish --tag=filament-actions-migrations
 php artisan migrate
 ```
 
@@ -82,8 +90,6 @@ If you'd like to save time, Filament can automatically generate the [columns](#d
 php artisan make:filament-exporter Product --generate
 ```
 
-> If your table contains ENUM columns, the `doctrine/dbal` package we use is unable to scan your table and will crash. Hence, Filament is unable to generate the columns for your exporter if it contains an ENUM column. Read more about this issue [here](https://github.com/doctrine/dbal/issues/3819#issuecomment-573419808).
-
 ## Defining exporter columns
 
 To define the columns that can be exported, you need to override the `getColumns()` method on your exporter class, returning an array of `ExportColumn` objects:
@@ -91,12 +97,12 @@ To define the columns that can be exported, you need to override the `getColumns
 ```php
 use Filament\Actions\Exports\ExportColumn;
 
-public function getColumns(): array
+public static function getColumns(): array
 {
     return [
         ExportColumn::make('name'),
         ExportColumn::make('sku')
-            ->label('SKU')),
+            ->label('SKU'),
         ExportColumn::make('price'),
     ];
 }
@@ -111,6 +117,29 @@ use Filament\Actions\Exports\ExportColumn;
 
 ExportColumn::make('sku')
     ->label('SKU')
+```
+
+### Configuring the default column selection
+
+By default, all columns will be selected when the user is asked which columns they would like to export. You can customize the default selection state for a column with the `enabledByDefault()` method:
+
+```php
+use Filament\Actions\Exports\ExportColumn;
+
+ExportColumn::make('description')
+    ->enabledByDefault(false)
+```
+
+### Disabling column selection
+
+By default, user will be asked which columns they would like to export. You can disable this functionality using `columnMapping(false)`:
+
+```php
+use App\Filament\Exports\ProductExporter;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->columnMapping(false)
 ```
 
 ### Calculated export column state
@@ -266,20 +295,109 @@ ExportColumn::make('users_avg_age')->avg([
 ], 'age')
 ```
 
+## Configuring the export formats
+
+By default, the export action will allow the user to choose between both CSV and XLSX formats. You can use the `ExportFormat` enum to customize this, by passing an array of formats to the `formats()` method on the action:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Filament\Actions\Exports\Enums\ExportFormat;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->formats([
+        ExportFormat::Csv,
+    ])
+    // or
+    ->formats([
+        ExportFormat::Xlsx,
+    ])
+    // or
+    ->formats([
+        ExportFormat::Xlsx,
+        ExportFormat::Csv,
+    ])
+```
+
+Alternatively, you can override the `getFormats()` method on the exporter class, which will set the default formats for all actions that use that exporter:
+
+```php
+use Filament\Actions\Exports\Enums\ExportFormat;
+
+public function getFormats(): array
+{
+    return [
+        ExportFormat::Csv,
+    ];
+}
+```
+
+## Modifying the export query
+
+By default, if you are using the `ExportAction` with a table, the action will use the table's currently filtered and sorted query to export the data. If you don't have a table, it will use the model's default query. To modify the query builder before exporting, you can use the `modifyQueryUsing()` method on the action:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Illuminate\Database\Eloquent\Builder;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', true))
+```
+
+You may inject the `$options` argument into the function, which is an array of [options](#using-export-options) for that export:
+
+```php
+use App\Filament\Exports\ProductExporter;
+use Illuminate\Database\Eloquent\Builder;
+
+ExportAction::make()
+    ->exporter(ProductExporter::class)
+    ->modifyQueryUsing(fn (Builder $query, array $options) => $query->where('is_active', $options['isActive'] ?? true))
+```
+
+Alternatively, you can override the `modifyQuery()` method on the exporter class, which will modify the query for all actions that use that exporter:
+
+```php
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
+public static function modifyQuery(Builder $query): Builder
+{
+    return $query->with([
+        'purchasable' => fn (MorphTo $morphTo) => $morphTo->morphWith([
+            ProductPurchase::class => ['product'],
+            ServicePurchase::class => ['service'],
+            Subscription::class => ['plan'],
+        ]),
+    ]);
+}
+```
+
 ## Configuring the export filesystem
 
 ### Customizing the storage disk
 
-By default, exported files will be uploaded to the storage disk defined in the [configuration file](../installation#publishing-configuration). You can also set the `FILAMENT_FILESYSTEM_DISK` environment variable to change this.
+By default, exported files will be uploaded to the storage disk defined in the [configuration file](../installation#publishing-configuration), which is `public` by default. You can set the `FILAMENT_FILESYSTEM_DISK` environment variable to change this.
+
+While using the `public` disk a good default for many parts of Filament, using it for exports would result in exported files being stored in a public location. As such, if the default filesystem disk is `public` and a `local` disk exists in your `config/filesystems.php`, Filament will use the `local` disk for exports instead. If you override the disk to be `public` for an `ExportAction` or inside an exporter class, Filament will use that.
+
+In production, you should use a disk such as `s3` with a private access policy, to prevent unauthorized access to the exported files.
 
 If you want to use a different disk for a specific export, you can pass the disk name to the `disk()` method on the action:
 
 ```php
-use Filament\Actions\ExportAction;
-
 ExportAction::make()
     ->exporter(ProductExporter::class)
     ->fileDisk('s3')
+```
+
+You may set the disk for all export actions at once in the `boot()` method of a service provider such as `AppServiceProvider`:
+
+```php
+use Filament\Actions\ExportAction;
+
+ExportAction::configureUsing(fn (ExportAction $action) => $action->fileDisk('s3'));
 ```
 
 Alternatively, you can override the `getFileDisk()` method on the exporter class, returning the name of the disk:
@@ -291,17 +409,18 @@ public function getFileDisk(): string
 }
 ```
 
+Export files that are created are the developer's responsibility to delete if they wish. Filament does not delete these files in case the exports need to be downloaded again at a later date.
+
 ### Configuring the export file names
 
 By default, exported files will have a name generated based on the ID and type of the export. You can also use the `fileName()` method on the action to customize the file name:
 
 ```php
-use Filament\Actions\ExportAction;
 use Filament\Actions\Exports\Models\Export;
 
 ExportAction::make()
     ->exporter(ProductExporter::class)
-    ->fileName(fn (Export): string => "products-{$export->getKey()}.csv")
+    ->fileName(fn (Export $export): string => "products-{$export->getKey()}.csv")
 ```
 
 Alternatively, you can override the `getFileName()` method on the exporter class, returning a string:
@@ -336,8 +455,6 @@ public static function getOptionsFormComponents(): array
 Alternatively, you can pass a set of static options to the exporter through the `options()` method on the action:
 
 ```php
-use Filament\Actions\ExportAction;
-
 ExportAction::make()
     ->exporter(ProductExporter::class)
     ->options([
@@ -439,13 +556,50 @@ public static function getCsvDelimiter(): string
 
 You can only specify a single character, otherwise an exception will be thrown.
 
+## Styling XLSX cells
+
+If you want to style the cells of the XLSX file, you may override the `getXlsxCellStyle()` method on the exporter class, returning an [OpenSpout `Style` object](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#styling):
+
+```php
+use OpenSpout\Common\Entity\Style\Style;
+
+public function getXlsxCellStyle(): ?Style
+{
+    return (new Style())
+        ->setFontSize(12)
+        ->setFontName('Consolas');
+}
+```
+
+If you want to use a different style for the header cells of the XLSX file only, you may override the `getXlsxHeaderCellStyle()` method on the exporter class, returning an [OpenSpout `Style` object](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#styling):
+
+```php
+use OpenSpout\Common\Entity\Style\CellAlignment;
+use OpenSpout\Common\Entity\Style\CellVerticalAlignment;
+use OpenSpout\Common\Entity\Style\Color;
+use OpenSpout\Common\Entity\Style\Style;
+
+public function getXlsxHeaderCellStyle(): ?Style
+{
+    return (new Style())
+        ->setFontBold()
+        ->setFontItalic()
+        ->setFontSize(14)
+        ->setFontName('Consolas')
+        ->setFontColor(Color::rgb(255, 255, 77))
+        ->setBackgroundColor(Color::rgb(0, 0, 0))
+        ->setCellAlignment(CellAlignment::CENTER)
+        ->setCellVerticalAlignment(CellVerticalAlignment::CENTER);
+}
+```
+
 ## Customizing the export job
 
 The default job for processing exports is `Filament\Actions\Exports\Jobs\PrepareCsvExport`. If you want to extend this class and override any of its methods, you may replace the original class in the `register()` method of a service provider:
 
 ```php
 use App\Jobs\PrepareCsvExport;
-use Filament\Actions\Exports\Jobs\PrepareCsvExport::class as BasePrepareCsvExport;
+use Filament\Actions\Exports\Jobs\PrepareCsvExport as BasePrepareCsvExport;
 
 $this->app->bind(BasePrepareCsvExport::class, PrepareCsvExport::class);
 ```
@@ -502,7 +656,7 @@ By default, the export system will retry a job for 24 hours. This is to allow fo
 ```php
 use Carbon\CarbonInterface;
 
-public function getJobRetryUntil(): CarbonInterface
+public function getJobRetryUntil(): ?CarbonInterface
 {
     return now()->addDay();
 }
@@ -522,3 +676,41 @@ public function getJobTags(): array
 ```
 
 If you'd like to customize the tags that are applied to jobs of a certain exporter, you may override this method in your exporter class.
+
+### Customizing the export job batch name
+
+By default, the export system doesn't define any name for the job batches. If you'd like to customize the name that is applied to job batches of a certain exporter, you may override the `getJobBatchName()` method in your exporter class:
+
+```php
+public function getJobBatchName(): ?string
+{
+    return 'product-export';
+}
+```
+
+## Authorization
+
+By default, only the user who started the export may download files that get generated. If you'd like to customize the authorization logic, you may create an `ExportPolicy` class, and [register it in your `AuthServiceProvider`](https://laravel.com/docs/authorization#registering-policies):
+
+```php
+use App\Policies\ExportPolicy;
+use Filament\Actions\Exports\Models\Export;
+
+protected $policies = [
+    Export::class => ExportPolicy::class,
+];
+```
+
+The `view()` method of the policy will be used to authorize access to the downloads.
+
+Please note that if you define a policy, the existing logic of ensuring only the user who started the export can access it will be removed. You will need to add that logic to your policy if you want to keep it:
+
+```php
+use App\Models\User;
+use Filament\Actions\Exports\Models\Export;
+
+public function view(User $user, Export $export): bool
+{
+    return $export->user()->is($user);
+}
+```

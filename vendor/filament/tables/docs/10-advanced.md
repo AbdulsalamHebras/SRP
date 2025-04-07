@@ -63,6 +63,20 @@ public function table(Table $table): Table
 }
 ```
 
+### Displaying links to the first and the last pagination page
+
+To add "extreme" links to the first and the last page using the `extremePaginationLinks()` method:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->extremePaginationLinks();
+}
+```
+
 ### Using simple pagination
 
 You may use simple pagination by overriding `paginateTableQuery()` method.
@@ -113,6 +127,18 @@ public function table(Table $table): Table
 ```
 
 In this example, clicking on each post will take you to the `posts.edit` route.
+
+You may also open the URL in a new tab:
+
+```php
+use Filament\Tables\Table;
+
+public function table(Table $table): Table
+{
+    return $table
+        ->openRecordUrlInNewTab();
+}
+```
 
 If you'd like to [override the URL](columns/getting-started#opening-urls) for a specific column, or instead [run an action](columns/getting-started#running-actions) when a column is clicked, see the [columns documentation](columns/getting-started#opening-urls).
 

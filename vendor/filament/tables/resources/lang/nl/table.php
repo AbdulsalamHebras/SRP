@@ -10,6 +10,10 @@ return [
 
     'columns' => [
 
+        'actions' => [
+            'label' => 'Actie|Acties',
+        ],
+
         'text' => [
 
             'actions' => [
@@ -111,6 +115,10 @@ return [
     'filters' => [
 
         'actions' => [
+
+            'apply' => [
+                'label' => 'Filters toepassen',
+            ],
 
             'remove' => [
                 'label' => 'Filter verwijderen',

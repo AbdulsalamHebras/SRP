@@ -13,6 +13,7 @@ use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Panel;
+use Filament\PanelRegistry;
 use Filament\Support\Assets\Theme;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static StatefulGuard auth()
  * @method static void bootCurrentPanel()
  * @method static array<NavigationGroup> buildNavigation()
+ * @method static void currentDomain(?string $domain)
  * @method static string getAuthGuard()
  * @method static string | null getAuthPasswordBroker()
  * @method static string | Htmlable getBrandName()
@@ -35,6 +37,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static string | null getBrandLogoHeight()
  * @method static array getClusteredComponents(?string $cluster = null)
  * @method static string getCollapsedSidebarWidth()
+ * @method static string getCurrentDomain(?string $testingDomain = null)
  * @method static Panel | null getCurrentPanel()
  * @method static string | Htmlable | null getDarkModeBrandLogo()
  * @method static string | null getDatabaseNotificationsPollingInterval()
@@ -47,6 +50,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static Htmlable getFontHtml()
  * @method static string getFontProvider()
  * @method static string | null getFontUrl()
+ * @method static string getGlobalSearchDebounce()
  * @method static array<string> getGlobalSearchKeyBindings()
  * @method static GlobalSearchProvider | null getGlobalSearchProvider()
  * @method static string | null getHomeUrl()
@@ -59,7 +63,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array<string | int, NavigationGroup | string> getNavigationGroups()
  * @method static array<NavigationItem> getNavigationItems()
  * @method static array getPages()
- * @method static Panel getPanel(?string $id = null)
+ * @method static Panel getPanel(?string $id = null, bool $isStrict = true)
  * @method static array<string, Panel> getPanels()
  * @method static Plugin getPlugin(string $id)
  * @method static string | null getProfileUrl(array $parameters = [])
@@ -67,6 +71,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static string | null getRequestPasswordResetUrl(array $parameters = [])
  * @method static string getResetPasswordUrl(string $token, CanResetPassword | Model | Authenticatable $user, array $parameters = [])
  * @method static array getResources()
+ * @method static array getResourceUrl(string | Model $model, string $name = 'index', array $parameters = [], bool $isAbsolute = false, ?Model $tenant = null)
  * @method static string getSidebarWidth()
  * @method static Model | null getTenant()
  * @method static string | null getTenantAvatarUrl(Model $tenant)
@@ -95,6 +100,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool hasDarkMode()
  * @method static bool hasDarkModeForced()
  * @method static bool hasDatabaseNotifications()
+ * @method static bool hasLazyLoadedDatabaseNotifications()
  * @method static bool hasEmailVerification()
  * @method static bool hasLogin()
  * @method static bool hasNavigation()
@@ -109,10 +115,10 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool hasTenantRegistration()
  * @method static bool hasTopNavigation()
  * @method static bool hasUnsavedChangesAlerts()
+ * @method static bool isProfilePageSimple()
  * @method static bool isServing()
  * @method static bool isSidebarCollapsibleOnDesktop()
  * @method static bool isSidebarFullyCollapsibleOnDesktop()
- * @method static void mountNavigation()
  * @method static void serving(Closure $callback)
  * @method static void setCurrentPanel(Panel | null $panel = null)
  * @method static void setServingStatus(bool $condition = true)
@@ -130,8 +136,8 @@ class Filament extends Facade
     public static function registerPanel(Panel | Closure $panel): void
     {
         static::getFacadeApplication()->resolving(
-            static::getFacadeAccessor(),
-            fn (FilamentManager $filamentManager) => $filamentManager->registerPanel(value($panel)),
+            PanelRegistry::class,
+            fn (PanelRegistry $registry) => $registry->register(value($panel)),
         );
     }
 }

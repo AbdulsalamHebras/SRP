@@ -10,6 +10,10 @@ return [
 
     'columns' => [
 
+        'actions' => [
+            'label' => 'Acção|Acções',
+        ],
+
         'text' => [
 
             'actions' => [
@@ -106,11 +110,16 @@ return [
         'heading' => 'Sem :model',
 
         'description' => 'Crie um(a) :model para começar.',
+
     ],
 
     'filters' => [
 
         'actions' => [
+
+            'apply' => [
+                'label' => 'Aplicar filtros',
+            ],
 
             'remove' => [
                 'label' => 'Remover filtro',
@@ -124,11 +133,12 @@ return [
             'reset' => [
                 'label' => 'Repôr',
             ],
+
         ],
 
         'heading' => 'Filtros',
 
-        'indicator' => 'Filtros ativos',
+        'indicator' => 'Filtros activos',
 
         'multi_select' => [
             'placeholder' => 'Todos',
@@ -173,6 +183,7 @@ return [
             ],
 
         ],
+
     ],
 
     'reorder_indicator' => 'Arraste e solte os registos por ordem.',
@@ -194,6 +205,7 @@ return [
         ],
 
     ],
+
     'sorting' => [
 
         'fields' => [

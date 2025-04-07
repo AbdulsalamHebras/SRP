@@ -25,11 +25,11 @@
 >
     <div
         @if (FilamentView::hasSpaMode())
-            ax-load="visible"
+            {{-- format-ignore-start --}}x-load="visible || event (ax-modal-opened)"{{-- format-ignore-end --}}
         @else
-            ax-load
+            x-load
         @endif
-        ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('file-upload', 'filament/forms') }}"
+        x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('file-upload', 'filament/forms') }}"
         x-data="fileUploadFormComponent({
                     acceptedFileTypes: @js($getAcceptedFileTypes()),
                     imageEditorEmptyFillColor: @js($getImageEditorEmptyFillColor()),
@@ -62,13 +62,17 @@
                     isOpenable: @js($isOpenable()),
                     isPreviewable: @js($isPreviewable()),
                     isReorderable: @js($isReorderable()),
+                    itemPanelAspectRatio: @js($getItemPanelAspectRatio()),
                     loadingIndicatorPosition: @js($getLoadingIndicatorPosition()),
                     locale: @js(app()->getLocale()),
                     panelAspectRatio: @js($getPanelAspectRatio()),
                     panelLayout: @js($getPanelLayout()),
                     placeholder: @js($getPlaceholder()),
-                    maxSize: @js(($size = $getMaxSize()) ? "'{$size} KB'" : null),
-                    minSize: @js(($size = $getMinSize()) ? "'{$size} KB'" : null),
+                    maxFiles: @js($getMaxFiles()),
+                    maxSize: @js(($size = $getMaxSize()) ? "{$size}KB" : null),
+                    minSize: @js(($size = $getMinSize()) ? "{$size}KB" : null),
+                    mimeTypeMap: @js($getMimeTypeMap()),
+                    maxParallelUploads: @js($getMaxParallelUploads()),
                     removeUploadedFileUsing: async (fileKey) => {
                         return await $wire.removeFormUploadedFile(@js($statePath), fileKey)
                     },
@@ -81,6 +85,7 @@
                     shouldTransformImage: @js($imageCropAspectRatio || $imageResizeTargetHeight || $imageResizeTargetWidth),
                     state: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')") }},
                     uploadButtonPosition: @js($getUploadButtonPosition()),
+                    uploadingMessage: @js($getUploadingMessage()),
                     uploadProgressIndicatorPosition: @js($getUploadProgressIndicatorPosition()),
                     uploadUsing: (fileKey, file, success, error, progress) => {
                         $wire.upload(
@@ -97,7 +102,6 @@
                     },
                 })"
         wire:ignore
-        x-ignore
         {{
             $attributes
                 ->merge([
@@ -106,14 +110,11 @@
                 ->merge($getExtraAttributes(), escape: false)
                 ->merge($getExtraAlpineAttributes(), escape: false)
                 ->class([
-                    'fi-fo-file-upload flex [&_.filepond--root]:font-sans',
+                    'fi-fo-file-upload flex flex-col gap-y-2 [&_.filepond--root]:font-sans',
                     match ($alignment) {
-                        Alignment::Start => 'justify-start',
-                        Alignment::Center => 'justify-center',
-                        Alignment::End => 'justify-end',
-                        Alignment::Left => 'justify-left',
-                        Alignment::Right => 'justify-right',
-                        Alignment::Between, Alignment::Justify => 'justify-between',
+                        Alignment::Start, Alignment::Left => 'items-start',
+                        Alignment::Center => 'items-center',
+                        Alignment::End, Alignment::Right => 'items-end',
                         default => $alignment,
                     },
                 ])
@@ -139,6 +140,13 @@
             />
         </div>
 
+        <div
+            x-show="error"
+            x-text="error"
+            x-cloak
+            class="text-sm text-danger-600 dark:text-danger-400"
+        ></div>
+
         @if ($hasImageEditor && (! $isDisabled))
             <div
                 x-show="isEditorOpen"
@@ -147,7 +155,7 @@
                 x-trap.noscroll="isEditorOpen"
                 x-on:keydown.escape.window="closeEditor"
                 @class([
-                    'fixed inset-0 isolate z-50 h-screen w-screen p-2 sm:p-10 md:p-20',
+                    'fixed inset-0 isolate z-50 h-[100dvh] w-screen p-2 sm:p-10 md:p-20',
                     'fi-fo-file-upload-circle-cropper' => $hasCircleCropper,
                 ])
             >
@@ -161,7 +169,7 @@
                     class="isolate z-10 flex h-full w-full items-center justify-center"
                 >
                     <div
-                        class="mx-auto flex h-full w-full flex-col overflow-hidden rounded-xl bg-white ring-1 ring-gray-900/10 lg:flex-row dark:bg-gray-800 dark:ring-gray-50/10"
+                        class="mx-auto flex h-full w-full flex-col overflow-hidden rounded-xl bg-white ring-1 ring-gray-900/10 dark:bg-gray-800 dark:ring-gray-50/10 lg:flex-row"
                     >
                         <div class="w-full flex-1 overflow-auto p-4 lg:h-full">
                             <div class="h-full w-full">
@@ -170,7 +178,7 @@
                         </div>
 
                         <div
-                            class="shadow-top z-[1] flex h-96 w-full flex-col overflow-auto bg-gray-50 lg:h-full lg:max-w-xs lg:shadow-none dark:bg-gray-900/30"
+                            class="shadow-top z-[1] flex h-96 w-full flex-col overflow-auto bg-gray-50 dark:bg-gray-900/30 lg:h-full lg:max-w-xs lg:shadow-none"
                         >
                             <div class="flex-1 overflow-hidden">
                                 <div

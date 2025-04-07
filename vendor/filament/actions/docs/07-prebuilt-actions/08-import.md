@@ -9,10 +9,18 @@ Filament v3.1 introduced a prebuilt action that is able to import rows from a CS
 This feature uses [job batches](https://laravel.com/docs/queues#job-batching) and [database notifications](../../notifications/database-notifications#overview), so you need to publish those migrations from Laravel. Also, you need to publish the migrations for tables that Filament uses to store information about imports:
 
 ```bash
+# Laravel 11 and higher
+php artisan make:queue-batches-table
+php artisan make:notifications-table
+
+# Laravel 10
 php artisan queue:batches-table
 php artisan notifications:table
-php artisan vendor:publish --tag=filament-actions-migrations
+```
 
+```bash
+# All apps
+php artisan vendor:publish --tag=filament-actions-migrations
 php artisan migrate
 ```
 
@@ -49,6 +57,16 @@ public function table(Table $table): Table
 
 The ["importer" class needs to be created](#creating-an-importer) to tell Filament how to import each row of the CSV.
 
+If you have more than one `ImportAction` in the same place, you should give each a unique name in the `make()` method:
+
+```php
+ImportAction::make('importProducts')
+    ->importer(ProductImporter::class)
+
+ImportAction::make('importBrands')
+    ->importer(BrandImporter::class)
+```
+
 ## Creating an importer
 
 To create an importer class for a model, you may use the `make:filament-importer` command, passing the name of a model:
@@ -67,8 +85,6 @@ If you'd like to save time, Filament can automatically generate the [columns](#d
 php artisan make:filament-importer Product --generate
 ```
 
-> If your table contains ENUM columns, the `doctrine/dbal` package we use is unable to scan your table and will crash. Hence, Filament is unable to generate the columns for your importer if it contains an ENUM column. Read more about this issue [here](https://github.com/doctrine/dbal/issues/3819#issuecomment-573419808).
-
 ## Defining importer columns
 
 To define the columns that can be imported, you need to override the `getColumns()` method on your importer class, returning an array of `ImportColumn` objects:
@@ -76,7 +92,7 @@ To define the columns that can be imported, you need to override the `getColumns
 ```php
 use Filament\Actions\Imports\ImportColumn;
 
-public function getColumns(): array
+public static function getColumns(): array
 {
     return [
         ImportColumn::make('name')
@@ -116,6 +132,19 @@ ImportColumn::make('sku')
 ```
 
 If you require a column in the database, you also need to make sure that it has a [`rules(['required'])` validation rule](#validating-csv-data).
+
+If a column is not mapped, it will not be validated since there is no data to validate.
+
+If you allow an import to create records as well as [update existing ones](#updating-existing-records-when-importing), but only require a column to be mapped when creating records as it's a required field, you can use the `requiredMappingForNewRecordsOnly()` method instead of `requiredMapping()`:
+
+```php
+use Filament\Actions\Imports\ImportColumn;
+
+ImportColumn::make('sku')
+    ->requiredMappingForNewRecordsOnly()
+```
+
+If the `resolveRecord()` method returns a model instance that is not saved in the database yet, the column will be required to be mapped, just for that row. If the user does not map the column, and one of the rows in the import does not yet exist in the database, just that row will fail and a message will be added to the failed rows CSV after every row has been analyzed.
 
 ### Validating CSV data
 
@@ -244,7 +273,7 @@ use App\Models\Author;
 use Filament\Actions\Imports\ImportColumn;
 
 ImportColumn::make('author')
-    ->relationship(resolveUsing: function (array $state): ?Author {
+    ->relationship(resolveUsing: function (string $state): ?Author {
         return Author::query()
             ->where('email', $state)
             ->orWhere('username', $state)
@@ -259,7 +288,7 @@ use App\Models\Author;
 use Filament\Actions\Imports\ImportColumn;
 
 ImportColumn::make('author')
-    ->relationship(resolveUsing: function (array $state): ?Author {
+    ->relationship(resolveUsing: function (string $state): ?Author {
         if (filter_var($state, FILTER_VALIDATE_EMAIL)) {
             return 'email';
         }
@@ -307,6 +336,19 @@ ImportColumn::make('customer_ratings')
     ->nestedRecursiveRules(['integer', 'min:1', 'max:5'])
 ```
 
+### Marking column data as sensitive
+
+When import rows fail validation, they are logged to the database, ready for export when the import completes. You may want to exclude certain columns from this logging to avoid storing sensitive data in plain text. To achieve this, you can use the `sensitive()` method on the `ImportColumn` to prevent its data from being logged:
+
+```php
+use Filament\Actions\Imports\ImportColumn;
+
+ImportColumn::make('ssn')
+    ->label('Social security number')
+    ->sensitive()
+    ->rules(['required', 'digits:9'])
+```
+
 ### Customizing how a column is filled into a record
 
 If you want to customize how column state is filled into a record, you can pass a function to the `fillRecordUsing()` method:
@@ -318,6 +360,18 @@ ImportColumn::make('sku')
     ->fillRecordUsing(function (Product $record, string $state): void {
         $record->sku = strtoupper($state);
     })
+```
+
+### Adding helper text below the import column
+
+Sometimes, you may wish to provide extra information for the user before validation. You can do this by adding `helperText()` to a column, which gets displayed below the mapping select:
+
+```php
+use Filament\Forms\Components\TextInput;
+
+ImportColumn::make('skus')
+    ->array(',')
+    ->helperText('A comma-separated list of SKUs.')
 ```
 
 ## Updating existing records when importing
@@ -365,6 +419,28 @@ public function resolveRecord(): ?Product
         ->first();
 }
 ```
+
+If you'd like to fail the import row if no record is found, you can throw a `RowImportFailedException` with a message:
+
+```php
+use App\Models\Product;
+use Filament\Actions\Imports\Exceptions\RowImportFailedException;
+
+public function resolveRecord(): ?Product
+{
+    $product = Product::query()
+        ->where('sku', $this->data['sku'])
+        ->first();
+
+    if (! $product) {
+        throw new RowImportFailedException("No product found with SKU [{$this->data['sku']}].");
+    }
+
+    return $product;
+}
+```
+
+When the import is completed, the user will be able to download a CSV of failed rows, which will contain the error messages.
 
 ### Ignoring blank state for an import column
 
@@ -446,6 +522,24 @@ ImportColumn::make('sku')
     ->example('ABC123')
 ```
 
+Or if you want to add more than one example row, you can pass an array to the `examples()` method:
+
+```php
+use Filament\Actions\Imports\ImportColumn;
+
+ImportColumn::make('sku')
+    ->examples(['ABC123', 'DEF456'])
+```
+
+By default, the name of the column is used in the header of the example CSV. You can customize the header per-column using `exampleHeader()`:
+
+```php
+use Filament\Actions\Imports\ImportColumn;
+
+ImportColumn::make('sku')
+    ->exampleHeader('SKU')
+```
+
 ## Using a custom user model
 
 By default, the `imports` table has a `user_id` column. That column is constrained to the `users` table:
@@ -519,13 +613,23 @@ ImportAction::make()
 
 You can only specify a single character, otherwise an exception will be thrown.
 
+## Changing the column header offset
+
+If your column headers are not on the first row of the CSV, you can call the `headerOffset()` method on the action, passing the number of rows to skip:
+
+```php
+ImportAction::make()
+    ->importer(ProductImporter::class)
+    ->headerOffset(5)
+```
+
 ## Customizing the import job
 
 The default job for processing imports is `Filament\Actions\Imports\Jobs\ImportCsv`. If you want to extend this class and override any of its methods, you may replace the original class in the `register()` method of a service provider:
 
 ```php
 use App\Jobs\ImportCsv;
-use Filament\Actions\Imports\Jobs\ImportCsv::class as BaseImportCsv;
+use Filament\Actions\Imports\Jobs\ImportCsv as BaseImportCsv;
 
 $this->app->bind(BaseImportCsv::class, ImportCsv::class);
 ```
@@ -582,7 +686,7 @@ By default, the import system will retry a job for 24 hours. This is to allow fo
 ```php
 use Carbon\CarbonInterface;
 
-public function getJobRetryUntil(): CarbonInterface
+public function getJobRetryUntil(): ?CarbonInterface
 {
     return now()->addDay();
 }
@@ -602,6 +706,17 @@ public function getJobTags(): array
 ```
 
 If you'd like to customize the tags that are applied to jobs of a certain importer, you may override this method in your importer class.
+
+### Customizing the import job batch name
+
+By default, the import system doesn't define any name for the job batches. If you'd like to customize the name that is applied to job batches of a certain importer, you may override the `getJobBatchName()` method in your importer class:
+
+```php
+public function getJobBatchName(): ?string
+{
+    return 'product-import';
+}
+```
 
 ## Customizing import validation messages
 
@@ -627,6 +742,22 @@ use Filament\Actions\Imports\ImportColumn;
 
 ImportColumn::make('name')
     ->validationAttribute('full name')
+```
+
+## Customizing import file validation
+
+You can add new [Laravel validation rules](https://laravel.com/docs/validation#available-validation-rules) for the import file using the `fileRules()` method:
+
+```php
+use Illuminate\Validation\Rules\File;
+
+ImportAction::make()
+    ->importer(ProductImporter::class)
+    ->fileRules([
+        'max:1024',
+        // or
+        File::types(['csv', 'txt'])->max(1024),
+    ]),
 ```
 
 ## Lifecycle hooks
@@ -706,3 +837,30 @@ class ProductImporter extends Importer
 Inside these hooks, you can access the current row's data using `$this->data`. You can also access the original row of data from the CSV, before it was [cast](#casting-state) or mapped, using `$this->originalData`.
 
 The current record (if it exists yet) is accessible in `$this->record`, and the [import form options](#using-import-options) using `$this->options`.
+
+## Authorization
+
+By default, only the user who started the import may access the failure CSV file that gets generated if part of an import fails. If you'd like to customize the authorization logic, you may create an `ImportPolicy` class, and [register it in your `AuthServiceProvider`](https://laravel.com/docs/authorization#registering-policies):
+
+```php
+use App\Policies\ImportPolicy;
+use Filament\Actions\Imports\Models\Import;
+
+protected $policies = [
+    Import::class => ImportPolicy::class,
+];
+```
+
+The `view()` method of the policy will be used to authorize access to the failure CSV file.
+
+Please note that if you define a policy, the existing logic of ensuring only the user who started the import can access the failure CSV file will be removed. You will need to add that logic to your policy if you want to keep it:
+
+```php
+use App\Models\User;
+use Filament\Actions\Imports\Models\Import;
+
+public function view(User $user, Import $import): bool
+{
+    return $import->user()->is($user);
+}
+```

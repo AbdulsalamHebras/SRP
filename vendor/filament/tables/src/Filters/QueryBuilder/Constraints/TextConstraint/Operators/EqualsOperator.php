@@ -59,8 +59,20 @@ class EqualsOperator extends Operator
         /** @var Connection $databaseConnection */
         $databaseConnection = $query->getConnection();
 
-        if ($databaseConnection->getDriverName() === 'pgsql') {
-            $qualifiedColumn = new Expression("lower({$qualifiedColumn}::text)");
+        $isPostgres = $databaseConnection->getDriverName() === 'pgsql';
+
+        if ($isPostgres) {
+            [$table, $column] = explode('.', $qualifiedColumn);
+
+            if (Str::lower($table) !== $table) {
+                $table = (string) str($table)->wrap('"');
+            }
+
+            if (Str::lower($column) !== $column) {
+                $column = (string) str($column)->wrap('"');
+            }
+
+            $qualifiedColumn = new Expression("lower({$table}.{$column}::text)");
             $text = Str::lower($text);
         }
 

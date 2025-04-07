@@ -75,6 +75,6 @@ class ApplierController extends Controller
         $user = auth()->guard('web')->user();
         $applier = Applier::where('email', $user->email)->first();
 
-        return view("CV.details", compact( "applier"));
+        return view("User.details", compact( "applier"));
     }
 }

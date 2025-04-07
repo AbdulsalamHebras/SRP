@@ -47,13 +47,13 @@
             <!-- Phone -->
             <div class="form-group">
                 <label for="phone">رقم الهاتف</label>
-                <input type="text" name="phoneNumber" id="phone" class="form-control @error('phoneNumber') is-invalid @enderror" value="{{ old('phoneNumber', $applier->phoneNumber) }}">
+                <input type="text" name="phoneNumber" id="phone" class="form-control @error('phoneNumber') is-invalid @enderror" value="{{ old('phoneNumber', $applier->phoneNumber) }}" required>
                 @error('phoneNumber') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
             </div>
              <!-- Date of Birth (DOB) -->
              <div class="form-group">
                 <label for="DOB">تاريخ الميلاد</label>
-                <input type="date" name="DOB" id="DOB" class="form-control @error('DOB') is-invalid @enderror" value="{{ old('DOB', $applier->DOB) }}" required>
+                <input type="date" name="DOB" id="DOB" class="form-control @error('DOB') is-invalid @enderror" value="{{ old('DOB', $applier->DOB) }}" >
                 @error('DOB') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
             </div>
 
@@ -98,7 +98,7 @@
             <!-- Gender -->
             <div class="form-group">
                 <label for="gender">الجنس</label>
-                <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror">
+                <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
                     <option value="male" {{ old('gender', $applier->gender) == 'male' ? 'selected' : '' }}>ذكر</option>
                     <option value="female" {{ old('gender', $applier->gender) == 'female' ? 'selected' : '' }}>أنثى</option>
                 </select>
@@ -153,7 +153,7 @@
             <!-- Graduation Date -->
             <div class="form-group">
                 <label for="graduationDate">تاريخ التخرج</label>
-                <input type="date" name="graduationDate" id="graduationDate" class="form-control @error('graduationDate') is-invalid @enderror" value="{{ old('graduationDate', $applier->graduationDate) }}" required>
+                <input type="date" name="graduationDate" id="graduationDate" class="form-control @error('graduationDate') is-invalid @enderror" value="{{ old('graduationDate', $applier->graduationDate) }}" >
                 @error('graduationDate') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
             </div>
 

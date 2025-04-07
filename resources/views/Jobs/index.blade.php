@@ -45,6 +45,12 @@
     </div>
     @include('includes.footer')
     <script>
+    document.querySelectorAll('.apply-btn form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            console.log("🚀 تم الضغط على زر التقديم السريع");
+        });
+    });
+
         function toggleFavorite(icon) {
             icon.style.color = icon.style.color === 'red' ? '#ccc' : 'red';
         }

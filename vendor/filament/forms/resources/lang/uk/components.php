@@ -11,15 +11,64 @@ return [
             ],
 
             'add' => [
+
                 'label' => 'Додати до :label',
+
+                'modal' => [
+
+                    'heading' => 'Додати до :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'Додати',
+                        ],
+
+                    ],
+
+                ],
             ],
 
             'add_between' => [
                 'label' => 'Вставити між',
+
+                'modal' => [
+
+                    'heading' => 'Додати до :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'Додати',
+                        ],
+
+                    ],
+
+                ],
             ],
 
             'delete' => [
                 'label' => 'Видалити',
+            ],
+
+            'edit' => [
+
+                'label' => 'Змінити',
+
+                'modal' => [
+
+                    'heading' => 'Змінити блок',
+
+                    'actions' => [
+
+                        'save' => [
+                            'label' => 'Зберегти зміни',
+                        ],
+
+                    ],
+
+                ],
+
             ],
 
             'reorder' => [
@@ -59,11 +108,11 @@ return [
         'actions' => [
 
             'deselect_all' => [
-                'label' => 'Снять выделение',
+                'label' => 'Зняти виділення',
             ],
 
             'select_all' => [
-                'label' => 'Выделить все',
+                'label' => 'Виділити все',
             ],
 
         ],
@@ -249,6 +298,15 @@ return [
 
     ],
 
+    'radio' => [
+
+        'boolean' => [
+            'true' => 'Так',
+            'false' => 'Ні',
+        ],
+
+    ],
+
     'repeater' => [
 
         'actions' => [
@@ -346,6 +404,8 @@ return [
 
             'create_option' => [
 
+                'label' => 'Створити',
+
                 'modal' => [
 
                     'heading' => 'Створити',
@@ -366,6 +426,8 @@ return [
             ],
 
             'edit_option' => [
+
+                'label' => 'Змінити',
 
                 'modal' => [
 
@@ -405,6 +467,31 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Новий тег',
+    ],
+
+    'text_input' => [
+
+        'actions' => [
+
+            'hide_password' => [
+                'label' => 'Приховати пароль',
+            ],
+
+            'show_password' => [
+                'label' => 'Показати пароль',
+            ],
+
+        ],
+
+    ],
+
+    'toggle_buttons' => [
+
+        'boolean' => [
+            'true' => 'Так',
+            'false' => 'Ні',
+        ],
+
     ],
 
     'wizard' => [

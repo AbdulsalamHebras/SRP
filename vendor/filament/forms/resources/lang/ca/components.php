@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'builder' => [
 
         'actions' => [
@@ -11,10 +12,60 @@ return [
 
             'add' => [
                 'label' => 'Afegir a :label',
+
+                'modal' => [
+
+                    'heading' => 'Afegeix a :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'Afegeix',
+                        ],
+
+                    ],
+
+                ],
+
             ],
 
             'add_between' => [
                 'label' => 'Inserir entre blocs',
+
+                'modal' => [
+
+                    'heading' => 'Afegir a :label',
+
+                    'actions' => [
+
+                        'add' => [
+                            'label' => 'Afegir',
+                        ],
+
+                    ],
+
+                ],
+
+            ],
+
+            'edit' => [
+
+                'label' => 'Edita',
+
+                'modal' => [
+
+                    'heading' => 'Edita bloc',
+
+                    'actions' => [
+
+                        'save' => [
+                            'label' => 'Desa els canvis',
+                        ],
+
+                    ],
+
+                ],
+
             ],
 
             'delete' => [
@@ -58,11 +109,11 @@ return [
         'actions' => [
 
             'deselect_all' => [
-                'label' => 'Deseleccionar tot',
+                'label' => 'Desseleccionar tots',
             ],
 
             'select_all' => [
-                'label' => 'Seleccionar tot',
+                'label' => 'Seleccionar tots',
             ],
 
         ],
@@ -80,11 +131,11 @@ return [
                 ],
 
                 'drag_crop' => [
-                    'label' => `Mode d'arrossegament "retallar"`,
+                    'label' => 'Mode d\'arrossegament "retallar"',
                 ],
 
                 'drag_move' => [
-                    'label' => `Mode d'arrossegament "moure"`,
+                    'label' => 'Mode d\'arrossegament "moure"',
                 ],
 
                 'flip_horizontal' => [
@@ -154,7 +205,7 @@ return [
 
                 'rotation' => [
                     'label' => 'Rotació',
-                    'unit' => 'deg',
+                    'unit' => 'graus',
                 ],
 
                 'width' => [
@@ -245,6 +296,15 @@ return [
             'strike' => 'Ratllat',
             'table' => 'Taula',
             'undo' => 'Desfer',
+        ],
+
+    ],
+
+    'radio' => [
+
+        'boolean' => [
+            'true' => 'Sí',
+            'false' => 'No',
         ],
 
     ],
@@ -348,7 +408,7 @@ return [
 
                 'modal' => [
 
-                    'heading' => 'Crear',
+                    'heading' => 'Nou',
 
                     'actions' => [
 
@@ -357,7 +417,7 @@ return [
                         ],
 
                         'create_another' => [
-                            'label' => 'Crear i crear un altre',
+                            'label' => 'Crear i crear-ne un altre',
                         ],
 
                     ],
@@ -387,7 +447,7 @@ return [
         ],
 
         'boolean' => [
-            'true' => 'Si',
+            'true' => 'Sí',
             'false' => 'No',
         ],
 
@@ -407,6 +467,31 @@ return [
 
     'tags_input' => [
         'placeholder' => 'Nova etiqueta',
+    ],
+
+    'text_input' => [
+
+        'actions' => [
+
+            'hide_password' => [
+                'label' => 'Ocultar contrasenya',
+            ],
+
+            'show_password' => [
+                'label' => 'Mostrar contrasenya',
+            ],
+
+        ],
+
+    ],
+
+    'toggle_buttons' => [
+
+        'boolean' => [
+            'true' => 'Sí',
+            'false' => 'No',
+        ],
+
     ],
 
     'wizard' => [

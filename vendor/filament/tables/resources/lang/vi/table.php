@@ -10,6 +10,10 @@ return [
 
     'columns' => [
 
+        'actions' => [
+            'label' => 'Hành động|Hành động',
+        ],
+
         'text' => [
 
             'actions' => [
@@ -111,6 +115,10 @@ return [
     'filters' => [
 
         'actions' => [
+
+            'apply' => [
+                'label' => 'Áp dụng bộ lọc',
+            ],
 
             'remove' => [
                 'label' => 'Xóa bộ lọc',

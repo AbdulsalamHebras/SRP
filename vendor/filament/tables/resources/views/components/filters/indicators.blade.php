@@ -3,7 +3,7 @@
 ])
 
 <div
-    {{ $attributes->class(['fi-ta-filter-indicators flex items-start justify-between gap-x-3 bg-gray-50 px-3 py-1.5 sm:px-6 dark:bg-white/5']) }}
+    {{ $attributes->class(['fi-ta-filter-indicators flex items-start justify-between gap-x-3 bg-gray-50 px-3 py-1.5 dark:bg-white/5 sm:px-6']) }}
 >
     <div class="flex flex-col gap-x-3 gap-y-1 sm:flex-row">
         <span
@@ -31,15 +31,17 @@
         </div>
     </div>
 
-    <div class="mt-0.5">
-        <x-filament::icon-button
-            color="gray"
-            icon="heroicon-m-x-mark"
-            icon-alias="tables::filters.remove-all-button"
-            size="sm"
-            :tooltip="__('filament-tables::table.filters.actions.remove_all.tooltip')"
-            wire:click="removeTableFilters"
-            wire:target="removeTableFilters,removeTableFilter"
-        />
-    </div>
+    @if (collect($indicators)->contains(fn (\Filament\Tables\Filters\Indicator $indicator): bool => $indicator->isRemovable()))
+        <div class="mt-0.5">
+            <x-filament::icon-button
+                color="gray"
+                icon="heroicon-m-x-mark"
+                icon-alias="tables::filters.remove-all-button"
+                size="sm"
+                :tooltip="__('filament-tables::table.filters.actions.remove_all.tooltip')"
+                wire:click="removeTableFilters"
+                wire:target="removeTableFilters,removeTableFilter"
+            />
+        </div>
+    @endif
 </div>

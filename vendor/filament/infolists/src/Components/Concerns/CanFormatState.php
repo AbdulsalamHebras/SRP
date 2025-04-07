@@ -6,12 +6,12 @@ use Closure;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Support\Contracts\HasLabel as LabelInterface;
+use Filament\Support\Enums\ArgumentValue;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Number;
 use Illuminate\Support\Str;
-
-use function Filament\Support\format_money;
-use function Filament\Support\format_number;
 
 trait CanFormatState
 {
@@ -52,7 +52,7 @@ trait CanFormatState
         return $this;
     }
 
-    public function date(?string $format = null, ?string $timezone = null): static
+    public function date(string | Closure | null $format = null, ?string $timezone = null): static
     {
         $this->isDate = true;
 
@@ -65,13 +65,13 @@ trait CanFormatState
 
             return Carbon::parse($state)
                 ->setTimezone($timezone ?? $component->getTimezone())
-                ->translatedFormat($format);
+                ->translatedFormat($component->evaluate($format));
         });
 
         return $this;
     }
 
-    public function dateTime(?string $format = null, ?string $timezone = null): static
+    public function dateTime(string | Closure | null $format = null, ?string $timezone = null): static
     {
         $this->isDateTime = true;
 
@@ -99,28 +99,61 @@ trait CanFormatState
         return $this;
     }
 
-    public function money(string | Closure | null $currency = null, int $divideBy = 0): static
+    public function dateTooltip(string | Closure | null $format = null, ?string $timezone = null): static
     {
-        $this->isMoney = true;
+        $format ??= Infolist::$defaultDateDisplayFormat;
 
-        $this->formatStateUsing(static function (TextEntry $component, $state) use ($currency, $divideBy): ?string {
+        $this->tooltip(static function (TextEntry $component, mixed $state) use ($format, $timezone): ?string {
             if (blank($state)) {
                 return null;
             }
 
-            $currency = $component->evaluate($currency) ?? Infolist::$defaultCurrency;
-
-            return format_money($state, $currency, $divideBy);
+            return Carbon::parse($state)
+                ->setTimezone($timezone ?? $component->getTimezone())
+                ->translatedFormat($component->evaluate($format));
         });
 
         return $this;
     }
 
-    public function numeric(int | Closure | null $decimalPlaces = null, string | Closure | null $decimalSeparator = '.', string | Closure | null $thousandsSeparator = ','): static
+    public function dateTimeTooltip(string | Closure | null $format = null, ?string $timezone = null): static
     {
-        $this->isNumeric = true;
+        $format ??= Infolist::$defaultDateTimeDisplayFormat;
 
-        $this->formatStateUsing(static function (TextEntry $component, $state) use ($decimalPlaces, $decimalSeparator, $thousandsSeparator): ?string {
+        $this->dateTooltip($format, $timezone);
+
+        return $this;
+    }
+
+    public function timeTooltip(string | Closure | null $format = null, ?string $timezone = null): static
+    {
+        $format ??= Infolist::$defaultTimeDisplayFormat;
+
+        $this->dateTooltip($format, $timezone);
+
+        return $this;
+    }
+
+    public function sinceTooltip(?string $timezone = null): static
+    {
+        $this->tooltip(static function (TextEntry $component, mixed $state) use ($timezone): ?string {
+            if (blank($state)) {
+                return null;
+            }
+
+            return Carbon::parse($state)
+                ->setTimezone($timezone ?? $component->getTimezone())
+                ->diffForHumans();
+        });
+
+        return $this;
+    }
+
+    public function money(string | Closure | null $currency = null, int $divideBy = 0, string | Closure | null $locale = null): static
+    {
+        $this->isMoney = true;
+
+        $this->formatStateUsing(static function (TextEntry $component, $state) use ($currency, $divideBy, $locale): ?string {
             if (blank($state)) {
                 return null;
             }
@@ -129,22 +162,57 @@ trait CanFormatState
                 return $state;
             }
 
-            if ($decimalPlaces === null) {
-                return format_number($state);
+            $currency = $component->evaluate($currency) ?? Infolist::$defaultCurrency;
+            $locale = $component->evaluate($locale) ?? Infolist::$defaultNumberLocale ?? config('app.locale');
+
+            if ($divideBy) {
+                $state /= $divideBy;
             }
 
-            return number_format(
-                $state,
-                $component->evaluate($decimalPlaces),
-                $component->evaluate($decimalSeparator),
-                $component->evaluate($thousandsSeparator),
-            );
+            return Number::currency($state, $currency, $locale);
         });
 
         return $this;
     }
 
-    public function time(?string $format = null, ?string $timezone = null): static
+    public function numeric(int | Closure | null $decimalPlaces = null, string | Closure | null | ArgumentValue $decimalSeparator = ArgumentValue::Default, string | Closure | null | ArgumentValue $thousandsSeparator = ArgumentValue::Default, int | Closure | null $maxDecimalPlaces = null, string | Closure | null $locale = null): static
+    {
+        $this->isNumeric = true;
+
+        $this->formatStateUsing(static function (TextEntry $component, $state) use ($decimalPlaces, $decimalSeparator, $locale, $maxDecimalPlaces, $thousandsSeparator): ?string {
+            if (blank($state)) {
+                return null;
+            }
+
+            if (! is_numeric($state)) {
+                return $state;
+            }
+
+            $decimalPlaces = $component->evaluate($decimalPlaces);
+            $decimalSeparator = $component->evaluate($decimalSeparator);
+            $thousandsSeparator = $component->evaluate($thousandsSeparator);
+
+            if (
+                ($decimalSeparator !== ArgumentValue::Default) ||
+                ($thousandsSeparator !== ArgumentValue::Default)
+            ) {
+                return number_format(
+                    $state,
+                    $decimalPlaces,
+                    $decimalSeparator === ArgumentValue::Default ? '.' : $decimalSeparator,
+                    $thousandsSeparator === ArgumentValue::Default ? ',' : $thousandsSeparator,
+                );
+            }
+
+            $locale = $component->evaluate($locale) ?? Infolist::$defaultNumberLocale ?? config('app.locale');
+
+            return Number::format($state, $decimalPlaces, $component->evaluate($maxDecimalPlaces), $locale);
+        });
+
+        return $this;
+    }
+
+    public function time(string | Closure | null $format = null, ?string $timezone = null): static
     {
         $this->isTime = true;
 
@@ -214,6 +282,10 @@ trait CanFormatState
             'state' => $state,
         ]);
 
+        if ($isHtml) {
+            $state = Str::sanitizeHtml($state);
+        }
+
         if ($state instanceof Htmlable) {
             $isHtml = true;
             $state = $state->toHtml();
@@ -249,6 +321,8 @@ trait CanFormatState
         if (filled($prefix)) {
             if ($prefix instanceof Htmlable) {
                 $prefix = $prefix->toHtml();
+            } elseif ($isHtml) {
+                $prefix = e($prefix);
             }
 
             $state = $prefix . $state;
@@ -257,16 +331,14 @@ trait CanFormatState
         if (filled($suffix)) {
             if ($suffix instanceof Htmlable) {
                 $suffix = $suffix->toHtml();
+            } elseif ($isHtml) {
+                $suffix = e($suffix);
             }
 
             $state = $state . $suffix;
         }
 
-        if ($isHtml) {
-            return str($state)->sanitizeHtml()->toHtmlString();
-        }
-
-        return $state;
+        return $isHtml ? new HtmlString($state) : $state;
     }
 
     public function getCharacterLimit(): ?int

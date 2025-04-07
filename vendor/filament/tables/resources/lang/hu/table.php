@@ -10,6 +10,10 @@ return [
 
     'columns' => [
 
+        'actions' => [
+            'label' => 'Művelet|Műveletek',
+        ],
+
         'text' => [
 
             'actions' => [
@@ -112,6 +116,10 @@ return [
     'filters' => [
 
         'actions' => [
+
+            'apply' => [
+                'label' => 'Szűrők alkalmazása',
+            ],
 
             'remove' => [
                 'label' => 'Szűrő megszüntetése',

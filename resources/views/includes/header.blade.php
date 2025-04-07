@@ -73,7 +73,7 @@
                                 $jobTitle = $job ? $job->jobName : 'وظيفة غير معروفة';
                                 $date = $data['date'] ?? 'تاريخ غير محدد';
                                 $time = $data['time'] ?? 'وقت غير محدد';
-                                $noteText = $data['note'] ?? 'لا توجد ملاحظات';
+                                $noteText = $data['notes'] ?? 'لا توجد ملاحظات';
                             @endphp
 
                             <div class="notification-item"
