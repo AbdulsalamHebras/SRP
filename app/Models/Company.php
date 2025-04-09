@@ -26,7 +26,7 @@ class Company extends Authenticatable
         'website',
         'phoneNumber',
         'commercialRegister',
-        'isAccepted',    
+        'isAccepted',
         'jobsNumber',
         'location',
     ];
