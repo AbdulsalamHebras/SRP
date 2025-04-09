@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Facades\Hash;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 
 
 
@@ -30,26 +32,111 @@ class CompanyResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required()
-                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                    ->dehydrateStateUsing(fn (?string $state): string => $state ? Hash::make($state) : $state)
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->maxLength(12)
-                    ->minlength(6),
-                Forms\Components\TextInput::make('jobField')
-                    ->maxLength(255)
-                    ->required(),
+                    ->minlength(8)
+                    ->nullable()
+                    ->confirmed()
+                    ->rules([
+                        'required',
+                        'confirmed',
+                        \Illuminate\Validation\Rules\Password::defaults(),
+                        'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+                    ]),
+                TextInput::make('password_confirmation')
+                    ->password()
+                    ->dehydrated(false),
+                Select::make('jobField')
+                    ->label('مجال العمل') // اختيار تسمية الحقل
+                    ->options([
+                        'Agriculture & Farming' => 'الزراعة والثروة الحيوانية',
+                        'Fishing & Aquaculture' => 'الصيد وتربية الأحياء المائية',
+                        'Forestry & Logging' => 'الغابات وقطع الأشجار',
+                        'Mining & Quarrying' => 'التعدين واستخراج المعادن',
+                        'Oil & Gas Extraction' => 'استخراج النفط والغاز',
+                        'Automotive Manufacturing' => 'صناعة السيارات',
+                        'Aerospace & Defense' => 'الطيران والدفاع',
+                        'Construction & Civil Engineering' => 'البناء والهندسة المدنية',
+                        'Electronics & Semiconductors' => 'الإلكترونيات وأشباه الموصلات',
+                        'Energy Production' => 'إنتاج الطاقة',
+                        'Food & Beverage Processing' => 'تصنيع الأغذية والمشروبات',
+                        'Machinery & Equipment Manufacturing' => 'تصنيع الآلات والمعدات',
+                        'Metal & Steel Industry' => 'صناعة المعادن والصلب',
+                        'Textile & Apparel Manufacturing' => 'صناعة النسيج والملابس',
+                        'Chemical Industry' => 'الصناعات الكيميائية',
+                        'Pharmaceuticals & Biotechnology' => 'الصيدلة والتكنولوجيا الحيوية',
+                        'Banking & Finance' => 'البنوك والتمويل',
+                        'Insurance' => 'التأمين',
+                        'Real Estate & Property Development' => 'العقارات والتطوير العقاري',
+                        'Retail & E-commerce' => 'التجارة الإلكترونية والتجزئة',
+                        'Wholesale Trade' => 'التجارة بالجملة',
+                        'Hospitality & Tourism' => 'الضيافة والسياحة',
+                        'Healthcare & Medical Services' => 'الرعاية الصحية والخدمات الطبية',
+                        'Transportation & Logistics' => 'النقل والخدمات اللوجستية',
+                        'Education & Training' => 'التعليم والتدريب',
+                        'Media & Entertainment' => 'الإعلام والترفيه',
+                        'Telecommunications' => 'الاتصالات',
+                        'Consulting & Professional Services' => 'الاستشارات والخدمات المهنية',
+                        'Law & Legal Services' => 'القانون والخدمات القانونية',
+                        'Information Technology & Software Development' => 'تكنولوجيا المعلومات وتطوير البرمجيات',
+                        'Cybersecurity' => 'الأمن السيبراني',
+                        'Artificial Intelligence & Machine Learning' => 'الذكاء الاصطناعي وتعلم الآلة',
+                        'Research & Development (R&D)' => 'البحث والتطوير',
+                        'Data Science & Analytics' => 'علم البيانات والتحليلات',
+                        'Digital Marketing & Advertising' => 'التسويق الرقمي والإعلانات',
+                        'Cloud Computing & Hosting Services' => 'الحوسبة السحابية وخدمات الاستضافة',
+                        'Government & Public Administration' => 'الحكومة والإدارة العامة',
+                        'Nonprofit Organizations & NGOs' => 'المنظمات غير الربحية والمنظمات غير الحكومية',
+                        'International Organizations' => 'المنظمات الدولية',
+                        'Think Tanks & Policy Research' => 'مراكز الأبحاث والسياسات',
+                    ])
+                    ->required()
+                    ->searchable(),
+                Select::make('location')
+                    ->label('المحافظة')
+                    ->options([
+                        'Aden' => 'عدن',
+                        'Sana\'a' => 'صنعاء',
+                        'Taiz' => 'تعز',
+                        'Al Hudaydah' => 'الحديدة',
+                        'Ibb' => 'إب',
+                        'Hadramout' => 'حضرموت',
+                        'Dhamar' => 'ذمار',
+                        'Al Mahwit' => 'المحويت',
+                        'Al Bayda' => 'البيضاء',
+                        'Amran' => 'عمران',
+                        'Lahij' => 'لحج',
+                        'Al Jawf' => 'الجوف',
+                        'Saada' => 'صعدة',
+                        'Al Mahrah' => 'المهرة',
+                        'Marib' => 'مأرب',
+                        'Shabwah' => 'شبوة',
+                        'Raymah' => 'ريمة',
+                        'Hajjah' => 'حجة',
+                        'Al Dhale\'e' => 'الضالع',
+                        'Socotra' => 'سقطرى',
+                    ])
+                    ->required()
+                    ->searchable(),
+                Forms\Components\DatePicker::make('dateOfCreation')
+                    ->required()
+                    ->native(false)
+                    ->displayFormat('Y-m-d')
+                    ->format('Y-m-d')
+                    ->maxDate(now()),
                 RichEditor::make('mission')
                         ->maxLength(255)
-                        ->default(null)
+                        ->required()
                         ->toolbarButtons([
                             'bold',
                             'italic',
@@ -62,7 +149,7 @@ class CompanyResource extends Resource
                         ]),
                 RichEditor::make('vision')
                         ->maxLength(255)
-                        ->default(null)
+                        ->required()
                         ->toolbarButtons([
                             'bold',
                             'italic',
@@ -73,15 +160,10 @@ class CompanyResource extends Resource
                             'unorderedList',
                             'blockquote',
                         ]),
-                Forms\Components\DatePicker::make('dataOfCreation')
-                    ->required()
-                    ->native(false)
-                    ->displayFormat('Y-m-d')
-                    ->format('Y-m-d')
-                    ->maxDate(now()),
+
                 RichEditor::make('aboutus')
                     ->maxLength(255)
-                    ->default(null)
+                    ->required()
                     ->toolbarButtons([
                         'bold',
                         'italic',
@@ -96,7 +178,7 @@ class CompanyResource extends Resource
                     ->preserveFilenames()
                     ->image()
                     ->maxSize(5120)
-                    ->default(null)
+                    ->required()
                     ->visibility('public')
                     ->disk('logos')
                     ->directory('')
@@ -115,7 +197,7 @@ class CompanyResource extends Resource
                 Forms\Components\TextInput::make('phoneNumber')
                     ->tel()
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(13)
                     ->placeholder('7XXXXXXXX')
                     ->rules([
@@ -126,9 +208,9 @@ class CompanyResource extends Resource
                     ->prefixIcon('heroicon-o-phone'),
                 Forms\Components\TextInput::make('website')
                     ->maxLength(255)
-                    ->default(null)
+                    ->required()
                     ->url()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->placeholder('https://example.com')
                     ->suffixIcon('heroicon-o-globe-alt'),
                 Forms\Components\Toggle::make('isAccepted')
@@ -153,11 +235,14 @@ class CompanyResource extends Resource
                 Tables\Columns\TextColumn::make('jobField')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('location')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('mission')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('vision')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('dataOfCreation')
+                Tables\Columns\TextColumn::make('dateOfCreation')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('aboutus')
