@@ -29,11 +29,15 @@ class AdminResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required()
-                    ->maxLength(255),
+                    ->dehydrateStateUsing(fn (?string $state): string => $state ? Hash::make($state) : $state)
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->maxLength(12)
+                    ->minlength(8)
+                    ->nullable(),
             ]);
     }
 
