@@ -38,18 +38,13 @@ class ApplierResource extends Resource
                     ->unique('appliers', 'email', ignoreRecord: true)
                     ->maxLength(255),
 
-                TextInput::make('password')
+                    Forms\Components\TextInput::make('password')
                     ->password()
                     ->dehydrateStateUsing(fn (?string $state): string => $state ? Hash::make($state) : $state)
                     ->dehydrated(fn (?string $state): bool => filled($state))
-                    ->nullable()
-                    ->confirmed()
-                    ->rule(Password::defaults())
-                    ->rule('regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'),
-
-                TextInput::make('password_confirmation')
-                    ->password()
-                    ->dehydrated(false),
+                    ->maxLength(12)
+                    ->minlength(8)
+                    ->nullable(),
 
                 TextInput::make('phoneNumber')
                     ->required()
@@ -58,9 +53,31 @@ class ApplierResource extends Resource
                     ->rule('regex:/^(77|78|71|73|70)\d{7}$/')
                     ->unique('appliers', 'phoneNumber', ignoreRecord: true),
 
-                TextInput::make('city')
+                Select::make('city')
+                    ->options([
+                        'Aden' => 'عدن',
+                        'Sana\'a' => 'صنعاء',
+                        'Taiz' => 'تعز',
+                        'Al Hudaydah' => 'الحديدة',
+                        'Ibb' => 'إب',
+                        'Hadramout' => 'حضرموت',
+                        'Dhamar' => 'ذمار',
+                        'Al Mahwit' => 'المحويت',
+                        'Al Bayda' => 'البيضاء',
+                        'Amran' => 'عمران',
+                        'Lahij' => 'لحج',
+                        'Al Jawf' => 'الجوف',
+                        'Saada' => 'صعدة',
+                        'Al Mahrah' => 'المهرة',
+                        'Marib' => 'مأرب',
+                        'Shabwah' => 'شبوة',
+                        'Raymah' => 'ريمة',
+                        'Hajjah' => 'حجة',
+                        'Al Dhale\'e' => 'الضالع',
+                        'Socotra' => 'سقطرى',
+                    ])
                     ->required()
-                    ->maxLength(255),
+                    ->searchable(),
 
                 TextInput::make('address')
                     ->required()
@@ -182,12 +199,15 @@ class ApplierResource extends Resource
                 Tables\Columns\TextColumn::make('phoneNumber')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('city')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('address')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('BOB')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('gender')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('acadmicStudy')
@@ -195,7 +215,8 @@ class ApplierResource extends Resource
                 Tables\Columns\TextColumn::make('languages')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('CVfile')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('graduationDate')
                     ->date()
                     ->sortable(),
@@ -203,7 +224,8 @@ class ApplierResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('photo')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -219,6 +241,7 @@ class ApplierResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

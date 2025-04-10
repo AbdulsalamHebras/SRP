@@ -45,17 +45,7 @@ class CompanyResource extends Resource
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->maxLength(12)
                     ->minlength(8)
-                    ->nullable()
-                    ->confirmed()
-                    ->rules([
-                        'required',
-                        'confirmed',
-                        \Illuminate\Validation\Rules\Password::defaults(),
-                        'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
-                    ]),
-                TextInput::make('password_confirmation')
-                    ->password()
-                    ->dehydrated(false),
+                    ->nullable(),
                 Select::make('jobField')
                     ->label('مجال العمل') // اختيار تسمية الحقل
                     ->options([
@@ -103,7 +93,6 @@ class CompanyResource extends Resource
                     ->required()
                     ->searchable(),
                 Select::make('location')
-                    ->label('المحافظة')
                     ->options([
                         'Aden' => 'عدن',
                         'Sana\'a' => 'صنعاء',
