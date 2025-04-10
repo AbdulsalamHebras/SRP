@@ -153,15 +153,24 @@ class ApplierResource extends Resource
 
                 FileUpload::make('CVfile')
                     ->nullable()
-                    ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
-                    ->maxSize(10240), // 10 MB
+                    ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
+                    ->maxSize(size: 5120)
+                    ->disk('cv_files')
+                    ->directory('')
+                    ->openable()
+                    ->downloadable()
+                    ->visibility('public') , // 10 MB
 
                 FileUpload::make('photo')
-                    ->nullable()
+                    ->preserveFilenames()
                     ->image()
-                    ->imageEditor()
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
-                    ->maxSize(5120), // 5 MB
+                    ->maxSize(5120)
+                    ->required()
+                    ->visibility('public')
+                    ->disk('photos')
+                    ->directory('')
+                    ->openable()
+                    ->downloadable(),
 
                 Select::make('gender')
                     ->required()
