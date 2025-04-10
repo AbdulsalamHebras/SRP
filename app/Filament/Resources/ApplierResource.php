@@ -151,26 +151,26 @@ class ApplierResource extends Resource
                             ->visible(fn ($get) => $get('specialization') === 'other'),
                             ]),
 
-                    FileUpload::make('CVfile')
-                        ->nullable()
-                        ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
-                        ->maxSize(size: 5120)
-                        ->disk('cv_files')
-                        ->directory('')
-                        ->openable()
-                        ->downloadable()
-                        ->visibility('public') , // 10 MB
+                FileUpload::make('CVfile')
+                    ->nullable()
+                    ->acceptedFileTypes(['image/png', 'image/jpeg','image/jpg', 'application/pdf'])
+                    ->maxSize(size: 5120)
+                    ->disk('cv_files')
+                    ->directory('')
+                    ->openable()
+                    ->downloadable()
+                    ->visibility('public') , // 10 MB
 
-                    FileUpload::make('photo')
-                        ->preserveFilenames()
-                        ->image()
-                        ->maxSize(5120)
-                        ->required()
-                        ->visibility('public')
-                        ->disk('photos')
-                        ->directory('')
-                        ->openable()
-                        ->downloadable(),
+                FileUpload::make('photo')
+                    ->preserveFilenames()
+                    ->image()
+                    ->maxSize(5120)
+                    ->required()
+                    ->visibility('public')
+                    ->disk('photos')
+                    ->directory('')
+                    ->openable()
+                    ->downloadable(),
 
                     Select::make('gender')
                         ->required()

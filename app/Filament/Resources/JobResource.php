@@ -46,24 +46,33 @@ class JobResource extends Resource
                         'blockquote',
                     ]),
 
-                Forms\Components\TextInput::make('jobType')
+                Select::make('jobType')
                     ->required()
-                    ->maxLength(255)
-                    ->rules(['required', 'in:دوام كامل,دوام جزئي,عن بعد']),
+                    ->options([
+                        'دوام كلي ' => 'دوام كلي ',
+                        'دوام جزئي' => 'دوام جزئي',
+                        'عن بعد' => 'عن بعد',
+                    ]),
 
                 Forms\Components\TextInput::make('minSalary')
                     ->required()
                     ->numeric()
-                    ->rules(['nullable', 'numeric', 'min:0']),
+                    ->lte('minSalary')
+                    ->rules(['numeric', 'min:0']),
 
                 Forms\Components\TextInput::make('maxSalary')
                     ->required()
                     ->numeric()
-                    ->rules(['nullable', 'numeric', 'min:0', 'gte:minSalary']),
+                    ->gte('minSalary')
+                    ->rules(['numeric']),
 
-                Forms\Components\TextInput::make('currency')
+                Select::make('currency')
                     ->required()
-                    ->maxLength(255)
+                    ->options([
+                        'YEM' => 'ريال يمني',
+                        'SAY' => 'ريال سعودي',
+                        'USD' => 'دولار امريكي ',
+                    ])
                     ->rules(['required', 'in:YEM,SAR,USD']),
 
                 Forms\Components\Select::make('company_id')
@@ -167,6 +176,7 @@ class JobResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
