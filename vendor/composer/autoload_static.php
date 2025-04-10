@@ -767,6 +767,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Requests\\JobRequest' => __DIR__ . '/../..' . '/app/Http/Requests/JobRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
         'App\\Mail\\CompanyRegistered' => __DIR__ . '/../..' . '/app/Mail/CompanyRegistered.php',
+        'App\\Mail\\NewJobPosted' => __DIR__ . '/../..' . '/app/Mail/NewJobPosted.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\Applier' => __DIR__ . '/../..' . '/app/Models/Applier.php',
         'App\\Models\\Company' => __DIR__ . '/../..' . '/app/Models/Company.php',

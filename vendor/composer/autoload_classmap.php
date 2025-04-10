@@ -70,6 +70,7 @@ return array(
     'App\\Http\\Requests\\JobRequest' => $baseDir . '/app/Http/Requests/JobRequest.php',
     'App\\Http\\Requests\\ProfileUpdateRequest' => $baseDir . '/app/Http/Requests/ProfileUpdateRequest.php',
     'App\\Mail\\CompanyRegistered' => $baseDir . '/app/Mail/CompanyRegistered.php',
+    'App\\Mail\\NewJobPosted' => $baseDir . '/app/Mail/NewJobPosted.php',
     'App\\Models\\Admin' => $baseDir . '/app/Models/Admin.php',
     'App\\Models\\Applier' => $baseDir . '/app/Models/Applier.php',
     'App\\Models\\Company' => $baseDir . '/app/Models/Company.php',
