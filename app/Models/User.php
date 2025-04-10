@@ -49,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function applier()
     {
-        return $this->belongsTo(related: Applier::class);
+        return $this->hasOne(Applier::class, 'email', 'email');
     }
+
 }
