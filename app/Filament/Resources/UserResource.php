@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -33,8 +34,11 @@ class UserResource extends Resource
                 Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required()
-                    ->maxLength(255),
+                    ->dehydrateStateUsing(fn (?string $state): string => $state ? Hash::make($state) : $state)
+                    ->dehydrated(fn (?string $state): bool => filled($state))
+                    ->maxLength(12)
+                    ->minlength(8)
+                    ->nullable(),
             ]);
     }
 
