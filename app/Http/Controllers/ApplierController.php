@@ -61,8 +61,26 @@ class ApplierController extends Controller
         }
 
         $applier->update($data);
+        if ($applier->user) {
+            $userData = [];
+
+            if ($request->filled('name')) {
+                $userData['name'] = $request->name;
+            }
+
+            if ($request->filled('email')) {
+                $userData['email'] = $request->email;
+            }
+
+            if ($request->filled('password')) {
+                $userData['password'] = bcrypt($request->password);
+            }
+
+            $applier->user->update($userData);
+        }
 
         return redirect()->route('main')->with('success', 'تم تحديث المعلومات بنجاح!');
+
     }
 
 

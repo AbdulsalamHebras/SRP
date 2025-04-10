@@ -38,4 +38,11 @@ class Applier extends Model
     {
         return $this->belongsToMany(Job::class, 'jobs_appliers', 'applier_id', 'job_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
+
+
+
 }
