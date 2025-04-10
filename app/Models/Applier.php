@@ -10,13 +10,32 @@ class Applier extends Model
 {
     use HasFactory;
     use Notifiable;
+
     protected $fillable = [
-        'name', 'email', 'password', 'phoneNumber', 'city', 'address', 'age',
-        'DOB', 'degree', 'specialization', 'photo', 'CVfile','graduationDate','gender','languages'
+        'name',
+        'email',
+        'password',
+        'phoneNumber',
+        'city',
+        'address',
+        'age',
+        'DOB',
+        'graduationDate',
+        'degree',
+        'specialization',
+        'specialization',
+        'photo',
+        'CVfile',
+        'gender',
+        'languages',
     ];
-    public function Jobs()
+
+    protected $casts = [
+        'languages' => 'array',
+    ];
+
+    public function jobs()
     {
         return $this->belongsToMany(Job::class, 'jobs_appliers', 'applier_id', 'job_id');
     }
-
 }

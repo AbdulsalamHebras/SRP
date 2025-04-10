@@ -192,6 +192,7 @@ class ApplierResource extends Resource
                         'Other' => 'أخرى',
                     ])
                     ->searchable()
+                    ->dehydrateStateUsing(fn ($state) => is_array($state) ? implode(',', $state) : $state)
                     ->preload()
                     ->nullable(),
             ]);
@@ -221,8 +222,10 @@ class ApplierResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('acadmicStudy')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('languages')
+                    Tables\Columns\TextColumn::make('languages')
+                    ->formatStateUsing(fn ($state) => is_array($state) ? implode(', ', $state) : $state)
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('CVfile')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
