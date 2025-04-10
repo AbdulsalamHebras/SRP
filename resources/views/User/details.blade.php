@@ -30,8 +30,8 @@
                 <!-- Gender and Languages -->
                 <p><strong>الجنس:</strong> {{ $applier->gender ?? 'N/A' }}</p>
                 <p><strong>اللغات:</strong>
-                    @if($applier->languages)
-                        {{ implode(', ', explode(',', $applier->languages)) }}
+                    @if($applier->languages && is_array($applier->languages))
+                        {{ implode(', ', $applier->languages) }}
                     @else
                         N/A
                     @endif

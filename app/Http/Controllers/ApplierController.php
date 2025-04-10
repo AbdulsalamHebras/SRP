@@ -38,10 +38,6 @@ class ApplierController extends Controller
             $data['password'] = bcrypt($request->password);
         }
 
-        if ($request->has('languages')) {
-            $data['languages'] = is_array($request->languages) ? implode(',', $request->languages) : $request->languages;
-        }
-
         if ($request->hasFile('photo')) {
             $photoName = $request->file('photo')->getClientOriginalName();
 
@@ -86,6 +82,7 @@ class ApplierController extends Controller
         return redirect()->route('main')->with('success', 'تم تحديث المعلومات بنجاح!');
 
     }
+
 
 
 
