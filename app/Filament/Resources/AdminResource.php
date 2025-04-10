@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
+use Illuminate\Support\Facades\Hash;
 
 class AdminResource extends Resource
 {
@@ -39,13 +39,7 @@ class AdminResource extends Resource
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->maxLength(12)
                     ->minlength(8)
-                    ->nullable()
-                    ->rules([
-                        'required',
-                        \Illuminate\Validation\Rules\Password::defaults(),
-                        'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
-                    ]),
-                
+                    ->nullable(),
             ]);
     }
 

@@ -36,7 +36,7 @@ class CompanyResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->unique(ignoreRecord: true) 
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
@@ -45,15 +45,8 @@ class CompanyResource extends Resource
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->maxLength(12)
                     ->minlength(8)
-                    ->nullable()
-
-                    ->rules([
-                        'required',
-                        \Illuminate\Validation\Rules\Password::defaults(),
-                        'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
-                    ]),
-
-                    Select::make('jobField')
+                    ->nullable(),
+                Select::make('jobField')
                     ->label('مجال العمل') // اختيار تسمية الحقل
                     ->options([
                         'Agriculture & Farming' => 'الزراعة والثروة الحيوانية',
@@ -100,7 +93,6 @@ class CompanyResource extends Resource
                     ->required()
                     ->searchable(),
                 Select::make('location')
-                    ->label('المحافظة')
                     ->options([
                         'Aden' => 'عدن',
                         'Sana\'a' => 'صنعاء',
