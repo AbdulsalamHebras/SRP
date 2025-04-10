@@ -165,7 +165,7 @@ class ApplierResource extends Resource
                     ->preserveFilenames()
                     ->image()
                     ->maxSize(5120)
-                    ->required()
+                    ->required() 
                     ->visibility('public')
                     ->disk('photos')
                     ->directory('')
