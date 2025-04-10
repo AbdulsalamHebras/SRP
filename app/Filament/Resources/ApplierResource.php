@@ -43,13 +43,10 @@ class ApplierResource extends Resource
                     ->dehydrateStateUsing(fn (?string $state): string => $state ? Hash::make($state) : $state)
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->nullable()
-                    ->confirmed()
                     ->rule(Password::defaults())
                     ->rule('regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'),
 
-                TextInput::make('password_confirmation')
-                    ->password()
-                    ->dehydrated(false),
+                
 
                 TextInput::make('phoneNumber')
                     ->required()

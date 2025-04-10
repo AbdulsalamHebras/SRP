@@ -36,7 +36,7 @@ class CompanyResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->unique(ignoreRecord: true)
+                    ->unique(ignoreRecord: true) 
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
@@ -46,17 +46,14 @@ class CompanyResource extends Resource
                     ->maxLength(12)
                     ->minlength(8)
                     ->nullable()
-                    ->confirmed()
+
                     ->rules([
                         'required',
-                        'confirmed',
                         \Illuminate\Validation\Rules\Password::defaults(),
                         'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
                     ]),
-                TextInput::make('password_confirmation')
-                    ->password()
-                    ->dehydrated(false),
-                Select::make('jobField')
+
+                    Select::make('jobField')
                     ->label('مجال العمل') // اختيار تسمية الحقل
                     ->options([
                         'Agriculture & Farming' => 'الزراعة والثروة الحيوانية',
