@@ -48,21 +48,61 @@
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-            <input type="password" name="password" placeholder="كلمة المرور" id="password"
-                class="form-control @error('password') is-invalid @enderror"
-                required autocomplete="new-password">
-            @error('password')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+           <!-- كلمة المرور -->
+<div style="position: relative;">
+    <input type="password" name="password" placeholder="كلمة المرور" id="password"
+        class="form-control @error('password') is-invalid @enderror"
+        required autocomplete="new-password"
+        style="padding-left: 40px;">
 
-            <input type="password" name="password_confirmation" placeholder="تأكيد كلمة المرور" id="password_confirmation" required autocomplete="new-password">
-            @error('password_confirmation')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+    <span onclick="togglePassword('password', 'toggleIcon1')" id="toggleIcon1"
+        style="position: absolute; top: 50%; left: 30px; transform: translateY(-50%);
+               cursor: pointer; font-size: 18px; color: #666;">
+        👁️
+    </span>
+
+    @error('password')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
+
+<!-- تأكيد كلمة المرور -->
+<div style="position: relative; margin-top: 15px;">
+    <input type="password" name="password_confirmation" placeholder="تأكيد كلمة المرور" id="password_confirmation"
+        required autocomplete="new-password"
+        style="padding-left: 40px;" class="form-control">
+
+    <span onclick="togglePassword('password_confirmation', 'toggleIcon2')" id="toggleIcon2"
+        style="position: absolute; top: 50%; left: 30px; transform: translateY(-50%);
+               cursor: pointer; font-size: 18px; color: #666;">
+        👁️
+    </span>
+
+    @error('password_confirmation')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
+
+<!-- JavaScript -->
+<script>
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.textContent = "🙈";
+        } else {
+            input.type = "password";
+            icon.textContent = "👁️";
+        }
+    }
+</script>
+
             <div id="company-container">
                 <select name="jobField" id="jobField" class="form-control @error('jobField') is-invalid @enderror">
                     <option value="" disabled {{ old('jobField') == '' ? 'selected' : '' }}>اختر مجال العمل</option>

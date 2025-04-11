@@ -35,14 +35,14 @@ class ApplierResource extends Resource
                 TextInput::make('email')
                     ->required()
                     ->email()
-                    ->unique('appliers', 'email', ignoreRecord: true)
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
 
-                    Forms\Components\TextInput::make('password')
+                Forms\Components\TextInput::make('password')
                     ->password()
                     ->dehydrateStateUsing(fn (?string $state): string => $state ? Hash::make($state) : $state)
                     ->dehydrated(fn (?string $state): bool => filled($state))
-                    ->maxLength(12)
+                    ->maxLength(192)
                     ->minlength(8)
                     ->nullable(),
 
@@ -181,7 +181,6 @@ class ApplierResource extends Resource
                     ->native(false),
 
                 Select::make('languages')
-                    ->label('اللغات')
                     ->multiple()
                     ->options([
                         'Arabic' => 'العربية',
@@ -194,7 +193,7 @@ class ApplierResource extends Resource
                     ->searchable()
                     ->dehydrateStateUsing(fn ($state) => is_array($state) ? implode(',', $state) : $state)
                     ->preload()
-                    ->nullable(),
+                    ->required(),
             ]);
     }
 
@@ -220,11 +219,14 @@ class ApplierResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('gender')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('acadmicStudy')
+                Tables\Columns\TextColumn::make('specialization')
                     ->searchable(),
-                    Tables\Columns\TextColumn::make('languages')
+                Tables\Columns\TextColumn::make('degree')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('languages')
                     ->formatStateUsing(fn ($state) => is_array($state) ? implode(', ', $state) : $state)
                     ->searchable(),
+
 
                 Tables\Columns\TextColumn::make('CVfile')
                     ->searchable()

@@ -30,12 +30,13 @@
                 <!-- Gender and Languages -->
                 <p><strong>الجنس:</strong> {{ $applier->gender ?? 'N/A' }}</p>
                 <p><strong>اللغات:</strong>
-                    @if($applier->languages && is_array($applier->languages))
-                        {{ implode(', ', $applier->languages) }}
+                    @if($applier->languages)
+                        {{ implode(', ', explode(',', $applier->languages)) }}
                     @else
                         N/A
                     @endif
                 </p>
+
 
                 <p><strong>السيرة الذاتية:</strong>
                     @if($applier->CVfile)

@@ -30,14 +30,41 @@
             @enderror
 
             <!-- Password Field -->
-            <input type="password" name="password" placeholder="كلمة المرور" id="password"
-                class="form-control form-control-lg @error('password') is-invalid @enderror"
-                required autocomplete="current-password">
-            @error('password')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+<div style="position: relative;">
+    <input type="password" name="password" placeholder="كلمة المرور" id="password"
+        class="form-control form-control-lg @error('password') is-invalid @enderror"
+        required autocomplete="current-password"
+        style="padding-left: 40px;"> <!-- مساحة للأيقونة عاليسار -->
+
+    <!-- Eye Icon -->
+    <span onclick="togglePassword()" id="toggleIcon"
+        style="position: absolute; top: 50%; left: 30px; transform: translateY(-50%);
+               cursor: pointer; font-size: 18px; color: #666;">
+        👁️
+    </span>
+
+    @error('password')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
+
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const toggleIcon = document.getElementById("toggleIcon");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.textContent = "🙈";
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.textContent = "👁️";
+        }
+    }
+</script>
+
 
             <!-- Account Type Field -->
             <select id="userType" name="accountType" required>

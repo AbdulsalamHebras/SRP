@@ -130,18 +130,19 @@
                 <label for="languages">اللغات:</label>
                 <select name="languages[]" id="languages" multiple class="form-control @error('languages') is-invalid @enderror">
                     @foreach(['الإنجليزية' => 'English', 'العربية' => 'Arabic', 'الفرنسية' => 'French', 'الإسبانية' => 'Spanish',
-                        'الألمانية' => 'German', 'الصينية' => 'Chinese', 'اليابانية' => 'Japanese', 'الروسية' => 'Russian',
-                        'البرتغالية' => 'Portuguese', 'الإيطالية' => 'Italian', 'الهندية' => 'Hindi', 'الكورية' => 'Korean',
-                        'التركية' => 'Turkish', 'الهولندية' => 'Dutch', 'السويدية' => 'Swedish', 'اليونانية' => 'Greek',
-                        'العبرية' => 'Hebrew', 'البنغالية' => 'Bengali', 'البولندية' => 'Polish', 'الإندونيسية' => 'Indonesian',
-                        'النرويجية' => 'Norwegian'] as $arabic => $english)
-                        <option value="{{ $english }}" @if(in_array($english, (array) old('languages', $applier->languages))) selected @endif>
+                              'الألمانية' => 'German', 'الصينية' => 'Chinese', 'اليابانية' => 'Japanese', 'الروسية' => 'Russian',
+                              'البرتغالية' => 'Portuguese', 'الإيطالية' => 'Italian', 'الهندية' => 'Hindi', 'الكورية' => 'Korean',
+                              'التركية' => 'Turkish', 'الهولندية' => 'Dutch', 'السويدية' => 'Swedish', 'اليونانية' => 'Greek',
+                              'العبرية' => 'Hebrew', 'البنغالية' => 'Bengali', 'البولندية' => 'Polish', 'الإندونيسية' => 'Indonesian',
+                              'النرويجية' => 'Norwegian'] as $arabic => $english)
+                        <option value="{{ $english }}" @if(in_array($english, (array) old('languages', explode(',', $applier->languages)))) selected @endif>
                             {{ $arabic }}
                         </option>
                     @endforeach
                 </select>
                 @error('languages') <span class="invalid-feedback"><strong>{{ $message }}</strong></span> @enderror
             </div>
+
 
             <!-- CV file -->
             <div class="form-group">

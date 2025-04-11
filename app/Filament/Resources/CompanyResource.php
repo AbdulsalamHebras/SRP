@@ -163,7 +163,7 @@ class CompanyResource extends Resource
                         'unorderedList',
                         'blockquote',
                     ]),
-                Forms\Components\FileUpload::make('logo')
+                 Forms\Components\FileUpload::make('logo')
                     ->preserveFilenames()
                     ->image()
                     ->maxSize(5120)
