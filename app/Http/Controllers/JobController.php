@@ -11,29 +11,57 @@ use App\Models\jobs_appliers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Applier;
 use App\Mail\NewJobPosted;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class JobController extends Controller
 {
-    public function index(Request $request) {
-        $sort = $request->input('sort', 'date');
+    public function index(Request $request)
+        {
+            $user = Auth::user();
+            $specialization = $user->applier->specialization ?? null;
 
-        $query = Job::with('company')
-            ->where('expirationDate', '>=', now());
+            $sort = $request->input('sort', $specialization ? 'similarity' : 'date');
 
-        if ($sort === 'date') {
-            $query->orderBy('created_at', 'desc');
-        } elseif ($sort === 'type') {
-            $query->orderBy('jobType', 'asc');
-        } elseif ($sort === 'salary') {
-            $query->orderBy('maxSalary', 'desc');
+            $query = Job::with('company')
+                ->where('expirationDate', '>=', now());
+
+            if ($sort === 'date') {
+                $query->orderBy('created_at', 'desc');
+            } elseif ($sort === 'type') {
+                $query->orderBy('jobType', 'asc');
+            } elseif ($sort === 'salary') {
+                $query->orderBy('maxSalary', 'desc');
+            }
+
+
+            $jobs = $query->get();
+            $jobsNumber = $jobs->count();
+
+            if ($sort === 'similarity' && $specialization) {
+                $response = Http::timeout(10)
+                    ->withHeaders([
+                        'Authorization' => 'Bearer ' . env('HUGGINGFACE_API_KEY'),
+                    ])->post('https://api-inference.huggingface.co/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2', [
+                        'inputs' => [
+                            'source_sentence' => $specialization,
+                            'sentences' => $jobs->pluck('description')->toArray(),
+                        ],
+                    ]);
+
+                if ($response->ok()) {
+                    $scores = $response->json();
+
+
+                    $jobs = $jobs->sortByDesc(function ($job, $index) use ($scores) {
+                        return $scores[$index] ?? 0;
+                    })->values();
+                }
+            }
+
+            return view("Jobs.index", compact('jobs', 'jobsNumber', 'sort'));
         }
 
-        $jobs = $query->get();
-        $jobsNumber = $jobs->count();
-
-        return view("Jobs.index", compact('jobs', 'jobsNumber', 'sort'));
-    }
 
     public function create() {
 
@@ -43,34 +71,34 @@ class JobController extends Controller
     {
 
 
-    $validated = $request->validated();
+        $validated = $request->validated();
 
-    $location = $request->jobType === 'عن بعد' ? 'عن بعد' : $request->location;
+        $location = $request->jobType === 'عن بعد' ? 'عن بعد' : $request->location;
 
-    $job = Job::create([
-        'jobName'        => $request->jobName,
-        'jobType'        => $request->jobType,
-        'description'    => $request->description,
-        'minSalary'      => $request->minSalary,
-        'maxSalary'      => $request->maxSalary,
-        'currency'       => $request->currency,
-        'expirationDate' => $request->expirationDate,
-        'requirements'   => $request->requirements,
-        'location'       => $location,
-        'company_id'     => auth()->guard('company')->user()->id,
-    ]);
+        $job = Job::create([
+            'jobName'        => $request->jobName,
+            'jobType'        => $request->jobType,
+            'description'    => $request->description,
+            'minSalary'      => $request->minSalary,
+            'maxSalary'      => $request->maxSalary,
+            'currency'       => $request->currency,
+            'expirationDate' => $request->expirationDate,
+            'requirements'   => $request->requirements,
+            'location'       => $location,
+            'company_id'     => auth()->guard('company')->user()->id,
+        ]);
 
-    $company = auth()->guard('company')->user();
-    $company->update(['jobsNumber' => $company->jobsNumber + 1]);
-    if($job){
-        $followers = $company->followers;
+        $company = auth()->guard('company')->user();
+        $company->update(['jobsNumber' => $company->jobsNumber + 1]);
+        if($job){
+            $followers = $company->followers;
 
-        foreach ($followers as $follower) {
-            Mail::to($follower->email)->send(new NewJobPosted($job, $company));
+            foreach ($followers as $follower) {
+                Mail::to($follower->email)->send(new NewJobPosted($job, $company));
+            }
         }
-    }
 
-        return redirect()->route('company.jobs')->with('success', 'The job added successfully');
+            return redirect()->route('company.jobs')->with('success', 'The job added successfully');
     }
 
 

@@ -34,11 +34,13 @@
             <form method="GET" action="{{ route('jobs.index') }}">
                 <label for="sort">الترتيب حسب:</label>
                 <select id="sort" name="sort" onchange="this.form.submit()">
-                    <option value="date" {{ request('sort', 'date') == 'date' ? 'selected' : '' }}>التاريخ</option>
-                    <option value="type" {{ request('sort') == 'type' ? 'selected' : '' }}>نوع الوظيفة</option>
-                    <option value="salary" {{ request('sort') == 'salary' ? 'selected' : '' }}>الراتب</option>
+                    <option value="similarity" {{ $sort == 'similarity' ? 'selected' : '' }}>التشابه</option>
+                    <option value="date" {{ $sort == 'date' ? 'selected' : '' }}>التاريخ</option>
+                    <option value="type" {{ $sort == 'type' ? 'selected' : '' }}>نوع الوظيفة</option>
+                    <option value="salary" {{ $sort == 'salary' ? 'selected' : '' }}>الراتب</option>
                 </select>
             </form>
+
         </div>
 
         @include('Jobs.getJobs')
