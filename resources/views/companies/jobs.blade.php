@@ -9,6 +9,7 @@
 </head>
 <body>
     @include('includes.header')
+    @include('search')
     <div class="container">
             <h1>وظائف في اليمن</h1>
             <p>تم العثور على <span>{{$jobsNumber}} </span> وظيفة</p>

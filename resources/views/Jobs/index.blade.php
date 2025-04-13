@@ -47,22 +47,22 @@
     </div>
     @include('includes.footer')
     <script>
-    document.querySelectorAll('.apply-btn form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            console.log("🚀 تم الضغط على زر التقديم السريع");
+        document.querySelectorAll('.apply-btn form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                console.log("🚀 تم الضغط على زر التقديم السريع");
+            });
         });
-    });
 
-        function toggleFavorite(icon) {
-            icon.style.color = icon.style.color === 'red' ? '#ccc' : 'red';
-        }
-        setTimeout(function() {
-        document.querySelectorAll('.custom-alert').forEach(alert => {
-            alert.style.opacity = "0";
-            alert.style.transform = "translateY(-20px)";
-            setTimeout(() => alert.remove(), 500);
-        });
-    }, 5000);
+            function toggleFavorite(icon) {
+                icon.style.color = icon.style.color === 'red' ? '#ccc' : 'red';
+            }
+            setTimeout(function() {
+            document.querySelectorAll('.custom-alert').forEach(alert => {
+                alert.style.opacity = "0";
+                alert.style.transform = "translateY(-20px)";
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 5000);
     </script>
 </body>
 </html>

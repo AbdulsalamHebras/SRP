@@ -14,12 +14,14 @@
     <div class="container">
         <h1>ابحث عن وظيفة أحلامك</h1>
         <p>ابحث ضمن أكثر الوظائف الفعّالة على أكبر موقع للوظائف في اليمن</p>
-        <form action="{{ route('jobs.search') }}" method="GET">
-            <div class="search-box">
-                <input type="text" name="search" placeholder="ابحث عن الوظائف والمهارات">
-                <button type="submit">بحث</button>
-            </div>
-        </form>
+        @if (!auth()->guard('company')->user())
+            <form action="{{ route('jobs.search') }}" method="GET">
+                <div class="search-box">
+                    <input type="text" name="search" placeholder="ابحث عن الوظائف والمهارات">
+                    <button type="submit">بحث</button>
+                </div>
+            </form>
+        @endif
         <div class="popular-searches">
             <span class="search-title">عمليات البحث الشائعة:</span>
             <div class="search-links">
@@ -59,14 +61,21 @@
                         </span>
                     </div>
                 </a>
+            @if (!auth()->guard('company')->user())
                 <div class="apply-btn" onclick="event.stopPropagation();">
                         <button onclick="window.location.href={{route('jobs.apply')}}";>التقديم السريع</button>
                 </div>
+            @endif
             </div>
         @endforeach
     </div>
     <div class="show-more-container">
-        <a href="{{route('jobs.index')}}" class="show-more-btn" id="show-more-btn">عرض المزيد</a>
+        @if (!auth()->guard('company')->user())
+            <a href="{{route('jobs.index')}}" class="show-more-btn" id="show-more-btn">عرض المزيد</a>
+        @else
+            <a href="{{route('company.jobs')}}" class="show-more-btn" id="show-more-btn">عرض المزيد</a>
+        @endif
+
     </div>
 
     @include('includes.footer')

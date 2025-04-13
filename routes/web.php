@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Job;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Company;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,12 +26,24 @@ use Carbon\Carbon;
 
 
 Route::get('/', function () {
-    $jobs = Job::with('company')
-    ->where('expirationDate', '>=', Carbon::now())
-    ->latest()
-    ->take(6)
-    ->get();
+    if (auth()->guard('company')->user())
+        {
+            $company = Company::find(auth()->guard('company')->user()->id);
 
+            if (!$company) {
+                abort(404, 'الشركة غير موجودة');
+            }
+
+            $jobs = Job::where('company_id', auth()->guard('company')->user()->id);
+            $jobs = $jobs->latest()->take(6)->get();
+        }
+    else{
+        $jobs = Job::with('company')
+            ->where('expirationDate', '>=', Carbon::now())
+            ->latest()
+            ->take(6)
+            ->get();
+    }
     return view('index',compact('jobs'));
 })->name('home');
 
@@ -75,6 +88,7 @@ Route::middleware('auth:company')->name('company.')->prefix('company')->group(fu
         return view('companies.details', compact('company'));
     })->name('dashboard');
     Route::get('/edit/{companyid}',[CompanyController::class,'edit'])->name('edit');
+    Route::put('/edit/{companyid}',[CompanyController::class,'update'])->name('update');
     Route::get('/jobs',[CompanyController::class,'jobs'])->name('jobs');
     Route::get('/appliers',[CompanyController::class,'appliers'])->name('appliers');
 

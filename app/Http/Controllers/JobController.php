@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 
 class JobController extends Controller
 {
+    private $sort;
     public function index(Request $request)
         {
             $user = Auth::user();
@@ -194,7 +195,8 @@ class JobController extends Controller
 
 
     public function search(Request $request) {
-        $query = Job::with('company');
+        $query = Job::with('company')
+            ->where('expirationDate', '>=', now()); // Filter expired jobs
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
@@ -211,7 +213,8 @@ class JobController extends Controller
         $jobs = $query->paginate(10);
         $jobsNumber = $jobs->total();
 
-        return view('jobs.index', compact('jobs', 'jobsNumber'));
+        return view('jobs.index', compact('jobs', 'jobsNumber'))->with('sort');
     }
+
 
 }
