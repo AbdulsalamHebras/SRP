@@ -216,6 +216,26 @@ class CompanyController extends Controller
 
         return view('companies.appliers', compact('jobs', 'appliers'));
     }
+    public function search(Request $request)
+    {
+        $query = Company::where('isAccepted', 1);
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%");
+                        });
+        }
+
+        if ($request->has('location') && !empty($request->location) && $request->location !== 'جميع المواقع') {
+            $query->where('location', $request->location);
+        }
+
+        $companies = $query->paginate(10);
+        $companiesNumber = $companies->total();
+
+        return view('companies.index', compact('companies', 'companiesNumber'))->with('sort');
+    }
 
 
 

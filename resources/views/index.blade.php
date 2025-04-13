@@ -11,6 +11,12 @@
 </head>
 <body>
     @include('includes/header')
+    @if (session('success'))
+    <div class="custom-alert success">
+        {{ session('success') }}
+        <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
+    </div>
+    @endif
     <div class="container">
         <h1>ابحث عن وظيفة أحلامك</h1>
         <p>ابحث ضمن أكثر الوظائف الفعّالة على أكبر موقع للوظائف في اليمن</p>
@@ -25,7 +31,7 @@
         <div class="popular-searches">
             <span class="search-title">عمليات البحث الشائعة:</span>
             <div class="search-links">
-                <a href="#" class="search-link">all works</a>
+                <a href="{{route('jobs.index')}}" class="search-link">all works</a>
                 <a href="#" class="search-link">management</a>
                 <a href="#" class="search-link">IT</a>
                 <a href="#" class="search-link">manager</a>
@@ -110,6 +116,13 @@
                 dropdownContent.style.display = 'none';
             });
         });
+        setTimeout(function() {
+        document.querySelectorAll('.custom-alert').forEach(alert => {
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-20px)";
+            setTimeout(() => alert.remove(), 500);
+        });
+    }, 5000);
 
     </script>
 </body>

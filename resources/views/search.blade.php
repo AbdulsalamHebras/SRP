@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="search-box">
-        <form action="{{ route('jobs.search') }}" method="GET">
+        <form action="{{ request()->routeIs('companies.*') ? route('companies.search') : route('jobs.search') }}" method="GET">
             <input type="text" name="search" placeholder="{{ request()->is('companies') ? 'ابحث عن الشركات' : 'ابحث عن الوظائف والشركات' }}" value="{{ request('search') }}">
 
             <!-- Hidden input for location -->

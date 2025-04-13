@@ -58,6 +58,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
         Auth::login($user);
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(RouteServiceProvider::HOME)->with('success','اهلا بك في موقع طموح ،الرجاء الدخول الى الصفحة الرئيسية لاكمال سيرتك الذاتية لزيادةد فرص قبولك');
     }
 }

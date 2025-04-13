@@ -11,6 +11,7 @@
 </head>
 <body>
     @include('includes.header')
+    @include('search')
     @if (session('status'))
     <div class="custom-alert
         {{ session('status') === 'error' ? 'error' : 'success' }}">

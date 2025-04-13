@@ -67,7 +67,7 @@
                                     <span>{{ $job->company->name }}</span>
                             </div>
                             <span class="location">{{$job->location}}</span>
-                            <p>{{$job->description}}</p>
+                            <p>{!!$job->description!!}</p>
                             <span class="salary">{{$job->currency}}{{$job->maxSalary}} - {{$job->currency}}{{$job->minSalary}}</span>
                             <span class="time-posted">
                                 @if($job->updated_at > $job->created_at)

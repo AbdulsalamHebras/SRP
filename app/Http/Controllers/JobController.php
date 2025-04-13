@@ -198,6 +198,12 @@ class JobController extends Controller
         $query = Job::with('company')
             ->where('expirationDate', '>=', now()); // Filter expired jobs
 
+        // إذا كانت هناك شركة مسجلة دخول، نعرض وظائفها فقط
+        if (auth('company')->check()) {
+            $companyId = auth('company')->id();
+            $query->where('company_id', $companyId);
+        }
+
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -215,6 +221,7 @@ class JobController extends Controller
 
         return view('jobs.index', compact('jobs', 'jobsNumber'))->with('sort');
     }
+
 
 
 }
