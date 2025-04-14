@@ -17,6 +17,7 @@
         <span class="close-btn" onclick="this.parentElement.remove();">&times;</span>
     </div>
     @endif
+    
     <div class="container">
         <h1>ابحث عن وظيفة أحلامك</h1>
         <p>ابحث ضمن أكثر الوظائف الفعّالة على أكبر موقع للوظائف في اليمن</p>
@@ -68,8 +69,12 @@
                     </div>
                 </a>
             @if (!auth()->guard('company')->user())
-                <div class="apply-btn" onclick="event.stopPropagation();">
-                        <button onclick="window.location.href={{route('jobs.apply')}}";>التقديم السريع</button>
+                <div class="apply-btn">
+                    <form action="{{ route('jobs.apply') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="job_id" value="{{ $job->id }}">
+                        <button type="submit">التقديم السريع</button>
+                    </form>
                 </div>
             @endif
             </div>
@@ -123,6 +128,11 @@
             setTimeout(() => alert.remove(), 500);
         });
     }, 5000);
+    document.querySelectorAll('.apply-btn form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                console.log("🚀 تم الضغط على زر التقديم السريع");
+            });
+        });
 
     </script>
 </body>

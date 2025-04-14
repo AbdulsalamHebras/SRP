@@ -58,6 +58,13 @@
         @endforeach
     @endif
 </div>
+<script>
+    document.querySelectorAll('.apply-btn form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                console.log("🚀 تم الضغط على زر التقديم السريع");
+            });
+        });
+</script>
 
 
 

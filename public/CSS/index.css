@@ -30,6 +30,9 @@
 .success {
     background-color: #28a745; /* Green */
 }
+.error {
+    background-color: #dc3545; /* Red */
+}
 /* صندوق البحث */
 .search-box {
     display: flex;
